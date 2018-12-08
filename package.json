@@ -1,0 +1,15 @@
+{
+  "private": true,
+  "scripts": {
+    "start": "fable-splitter tools -w --run",
+    "build": "fable-splitter tools --run",
+    "pretest": "fable-splitter tests -o build --commonjs",
+    "test": "mocha build -t 10000"
+  },
+  "dependencies": {
+    "fable-compiler": "^2.1.6",
+    "fable-splitter": "^2.1.0",
+    "mocha": "^5.2.0",
+    "shelljs": "^0.8.3"
+  }
+}
