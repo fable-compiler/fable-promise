@@ -1,14 +1,9 @@
 module Main
 
-open Fable.Core.JsInterop
+open Util
 
-let shell: ShellJs.IExports = importAll "shelljs"
-
-let (!>) x = ignore x
-
-[<EntryPoint>]
-let main args =
-    !> shell.echo("foo", "bar")
-    printfn "Hello %s!" args.[0]
-    1
-
+run "npm test"
+match args with
+| IgnoreCase "publish"::_ ->
+    pushNuget "src/Fable.Promise.fsproj"
+| _ -> ()

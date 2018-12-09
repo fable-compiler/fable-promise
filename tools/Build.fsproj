@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="ShellJs.fs" />
+    <Compile Include="Util.fs" />
     <Compile Include="Main.fs" />
   </ItemGroup>
   <ItemGroup>
