@@ -60,13 +60,17 @@ let fullPath (path: string) =
   Node.path.resolve(path)
 
 let dirname (path: string) =
-  Node.path.dirname(path)
+  let parent = Node.path.dirname(path)
+  if parent = path then null else parent
 
 let dirFiles (path: string) =
     Node.fs.readdirSync(!^path).ToArray()
 
 let isDirectory (path: string) =
     Node.fs.lstatSync(!^path).isDirectory()
+
+let pathExists (path: string) =
+    Node.fs.existsSync(!^path)
 
 let filename (path: string) =
   Node.path.basename(path)
@@ -172,9 +176,19 @@ module private Publish =
         then version.Substring(0, i), Some(version.Substring(i + 1))
         else version, None
 
+    let rec findFileUpwards fileName dir =
+        let fullPath = dir </> fileName
+        if pathExists fullPath
+        then fullPath
+        else
+            let parent = dirname dir
+            if isNull parent then
+                failwithf "Couldn't find %s directory" fileName
+            findFileUpwards fileName parent
+
     let loadReleaseVersion projFile =
         let projDir = if isDirectory projFile then projFile else dirname projFile
-        let releaseNotes = projDir </> "RELEASE_NOTES.md"
+        let releaseNotes = findFileUpwards "RELEASE_NOTES.md" projDir
         match readFile releaseNotes with
         | Regex VERSION [version] -> version
         | _ -> failwithf "Couldn't find version in %s" releaseNotes
