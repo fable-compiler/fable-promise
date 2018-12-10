@@ -1,6 +1,6 @@
 module Main
 
-open Util
+open PublishUtils
 
 run "npm test"
 match args with
