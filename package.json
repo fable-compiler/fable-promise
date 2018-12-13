@@ -1,14 +1,15 @@
 {
   "private": true,
   "scripts": {
-    "start": "fable-splitter tools -w --run",
-    "build": "fable-splitter tools --run",
-    "pretest": "fable-splitter tests -o build --commonjs",
-    "test": "mocha build -t 10000"
+    "start": "fable build.fsx build/script -w --run",
+    "build": "fable build.fsx build/script --run",
+    "pretest": "fable-splitter tests -o build/tests --commonjs",
+    "test": "mocha build/tests -t 10000"
   },
   "dependencies": {
-    "fable-compiler": "^2.1.6",
-    "fable-publish-utils": "^1.0.0",
+    "fable-compiler": "^2.1.8",
+    "fable-compiler-js": "^1.0.0-alpha-005",
+    "fable-publish-utils": "^1.0.2",
     "fable-splitter": "^2.1.0",
     "mocha": "^5.2.0"
   }
