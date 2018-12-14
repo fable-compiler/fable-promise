@@ -8,8 +8,8 @@
   },
   "dependencies": {
     "fable-compiler": "^2.1.8",
-    "fable-compiler-js": "^1.0.0-alpha-005",
-    "fable-publish-utils": "^1.0.2",
+    "fable-compiler-js": "^1.0.0-alpha-008",
+    "fable-publish-utils": "^1.0.3",
     "fable-splitter": "^2.1.0",
     "mocha": "^5.2.0"
   }
