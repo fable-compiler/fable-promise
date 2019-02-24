@@ -64,6 +64,9 @@ let tryStart (fail: Exception->unit) (pr: JS.Promise<'T>): unit = jsNative
 [<Emit("Promise.all($0)")>]
 let Parallel (pr: seq<JS.Promise<'T>>): JS.Promise<'T[]> = jsNative
 
+[<Emit("Promise.all($0)")>]
+let all (pr: seq<JS.Promise<'T>>): JS.Promise<'T[]> = jsNative
+
 let result (a: JS.Promise<'A>): JS.Promise<Result<'A, 'E>> =
     either (U2.Case1 << Ok) (U2.Case1 << Error) a
 
