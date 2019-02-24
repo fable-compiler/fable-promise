@@ -21,6 +21,9 @@ let sleep (ms: int): JS.Promise<unit> = jsNative
 [<Emit("Promise.resolve($0)")>]
 let lift<'T> (a: 'T): JS.Promise<'T> = jsNative
 
+/// Creates promise (in rejected state) with supplied reason.
+let reject<'T> reason : JS.Promise<'T> = JS.Promise.reject<'T> reason
+
 [<Emit("$1.then($0)")>]
 let bind (a: 'T->JS.Promise<'R>) (pr: JS.Promise<'T>): JS.Promise<'R> = jsNative
 
