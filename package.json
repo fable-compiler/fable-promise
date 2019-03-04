@@ -6,10 +6,10 @@
     "test": "mocha build/tests -t 10000"
   },
   "dependencies": {
-    "fable-compiler": "^2.1.8",
-    "fable-compiler-js": "^1.0.0-alpha-012",
+    "fable-compiler": "^2.2.0-beta-015",
+    "fable-compiler-js": "^1.0.1",
     "fable-publish-utils": "^1.0.5",
-    "fable-splitter": "^2.1.0",
-    "mocha": "^5.2.0"
+    "fable-splitter": "^2.1.5",
+    "mocha": "^6.0.2"
   }
 }

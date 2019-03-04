@@ -6,7 +6,6 @@ module Promise
 
 open System
 open Fable.Core
-open Fable.Import
 open Fable.Core.JsInterop
 
 let inline private (!!) (x:obj): 'T = unbox x

@@ -3,7 +3,6 @@ module PromiseTests
 open System
 open Fable.Core
 open Fable.Core.JsInterop
-open Fable.Import
 
 let inline equal (expected: 'T) (actual: 'T): unit =
     Testing.Assert.AreEqual(expected, actual)
