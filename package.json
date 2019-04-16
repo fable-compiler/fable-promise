@@ -10,6 +10,6 @@
     "fable-compiler-js": "^1.0.1",
     "fable-publish-utils": "^1.0.5",
     "fable-splitter": "^2.1.5",
-    "mocha": "^6.0.2"
+    "mocha": "^6.1.3"
   }
 }
