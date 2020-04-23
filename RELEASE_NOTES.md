@@ -1,3 +1,7 @@
+### 2.1.0
+
+* Update to Fable.Core 3.1.5
+
 ### 2.0.0
 
 * Update to Fable.Core 3

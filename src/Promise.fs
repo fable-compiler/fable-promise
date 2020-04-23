@@ -21,7 +21,7 @@ let sleep (ms: int): JS.Promise<unit> = jsNative
 let lift<'T> (a: 'T): JS.Promise<'T> = jsNative
 
 /// Creates promise (in rejected state) with supplied reason.
-let reject<'T> reason : JS.Promise<'T> = JS.Promise.reject<'T> reason
+let reject<'T> reason : JS.Promise<'T> = JS.Constructors.Promise.reject<'T> reason
 
 [<Emit("$1.then($0)")>]
 let bind (a: 'T->JS.Promise<'R>) (pr: JS.Promise<'T>): JS.Promise<'R> = jsNative
@@ -131,21 +131,21 @@ type PromiseBuilder() =
                 try generator()?``then``(f1,f2)
                 with er ->
                     if box f2 = null
-                    then !!JS.Promise.reject(er)
+                    then !!JS.Constructors.Promise.reject(er)
                     else
-                        try !!JS.Promise.resolve(f2(er))
-                        with er -> !!JS.Promise.reject(er)
+                        try !!JS.Constructors.Promise.resolve(f2(er))
+                        with er -> !!JS.Constructors.Promise.reject(er)
             "catch" ==> fun f ->
                 try generator()?catch(f)
                 with er ->
-                    try !!JS.Promise.resolve(f(er))
-                    with er -> !!JS.Promise.reject(er)
+                    try !!JS.Constructors.Promise.resolve(f(er))
+                    with er -> !!JS.Constructors.Promise.reject(er)
         ]
 
     member x.Run(p:JS.Promise<'T>): JS.Promise<'T> =
         create (fun success fail ->
             try
-                let p : JS.Promise<'T> = !!JS.Promise.resolve(p)
+                let p : JS.Promise<'T> = !!JS.Constructors.Promise.resolve(p)
                 p?``then``(success, fail)
             with
               er -> fail(er)
