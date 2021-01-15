@@ -154,6 +154,11 @@ type PromiseBuilder() =
     member x.Using<'T, 'R when 'T :> IDisposable>(resource: 'T, binder: 'T->JS.Promise<'R>): JS.Promise<'R> =
         x.TryFinally(binder(resource), fun () -> resource.Dispose())
 
+    [<Emit("Promise.all([$1,$2])")>]
+    member x.MergeSources(a: JS.Promise<'T1>, b: JS.Promise<'T2>): JS.Promise<'T1 * 'T2>= jsNative
+    
+//    member x.BindReturn(y: JS.Promise<'T1>, f) = map f y
+    
     [<Emit("Promise.all([$1,$2]).then(([a,b]) => $3(a,b))")>]
     [<CustomOperation("andFor", IsLikeZip=true)>]
     member x.Merge(a: JS.Promise<'T1>, b: JS.Promise<'T2>, [<ProjectionParameter>] resultSelector : 'T1 -> 'T2 -> 'R): JS.Promise<'R> = jsNative
