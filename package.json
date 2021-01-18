@@ -2,7 +2,7 @@
   "private": true,
   "scripts": {
     "postinstall": "dotnet tool restore",
-    "build": "dotnet fable Build.fsx --run",
+    "build": "dotnet fable Build.fsx --runScript publish",
     "pretest": "dotnet fable tests -o build/tests",
     "test": "mocha -r esm build/tests -t 10000"
   },
