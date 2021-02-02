@@ -308,6 +308,27 @@ describe "Promise tests" <| fun _ ->
             ()
         )
         
+    it "Promise can run multiple tasks in parallel with and!" <| fun () ->
+        let mutable s = ""
+        let doWork ms letter = promise {
+            do! Promise.sleep ms
+            s <- s + letter
+            return letter
+        }
+        let one = doWork 1000 "a"
+        let two = doWork 500 "b"
+        let three = doWork 200 "c"
+        promise {
+            let! a = one
+            and! b = two
+            and! c = three
+            return a + b + c
+        }
+        |> Promise.tap (fun result ->
+            result |> equal "abc"
+            s |> equal "cba"
+        )
+        
     it "Promise can run multiple tasks in parallel with andFor extension" <| fun () ->
         let one = Promise.lift 1
         let two = Promise.lift 2

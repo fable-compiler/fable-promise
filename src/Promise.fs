@@ -154,8 +154,20 @@ type PromiseBuilder() =
     member x.Using<'T, 'R when 'T :> IDisposable>(resource: 'T, binder: 'T->JS.Promise<'R>): JS.Promise<'R> =
         x.TryFinally(binder(resource), fun () -> resource.Dispose())
 
-    [<Emit("Promise.all([$1,$2])")>]
+    [<Emit("Promise.all([$1, $2])")>]
     member x.MergeSources(a: JS.Promise<'T1>, b: JS.Promise<'T2>): JS.Promise<'T1 * 'T2>= jsNative
+    
+    [<Emit("Promise.all([$1, $2, $3])")>]
+    member x.MergeSources3(a: JS.Promise<'T1>, b: JS.Promise<'T2>, c: JS.Promise<'T3>): JS.Promise<'T1 * 'T2 * 'T3>= jsNative
+
+    [<Emit("Promise.all([$1, $2, $3, $4])")>]
+    member x.MergeSources4(a: JS.Promise<'T1>, b: JS.Promise<'T2>, c: JS.Promise<'T3>, d: JS.Promise<'T4>): JS.Promise<'T1 * 'T2 * 'T3 * 'T4>= jsNative
+    
+    [<Emit("Promise.all([$1, $2, $3, $4, $5])")>]
+    member x.MergeSources5(a: JS.Promise<'T1>, b: JS.Promise<'T2>, c: JS.Promise<'T3>, d: JS.Promise<'T4>, e: JS.Promise<'T5>): JS.Promise<'T1 * 'T2 * 'T3 * 'T4 * 'T5>= jsNative
+    
+    [<Emit("Promise.all([$1, $2, $3, $4, $5, $6])")>]
+    member x.MergeSources6(a: JS.Promise<'T1>, b: JS.Promise<'T2>, c: JS.Promise<'T3>, d: JS.Promise<'T4>, e: JS.Promise<'T5>, f: JS.Promise<'T6>): JS.Promise<'T1 * 'T2 * 'T3 * 'T4 * 'T5 * 'T6>= jsNative
     
 //    member x.BindReturn(y: JS.Promise<'T1>, f) = map f y
     
