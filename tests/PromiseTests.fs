@@ -343,21 +343,7 @@ describe "Promise tests" <| fun _ ->
             result |> equal true
             ()
         )
-    it "Promise can run multiple tasks in parallel with and!" <| fun () ->
-        let one = Promise.lift 1
-        let two = Promise.lift 2
-        let three = Promise.lift 3
-        promise {
-            let! a = one
-            and! b = two
-            and! c = three
-            return a + b = c
-        }
-        |> Promise.tap (fun result ->
-            result |> equal true
-            ()
-        )
-
+        
     it "Promise does not re-execute multiple times" <| fun () ->
         let mutable promiseExecutionCount = 0
         let p = promise {
