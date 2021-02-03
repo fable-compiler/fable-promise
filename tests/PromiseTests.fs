@@ -35,7 +35,7 @@ describe "Promise tests" <| fun _ ->
             return xs
         }
         |> Promise.map (fun xs -> xs = [4;3;2] |> equal true)
-
+    
     it "Promise for binding works correctly" <| fun () ->
         let inputs = [|1; 2; 3|]
         let result = ref 0
@@ -294,7 +294,41 @@ describe "Promise tests" <| fun _ ->
             result |> equal 3
             ()
         )
-
+        
+    it "Promise can be run in parallel with and!" <| fun () ->
+        let one = Promise.lift 1
+        let two = Promise.lift 2
+        promise {
+            let! a = one
+            and! b = two
+            return a + b
+        }
+        |> Promise.tap (fun result ->
+            result |> equal 3
+            ()
+        )
+        
+    it "Promise can run multiple tasks in parallel with and!" <| fun () ->
+        let mutable s = ""
+        let doWork ms letter = promise {
+            do! Promise.sleep ms
+            s <- s + letter
+            return letter
+        }
+        let one = doWork 1000 "a"
+        let two = doWork 500 "b"
+        let three = doWork 200 "c"
+        promise {
+            let! a = one
+            and! b = two
+            and! c = three
+            return a + b + c
+        }
+        |> Promise.tap (fun result ->
+            result |> equal "abc"
+            s |> equal "cba"
+        )
+        
     it "Promise can run multiple tasks in parallel with andFor extension" <| fun () ->
         let one = Promise.lift 1
         let two = Promise.lift 2
@@ -309,14 +343,14 @@ describe "Promise tests" <| fun _ ->
             result |> equal true
             ()
         )
-
+        
     it "Promise does not re-execute multiple times" <| fun () ->
         let mutable promiseExecutionCount = 0
         let p = promise {
             promiseExecutionCount <- promiseExecutionCount + 1
             return 1
         }
-
+    
         p.``then``(fun _ -> promiseExecutionCount |> equal 1) |> ignore
         p.``then``(fun _ -> promiseExecutionCount |> equal 1) |> ignore
         p.``then``(fun _ -> promiseExecutionCount |> equal 1)
