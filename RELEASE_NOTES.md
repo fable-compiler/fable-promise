@@ -1,3 +1,7 @@
+### 2.2.0
+
+* Support for and! in CE @delneg
+
 ### 2.1.0
 
 * Update to Fable.Core 3.1.5
