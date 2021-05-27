@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "esm": "^3.2.25",
-    "fable-publish-utils": "2.0.0",
+    "fable-publish-utils": "2.1.0",
     "mocha": "^8.2.1"
   }
 }

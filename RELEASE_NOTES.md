@@ -1,3 +1,7 @@
+### 2.2.1
+
+* Add package license file and symbols
+
 ### 2.2.0
 
 * Support for and! in CE @delneg
