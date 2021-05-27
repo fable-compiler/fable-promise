@@ -1,3 +1,7 @@
+### 2.2.2
+
+* Downgrade FSharp.Core to 4.7.2
+
 ### 2.2.1
 
 * Add package license file and symbols
