@@ -32,32 +32,32 @@ let map (a: 'T->'R) (pr: JS.Promise<'T>): JS.Promise<'R> = jsNative
 [<Emit("$1.then($0)")>]
 let iter (a: 'T->unit) (pr: JS.Promise<'T>): unit = jsNative
 
-[<Emit("$1.then(void 0, $0)")>]
+[<Emit("$1.catch($0)")>]
 /// This version of `catch` fakes a function returning just 'T, as opposed to `Promise<'T>`. If you need to return `Promise<'T>`, use `catchBind`.
 let catch (fail: Exception->'T) (pr: JS.Promise<'T>): JS.Promise<'T> = jsNative
 
-[<Emit("$1.then(void 0, $0)")>]
+[<Emit("$1.catch($0)")>]
 /// This is a version of `catch` that fakes a function returning Promise<'T> as opposed to just 'T. If you need to return just 'T, use `catch`.
 let catchBind (fail: Exception->JS.Promise<'T>) (pr: JS.Promise<'T>): JS.Promise<'T> = jsNative
 
-[<Emit("$1.then(void 0, $0)")>]
+[<Emit("$1.catch($0)")>]
 /// Used to catch errors at the end of a promise chain.
 let catchEnd (fail: Exception->unit) (pr: JS.Promise<'T>): unit = jsNative
 
-[<Emit("$2.then($0,$1)")>]
+[<Emit("$2.then($0).catch($1)")>]
 /// A combination of `map/bind` and `catch/catchBind`, this function applies the `success` continuation when the input promise resolves successfully, or `fail` continuation when the input promise fails. Both continuations may return either naked value `'R` or another promise `Promise<'R>`. Use the erased-cast operator `!^` to cast values when returning, for example:
 /// ```
 /// somePromise |> Promise.either (fun x -> !^(string x)) (fun err -> ^!(Promise.lift err.Message))
 /// ```
 let either (success: 'T->U2<'R, JS.Promise<'R>>) (fail: 'E->U2<'R, JS.Promise<'R>>) (pr: JS.Promise<'T>): JS.Promise<'R> = jsNative
 
-[<Emit("$2.then($0,$1)")>]
+[<Emit("$2.then($0).catch($1)")>]
 let eitherEnd (success: 'T->unit) (fail: 'E->unit) (pr: JS.Promise<'T>): unit = jsNative
 
-[<Emit("$0.then()")>]
+[<Emit("$0")>]
 let start (pr: JS.Promise<'T>): unit = jsNative
 
-[<Emit("$1.then(void 0, $0)")>]
+[<Emit("$1.catch($0)")>]
 let tryStart (fail: Exception->unit) (pr: JS.Promise<'T>): unit = jsNative
 
 [<Emit("Promise.all($0)")>]
@@ -93,7 +93,7 @@ type PromiseBuilder() =
     [<Emit("$1.then(() => $2)")>]
     member x.Combine(p1: JS.Promise<unit>, p2: JS.Promise<'T>): JS.Promise<'T> = jsNative
 
-    member x.For(seq: seq<'T>, body: 'T->JS.Promise<unit>): JS.Promise<unit> =
+    member x.For(seq: seq<'T>, body: 'T -> JS.Promise<unit>): JS.Promise<unit> =
         // (lift (), seq)
         // ||> Seq.fold (fun p a ->
         //     bind (fun () -> body a) p)
@@ -142,14 +142,7 @@ type PromiseBuilder() =
                     with er -> !!JS.Constructors.Promise.reject(er)
         ]
 
-    member x.Run(p:JS.Promise<'T>): JS.Promise<'T> =
-        create (fun success fail ->
-            try
-                let p : JS.Promise<'T> = !!JS.Constructors.Promise.resolve(p)
-                p?``then``(success, fail)
-            with
-              er -> fail(er)
-        )
+    member x.Run(p:JS.Promise<'T>): JS.Promise<'T> = p.``then``(id)
 
     member x.Using<'T, 'R when 'T :> IDisposable>(resource: 'T, binder: 'T->JS.Promise<'R>): JS.Promise<'R> =
         x.TryFinally(binder(resource), fun () -> resource.Dispose())
@@ -168,7 +161,7 @@ type PromiseBuilder() =
     
     [<Emit("Promise.all([$1, $2, $3, $4, $5, $6])")>]
     member x.MergeSources6(a: JS.Promise<'T1>, b: JS.Promise<'T2>, c: JS.Promise<'T3>, d: JS.Promise<'T4>, e: JS.Promise<'T5>, f: JS.Promise<'T6>): JS.Promise<'T1 * 'T2 * 'T3 * 'T4 * 'T5 * 'T6>= jsNative
-    
+
 //    member x.BindReturn(y: JS.Promise<'T1>, f) = map f y
     
     [<Emit("Promise.all([$1,$2]).then(([a,b]) => $3(a,b))")>]
