@@ -146,14 +146,14 @@ describe "Promise tests" <| fun _ ->
                         failwith "1"
                         return x
                     with
-                    | e -> return! failwith ("2 " + e.Message.Trim('"'))
+                    | e -> return failwith ("2 " + e.Message.Trim('"'))
                 }
             let f2 x =
                 promise {
                     try
                         return! f1 x
                     with
-                    | e -> return! failwith ("3 " + e.Message.Trim('"'))
+                    | e -> return failwith ("3 " + e.Message.Trim('"'))
                 }
             let f() =
                 promise {
@@ -245,9 +245,10 @@ describe "Promise tests" <| fun _ ->
             let successful = Promise.lift 42
 
             let! r1 = successful |> Promise.either (fun x -> !^(string x)) (fun x -> failwith "Shouldn't get called")
-            let! r2 = successful |> Promise.either (fun x -> !^(Promise.lift <| string x)) (fun x -> failwith "Shouldn't get called")
+            let! r2 = successful |> Promise.either (fun n -> string n |> Promise.lift |> U2.Case2) (fun x -> failwith "Shouldn't get called")
+
             let! r3 = failing |> Promise.either (fun x -> failwith "Shouldn't get called") (fun (ex:Exception) -> !^ex.Message)
-            let! r4 = failing |> Promise.either (fun x -> failwith "Shouldn't get called") (fun (ex:Exception) -> !^(Promise.lift ex.Message))
+            let! r4 = failing |> Promise.either (fun x -> failwith "Shouldn't get called") (fun (ex:Exception) -> Promise.lift ex.Message |> U2.Case2)
 
             r1 |> equal "42"
             r2 |> equal "42"
