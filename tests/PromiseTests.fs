@@ -35,7 +35,7 @@ describe "Promise tests" <| fun _ ->
             return xs
         }
         |> Promise.map (fun xs -> xs = [4;3;2] |> equal true)
-    
+
     it "Promise for binding works correctly" <| fun () ->
         let inputs = [|1; 2; 3|]
         let result = ref 0
@@ -282,6 +282,66 @@ describe "Promise tests" <| fun _ ->
                 x |> equal 5
             )
 
+    it "Promise.Parallel works" <| fun () ->
+        let p1 =
+            promise {
+                do! Promise.sleep 100
+                return 1
+            }
+        let p2 =
+            promise {
+                do! Promise.sleep 200
+                return 2
+            }
+        let p3 =
+            promise {
+                do! Promise.sleep 300
+                return 3
+            }
+
+        Promise.Parallel [p1; p2; p3]
+        |> Promise.map (fun res ->
+            res |> equal [|1; 2; 3 |]
+        )
+
+
+    it "Promise.all works" <| fun () ->
+        let p1 =
+            promise {
+                do! Promise.sleep 100
+                return 1
+            }
+        let p2 =
+            promise {
+                do! Promise.sleep 200
+                return 2
+            }
+        let p3 =
+            promise {
+                do! Promise.sleep 300
+                return 3
+            }
+
+        Promise.all [p1; p2; p3]
+        |> Promise.map (fun res ->
+            res |> equal [|1; 2; 3 |]
+        )
+
+    it "Promise.result maps to Result.Ok in case of success" <| fun () ->
+        Promise.lift 42
+        |> Promise.result
+        |> Promise.tap (fun result ->
+            result |> equal (Ok 42)
+        )
+
+
+    it "Promise.result maps to Result.Error in case of error" <| fun () ->
+        Promise.reject "Invalid value"
+        |> Promise.result
+        |> Promise.tap (fun result ->
+            result |> equal (Error "Invalid value")
+        )
+
     it "Promise can be run in parallel with andFor extension" <| fun () ->
         let one = Promise.lift 1
         let two = Promise.lift 2
@@ -294,7 +354,7 @@ describe "Promise tests" <| fun _ ->
             result |> equal 3
             ()
         )
-        
+
     it "Promise can be run in parallel with and!" <| fun () ->
         let one = Promise.lift 1
         let two = Promise.lift 2
@@ -307,7 +367,7 @@ describe "Promise tests" <| fun _ ->
             result |> equal 3
             ()
         )
-        
+
     it "Promise can run multiple tasks in parallel with and!" <| fun () ->
         let mutable s = ""
         let doWork ms letter = promise {
@@ -328,7 +388,7 @@ describe "Promise tests" <| fun _ ->
             result |> equal "abc"
             s |> equal "cba"
         )
-        
+
     it "Promise can run multiple tasks in parallel with andFor extension" <| fun () ->
         let one = Promise.lift 1
         let two = Promise.lift 2
@@ -343,14 +403,14 @@ describe "Promise tests" <| fun _ ->
             result |> equal true
             ()
         )
-        
+
     it "Promise does not re-execute multiple times" <| fun () ->
         let mutable promiseExecutionCount = 0
         let p = promise {
             promiseExecutionCount <- promiseExecutionCount + 1
             return 1
         }
-    
+
         p.``then``(fun _ -> promiseExecutionCount |> equal 1) |> ignore
         p.``then``(fun _ -> promiseExecutionCount |> equal 1) |> ignore
         p.``then``(fun _ -> promiseExecutionCount |> equal 1)
