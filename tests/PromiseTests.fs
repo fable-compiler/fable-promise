@@ -272,6 +272,21 @@ describe "Promise tests" <| fun _ ->
             | Error e -> equal 666 e
         )
 
+    it "Promise.bindResult works" <| fun () ->
+        let multiplyBy2 (value : int) =
+            Promise.create (fun resolve reject ->
+                resolve (value * 2)
+            )
+
+        Promise.lift 42
+        |> Promise.result
+        |> Promise.bindResult (fun value ->
+            multiplyBy2 value
+        )
+        |> Promise.tap (fun result ->
+            result |> equal (Ok (42 * 2))
+        )
+
     it "Promise.tap passes original value through to next transform" <| fun () ->
         Promise.lift(5)
             |> Promise.tap(fun x ->
