@@ -4,11 +4,23 @@
     "postinstall": "dotnet tool restore",
     "publish": "dotnet fsi Build.fsx publish",
     "pretest": "dotnet fable tests -o build/tests",
-    "test": "mocha -r esm build/tests -t 10000"
+    "test": "mocha -r esm build/tests -t 10000",
+    "docs:clean": "shx rm -rf deploy",
+    "predocs:watch": "npm run docs:clean",
+    "docs:watch": "nacara --watch",
+    "predocs:build": "npm run docs:clean",
+    "docs:build": "nacara",
+    "docs:deploy": "npm run build && gh-pages -d deploy"
   },
   "dependencies": {
     "esm": "^3.2.25",
     "fable-publish-utils": "2.1.0",
     "mocha": "^8.2.1"
+  },
+  "devDependencies": {
+    "gh-pages": "^3.2.3",
+    "nacara": "^1.0.0-beta-006",
+    "nacara-layout-standard": "^1.0.0-beta-005",
+    "shx": "^0.3.3"
   }
 }

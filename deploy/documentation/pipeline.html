@@ -1,0 +1,277 @@
+<html class="has-navbar-fixed-top"><head><title>Fable.Promise · Pipeline</title><meta http-equiv="content-type"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" type="text/css" href="/fable-promise/style.css"/><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous"/></head><body><nav class="navbar is-fixed-top"><div class="container"><div class="navbar-brand"><a class="navbar-item title is-4" href="https://fable.io/fable-promise/">Fable.Promise</a><a class="navbar-item is-hidden-desktop" href="https://github.com/fable-compiler/fable-promise"><span class="icon"><i class=" fab fa-github fa-lg"></i></span></a><a class="navbar-item is-hidden-desktop" href="https://twitter.com/FableCompiler"><span class="icon"><i class=" fab fa-twitter fa-lg"></i></span></a><a class="navbar-burger" data-target="nav-menu"><span></span><span></span><span></span></a></div><div class="navbar-menu" id="nav-menu"><div class="navbar-start"><a class="navbar-item is-active" href="/documentation/pipeline.html">Documentation</a></div><div class="navbar-end"><a class="navbar-item" href="https://github.com/fable-compiler/fable-promise"><span class="icon"><i class=" fab fa-github fa-lg"></i></span></a><a class="navbar-item" href="https://twitter.com/FableCompiler"><span class="icon"><i class=" fab fa-twitter fa-lg"></i></span></a></div></div></div></nav><div class="container"><div class="mobile-menu"><nav class="breadcrumb"><ul><li><a class="menu-trigger"><span></span><span></span><span></span></a></li><li class="is-active"><a>API</a></li><li class="is-active"><a>Pipeline</a></li></ul></nav></div><div class="columns is-gapless is-mobile"><div class="column is-menu-column is-3-desktop is-hidden-touch ml-5"><div class="menu-container"><aside class="menu"><ul class="menu-list"><ul class="menu-list"><p class="menu-label">API</p><li><a class=" is-active has-table-of-content" href="/fable-promise/documentation/pipeline.html">Pipeline</a></li><ul class="table-of-content"><li><a href="#Promise.create" data-toc-element="true">Promise.create </a></li><li><a href="#Promise.sleep" data-toc-element="true">Promise.sleep </a></li><li><a href="#Promise.lift" data-toc-element="true">Promise.lift </a></li><li><a href="#Promise.reject" data-toc-element="true">Promise.reject </a></li><li><a href="#Promise.bind" data-toc-element="true">Promise.bind </a></li><li><a href="#Promise.map" data-toc-element="true">Promise.map </a></li><li><a href="#Promise.iter" data-toc-element="true">Promise.iter </a></li><li><a href="#Promise.catch" data-toc-element="true">Promise.catch </a></li><li><a href="#Promise.catchBind" data-toc-element="true">Promise.catchBind </a></li><li><a href="#Promise.catchEnd" data-toc-element="true">Promise.catchEnd </a></li><li><a href="#Promise.either" data-toc-element="true">Promise.either </a></li><li><a href="#Promise.eitherEnd" data-toc-element="true">Promise.eitherEnd </a></li><li><a href="#Promise.start" data-toc-element="true">Promise.start </a></li><li><a href="#Promise.tryStart" data-toc-element="true">Promise.tryStart </a></li><li><a href="#Promise.Parallel" data-toc-element="true">Promise.Parallel </a></li><li><a href="#Promise.all" data-toc-element="true">Promise.all </a></li><li><a href="#Promise.result" data-toc-element="true">Promise.result </a></li><li><a href="#Promise.mapResult" data-toc-element="true">Promise.mapResult </a></li><li><a href="#Promise.bindResult" data-toc-element="true">Promise.bindResult </a></li><li><a href="#Promise.mapResultError" data-toc-element="true">Promise.mapResultError </a></li><li><a href="#Promise.tap" data-toc-element="true">Promise.tap </a></li></ul><li><a class=" " href="/fable-promise/documentation/computation-expression.html">Computation expression</a></li></ul></ul></aside></div></div><div class="column is-8-desktop is-full-touch"><section class="section"><div class="content"><header class="page-header"><a class="button is-hidden-touch is-outlined is-primary is-pulled-right" target="_blank" href="https://github.com/fable-compiler/fable-promise/edit/master/docsrc/documentation/pipeline.md">Edit</a><h1 class="title is-1">Pipeline</h1></header><div><h2>Promise.create <a href="#Promise.create" aria-hidden="true"><span class="anchor" id="Promise.create"></span>#</a></h2>
+<p><code>create: f: (('T -&gt; unit) -&gt; (Exception -&gt; unit) -&gt; unit) -&gt; Promise&lt;'T&gt;</code></p>
+<p>Create a promise from a function.</p>
+<pre style="background-color: #FFFFFF;color: #000000;padding: 1em"><code><span style="color: #A626A4">let</span><span> </span><span style="color: #E45649">write</span><span style="color: #383A42"> </span><span style="color: #A626A4">(</span><span style="color: #383A42">path</span><span style="color: #A626A4">:</span><span> </span><span style="color: #C18401">string</span><span style="color: #A626A4">)</span><span> </span><span style="color: #A626A4">(</span><span style="color: #383A42">content</span><span style="color: #A626A4">:</span><span> </span><span style="color: #C18401">string</span><span style="color: #A626A4">)</span><span> </span><span style="color: #A626A4">=</span>
+<span>    Promise.create </span><span style="color: #A626A4">(fun</span><span style="color: #383A42"> resolve reject </span><span style="color: #A626A4">-&gt;</span>
+<span>        Node.Api.fs.writeFile</span><span style="color: #A626A4">(</span><span>path</span><span style="color: #A626A4">,</span><span> content</span><span style="color: #A626A4">,</span><span> </span><span style="color: #A626A4">(fun</span><span style="color: #383A42"> res </span><span style="color: #A626A4">-&gt;</span>
+<span>            </span><span style="color: #A626A4">match</span><span> res </span><span style="color: #A626A4">with</span>
+<span>            </span><span style="color: #A626A4">|</span><span> Some res </span><span style="color: #A626A4">-&gt;</span><span> reject </span><span style="color: #A626A4">(</span><span>res </span><span style="color: #A626A4">:?&gt;</span><span> System.Exception</span><span style="color: #A626A4">)</span>
+<span>            </span><span style="color: #A626A4">|</span><span> None </span><span style="color: #A626A4">-&gt;</span><span> resolve </span><span style="color: #A626A4">()</span>
+<span>        </span><span style="color: #A626A4">))</span>
+<span>    </span><span style="color: #A626A4">)</span></code></pre>
+<h2>Promise.sleep <a href="#Promise.sleep" aria-hidden="true"><span class="anchor" id="Promise.sleep"></span>#</a></h2>
+<p><code>sleep: ms: int -&gt; Promise&lt;unit&gt;</code></p>
+<p>Create a promise which wait <code>X</code> ms before resolving.</p>
+<pre style="background-color: #FFFFFF;color: #000000;padding: 1em"><code><span style="color: #A0A1A7;font-style: italic">// Do something</span>
+<span>doSomething </span><span style="color: #986801">()</span>
+<span style="color: #A0A1A7;font-style: italic">// Sleep for 1 second</span>
+<span style="color: #A626A4">|&gt;</span><span> Promise.sleep </span><span style="color: #986801">1000</span>
+<span style="color: #A0A1A7;font-style: italic">// Do another thing</span>
+<span style="color: #A626A4">|&gt;</span><span> Promise.map </span><span style="color: #A626A4">(fun</span><span style="color: #383A42"> _ </span><span style="color: #A626A4">-&gt;</span>
+<span>    doAnotherThing </span><span style="color: #A626A4">()</span>
+<span style="color: #A626A4">)</span>
+<span style="color: #A626A4">|&gt;</span><span> Promise.map </span><span style="color: #A626A4">..</span><span>.</span></code></pre>
+<h2>Promise.lift <a href="#Promise.lift" aria-hidden="true"><span class="anchor" id="Promise.lift"></span>#</a></h2>
+<p><code>lift: a: 'T -&gt; Promise&lt;'T&gt;</code></p>
+<p>Create a promise (in resolved state) with supplied value.</p>
+<pre style="background-color: #FFFFFF;color: #000000;padding: 1em"><code><span>Promise.lift </span><span style="color: #A626A4">{|</span><span> Firstname </span><span style="color: #A626A4">=</span><span> </span><span style="color: #50A14F">&quot;John&quot;</span><span> </span><span style="color: #A626A4">|}</span>
+<span style="color: #A626A4">|&gt;</span><span> Promise.map </span><span style="color: #A626A4">(fun</span><span style="color: #383A42"> user </span><span style="color: #A626A4">-&gt;</span>
+<span>    console.log $</span><span style="color: #50A14F">&quot;Hello, </span><span style="color: #A626A4">%s</span><span style="color: #50A14F">{user.Firstname}&quot;</span>
+<span>    </span><span style="color: #A0A1A7;font-style: italic">// Expected output: &quot;Hello, John&quot;</span>
+<span style="color: #A626A4">)</span>
+<span style="color: #A626A4">|&gt;</span><span> Promise.map </span><span style="color: #A626A4">..</span><span>.</span></code></pre>
+<h2>Promise.reject <a href="#Promise.reject" aria-hidden="true"><span class="anchor" id="Promise.reject"></span>#</a></h2>
+<p><code>reject: reason: obj -&gt; Promise&lt;'T&gt;</code></p>
+<p>Create a promise (in rejected state) with supplied reason.</p>
+<pre style="background-color: #FFFFFF;color: #000000;padding: 1em"><code><span>Promise.reject </span><span style="color: #50A14F">&quot;User not found&quot;</span>
+<span style="color: #A626A4">|&gt;</span><span> Promise.map </span><span style="color: #A626A4">(fun</span><span style="color: #383A42"> _ </span><span style="color: #A626A4">-&gt;</span>
+<span>    </span><span style="color: #A0A1A7;font-style: italic">// This promise is skipped</span>
+<span style="color: #A626A4">)</span>
+<span style="color: #A626A4">|&gt;</span><span> Promise.catch </span><span style="color: #A626A4">(fun</span><span style="color: #383A42"> errorMessage </span><span style="color: #A626A4">-&gt;</span>
+<span>    console.error $</span><span style="color: #50A14F">&quot;An error ocurred: </span><span style="color: #A626A4">%s</span><span style="color: #50A14F">{errorMessage}&quot;</span>
+<span>    </span><span style="color: #A0A1A7;font-style: italic">// Expected output: &quot;An error ocurred: User not found&quot;</span>
+<span style="color: #A626A4">)</span>
+<span style="color: #A626A4">|&gt;</span><span> Promise.map </span><span style="color: #A626A4">..</span><span>.</span></code></pre>
+<h2>Promise.bind <a href="#Promise.bind" aria-hidden="true"><span class="anchor" id="Promise.bind"></span>#</a></h2>
+<p><code>bind: a : ('T -&gt; JS.Promise&lt;'R&gt;) -&gt; pr: Promise&lt;'T&gt; -&gt; Promise&lt;'R&gt;</code></p>
+<p>Bind a value into a promise of a new type.</p>
+<pre style="background-color: #FFFFFF;color: #000000;padding: 1em"><code><span>Promise.lift </span><span style="color: #A626A4">{|</span><span> Firstname </span><span style="color: #A626A4">=</span><span> </span><span style="color: #50A14F">&quot;John&quot;</span><span> </span><span style="color: #A626A4">|}</span>
+<span style="color: #A626A4">|&gt;</span><span> Promise.bind </span><span style="color: #A626A4">(fun</span><span style="color: #383A42"> user </span><span style="color: #A626A4">-&gt;</span>
+<span>    </span><span style="color: #A0A1A7;font-style: italic">// Do something with user and returns a promise</span>
+<span>    Promise.create </span><span style="color: #A626A4">(fun</span><span style="color: #383A42"> resolve reject </span><span style="color: #A626A4">-&gt;</span>
+<span>        resolve $</span><span style="color: #50A14F">&quot;Hello, </span><span style="color: #A626A4">%s</span><span style="color: #50A14F">{user.Firstname}&quot;</span>
+<span>    </span><span style="color: #A626A4">)</span>
+<span style="color: #A626A4">)</span>
+<span style="color: #A626A4">|&gt;</span><span> Promise.map </span><span style="color: #A626A4">(fun</span><span style="color: #383A42"> message </span><span style="color: #A626A4">-&gt;</span>
+<span>    console.log message</span>
+<span>    </span><span style="color: #A0A1A7;font-style: italic">// Expected output: &quot;Hello, John&quot;</span>
+<span style="color: #A626A4">)</span>
+<span style="color: #A626A4">|&gt;</span><span> Promise.map </span><span style="color: #A626A4">..</span><span>.</span></code></pre>
+<h2>Promise.map <a href="#Promise.map" aria-hidden="true"><span class="anchor" id="Promise.map"></span>#</a></h2>
+<p><code>map: a : ('T -&gt; 'R) -&gt; pr: Promise&lt;'T&gt; -&gt; Promise&lt;'R&gt;</code></p>
+<p>Map a value into another type, the result will be wrapped in a promise for you.</p>
+<pre style="background-color: #FFFFFF;color: #000000;padding: 1em"><code><span>Promise.lift </span><span style="color: #A626A4">{|</span><span> Firstname </span><span style="color: #A626A4">=</span><span> </span><span style="color: #50A14F">&quot;John&quot;</span><span> </span><span style="color: #A626A4">|}</span>
+<span style="color: #A626A4">|&gt;</span><span> Promise.map </span><span style="color: #A626A4">(fun</span><span style="color: #383A42"> user </span><span style="color: #A626A4">-&gt;</span>
+<span>    user.Firstname</span>
+<span style="color: #A626A4">)</span><span> </span><span style="color: #A0A1A7;font-style: italic">// Returns a Promise&lt;string&gt; with the value &quot;John&quot;</span>
+<span style="color: #A626A4">|&gt;</span><span> Promise.map </span><span style="color: #A626A4">..</span><span>.</span></code></pre>
+<h2>Promise.iter <a href="#Promise.iter" aria-hidden="true"><span class="anchor" id="Promise.iter"></span>#</a></h2>
+<p><code>iter: a : ('T -&gt; unit) -&gt; pr: Promise&lt;'T&gt; -&gt; unit</code></p>
+<p>Call a function with the result of a promise and stop the promise chain.</p>
+<p>This is equivalent to <code>Promise.map ... |&gt; ignore</code></p>
+<pre style="background-color: #FFFFFF;color: #000000;padding: 1em"><code><span>fetchUser </span><span style="color: #986801">()</span>
+<span style="color: #A626A4">|&gt;</span><span> Promise.iter </span><span style="color: #A626A4">(fun</span><span style="color: #383A42"> user </span><span style="color: #A626A4">-&gt;</span>
+<span>    console.log </span><span style="color: #50A14F">&quot;User firstname is user.Firstname&quot;</span>
+<span style="color: #A626A4">)</span><span> </span><span style="color: #A0A1A7;font-style: italic">// unit</span></code></pre>
+<h2>Promise.catch <a href="#Promise.catch" aria-hidden="true"><span class="anchor" id="Promise.catch"></span>#</a></h2>
+<p><code>catch: fail: (Exception -&gt; 'T) -&gt; pr  : Promise&lt;'T&gt; -&gt; Promise&lt;'T&gt;</code></p>
+<p>Handle an errored promise allowing you pass a return value.</p>
+<p>This version of <code>catch</code> fakes a function returning just <code>'T</code>, as opposed to <code>Promise&lt;'T&gt;</code>. If you need to return <code>Promise&lt;'T&gt;</code>, use <code>catchBind</code>.</p>
+<pre style="background-color: #FFFFFF;color: #000000;padding: 1em"><code><span>Promise.create </span><span style="color: #A626A4">(fun</span><span style="color: #383A42"> resolve reject </span><span style="color: #A626A4">-&gt;</span>
+<span>    reject </span><span style="color: #A626A4">(</span><span>System.Exception </span><span style="color: #50A14F">&quot;User not found&quot;</span><span style="color: #A626A4">)</span>
+<span style="color: #A626A4">)</span>
+<span style="color: #A626A4">|&gt;</span><span> Promise.catch </span><span style="color: #A626A4">(fun</span><span style="color: #383A42"> error </span><span style="color: #A626A4">-&gt;</span>
+<span>    </span><span style="color: #A0A1A7;font-style: italic">// Log the error</span>
+<span>    console.error error</span>
+<span>    </span><span style="color: #A0A1A7;font-style: italic">// Do something to recover from the error</span>
+<span>    Error error.Message</span>
+<span style="color: #A626A4">)</span>
+<span style="color: #A626A4">|&gt;</span><span> Promise.map </span><span style="color: #A626A4">..</span><span>.</span></code></pre>
+<h2>Promise.catchBind <a href="#Promise.catchBind" aria-hidden="true"><span class="anchor" id="Promise.catchBind"></span>#</a></h2>
+<p><code>catchBind: fail: (Exception -&gt; JS.Promise&lt;'T&gt;) -&gt; pr : Promise&lt;'T&gt; -&gt; Promise&lt;'T&gt;</code></p>
+<p>Handle an errored promise allowing to call a promise.</p>
+<p>This is a version of <code>catch</code> that fakes a function returning Promise&lt;'T&gt; as opposed to just <code>'T</code>. If you need to return just <code>'T</code>, use <code>catch</code>.</p>
+<pre style="background-color: #FFFFFF;color: #000000;padding: 1em"><code><span>Promise.create </span><span style="color: #A626A4">(fun</span><span style="color: #383A42"> resolve reject </span><span style="color: #A626A4">-&gt;</span>
+<span>    reject </span><span style="color: #A626A4">(</span><span>System.Exception </span><span style="color: #50A14F">&quot;User not found&quot;</span><span style="color: #A626A4">)</span>
+<span style="color: #A626A4">)</span>
+<span style="color: #A626A4">|&gt;</span><span> Promise.catchBind </span><span style="color: #A626A4">(fun</span><span style="color: #383A42"> error </span><span style="color: #A626A4">-&gt;</span>
+<span>    </span><span style="color: #A0A1A7;font-style: italic">// Recover from the error, here we call another promise and returns it&#039;s result</span>
+<span>    logErrorToTheServer error</span>
+<span style="color: #A626A4">)</span>
+<span style="color: #A626A4">|&gt;</span><span> Promise.map </span><span style="color: #A626A4">..</span><span>.</span></code></pre>
+<h2>Promise.catchEnd <a href="#Promise.catchEnd" aria-hidden="true"><span class="anchor" id="Promise.catchEnd"></span>#</a></h2>
+<p><code>catchEnd: fail: (Exception -&gt; unit) -&gt; pr  : Promise&lt;'T&gt; -&gt; unit</code></p>
+<p>Used to catch errors at the end of a promise chain.</p>
+<pre style="background-color: #FFFFFF;color: #000000;padding: 1em"><code><span>Promise.create </span><span style="color: #A626A4">(fun</span><span style="color: #383A42"> resolve reject </span><span style="color: #A626A4">-&gt;</span>
+<span>    reject </span><span style="color: #A626A4">(</span><span>System.Exception </span><span style="color: #50A14F">&quot;User not found&quot;</span><span style="color: #A626A4">)</span>
+<span style="color: #A626A4">)</span>
+<span style="color: #A626A4">|&gt;</span><span> Promise.map </span><span style="color: #A626A4">(fun</span><span style="color: #383A42"> _ </span><span style="color: #A626A4">-&gt;</span>
+<span>    </span><span style="color: #A0A1A7;font-style: italic">// ...</span>
+<span style="color: #A626A4">)</span>
+<span style="color: #A626A4">|&gt;</span><span> Promise.map </span><span style="color: #A626A4">(fun</span><span style="color: #383A42"> _ </span><span style="color: #A626A4">-&gt;</span>
+<span>    </span><span style="color: #A0A1A7;font-style: italic">// ...</span>
+<span style="color: #A626A4">)</span>
+<span style="color: #A626A4">|&gt;</span><span> Promise.catchEnd </span><span style="color: #A626A4">(fun</span><span style="color: #383A42"> error </span><span style="color: #A626A4">-&gt;</span>
+<span>    </span><span style="color: #A0A1A7;font-style: italic">// ...</span>
+<span style="color: #A626A4">)</span><span> </span><span style="color: #A0A1A7;font-style: italic">// Returns unit</span></code></pre>
+<h2>Promise.either <a href="#Promise.either" aria-hidden="true"><span class="anchor" id="Promise.either"></span>#</a></h2>
+<p><code>either: success: ('T -&gt; U2&lt;'R,JS.Promise&lt;'R&gt;&gt;) -&gt; fail : ('E -&gt; U2&lt;'R,JS.Promise&lt;'R&gt;&gt;) -&gt; pr : Promise&lt;'T&gt; -&gt; Promise&lt;'R&gt;</code></p>
+<p>A combination of <code>map/bind</code> and <code>catch/catchBind</code>, this function applies the <code>success</code> continuation when the input promise resolves successfully, or <code>fail</code> continuation when the input promise fails. Both continuations may return either naked value <code>'R</code> or another promise <code>Promise&lt;'R&gt;</code>. Use the erased-cast operator <code>!^</code> to cast values when returning, for example:</p>
+<pre style="background-color: #FFFFFF;color: #000000;padding: 1em"><code><span>somePromise</span>
+<span style="color: #A626A4">|&gt;</span><span> Promise.either</span>
+<span>    </span><span style="color: #A626A4">(fun</span><span style="color: #383A42"> x </span><span style="color: #A626A4">-&gt;</span><span> </span><span style="color: #A626A4">!^(</span><span>string x</span><span style="color: #A626A4">))</span>
+<span>    </span><span style="color: #A626A4">(fun</span><span style="color: #383A42"> err </span><span style="color: #A626A4">-&gt;</span><span> </span><span style="color: #A626A4">^!(</span><span>Promise.lift err.Message</span><span style="color: #A626A4">))</span>
+<span style="color: #A626A4">|&gt;</span><span> Promise.map </span><span style="color: #A626A4">..</span><span>.</span></code></pre>
+<h2>Promise.eitherEnd <a href="#Promise.eitherEnd" aria-hidden="true"><span class="anchor" id="Promise.eitherEnd"></span>#</a></h2>
+<p><code>eitherEnd: success: ('T -&gt; unit) -&gt; fail : ('E -&gt; unit) -&gt; pr : Promise&lt;'T&gt; -&gt; unit</code></p>
+<p>Same as <a href="#Promise.either"><code>Promise.either</code></a> but stopping the promise execution.</p>
+<pre style="background-color: #FFFFFF;color: #000000;padding: 1em"><code><span>somePromise</span>
+<span style="color: #A626A4">|&gt;</span><span> Promise.eitherEnd</span>
+<span>    </span><span style="color: #A626A4">(fun</span><span style="color: #383A42"> x </span><span style="color: #A626A4">-&gt;</span><span> </span><span style="color: #A626A4">!^(</span><span>string x</span><span style="color: #A626A4">))</span>
+<span>    </span><span style="color: #A626A4">(fun</span><span style="color: #383A42"> err </span><span style="color: #A626A4">-&gt;</span><span> </span><span style="color: #A626A4">^!(</span><span>Promise.lift err.Message</span><span style="color: #A626A4">))</span></code></pre>
+<h2>Promise.start <a href="#Promise.start" aria-hidden="true"><span class="anchor" id="Promise.start"></span>#</a></h2>
+<p><code>start: pr: Promise&lt;'T&gt; -&gt; unit</code></p>
+<p>Start a promise.</p>
+<p>In version before XXX, it was used because the promise CE was originally cold, so it didn't start until <code>then</code> was called. Now it's hot same as native promises, so <code>Promise.start</code> is equivalent to <code>promise |&gt; ignore</code></p>
+<pre style="background-color: #FFFFFF;color: #000000;padding: 1em"><code><span>myPromise</span>
+<span style="color: #A626A4">|&gt;</span><span> Promise.start</span></code></pre>
+<h2>Promise.tryStart <a href="#Promise.tryStart" aria-hidden="true"><span class="anchor" id="Promise.tryStart"></span>#</a></h2>
+<p><code>tryStart: fail: (Exception -&gt; unit) -&gt; pr : Promise&lt;'T&gt; -&gt; unit</code></p>
+<p>Same as <a href="#Promise.start">Promise.start</a> but forcing you to handle the rejected state.</p>
+<pre style="background-color: #FFFFFF;color: #000000;padding: 1em"><code><span>myPromise</span>
+<span style="color: #A626A4">|&gt;</span><span> Promise.tryStart</span>
+<span>    </span><span style="color: #A626A4">(fun</span><span style="color: #383A42"> error </span><span style="color: #A626A4">-&gt;</span>
+<span>        </span><span style="color: #A0A1A7;font-style: italic">// Do something on error</span>
+<span>    </span><span style="color: #A626A4">)</span></code></pre>
+<h2>Promise.Parallel <a href="#Promise.Parallel" aria-hidden="true"><span class="anchor" id="Promise.Parallel"></span>#</a></h2>
+<p><code>Parallel: pr: seq&lt;JS.Promise&lt;'T&gt;&gt; -&gt; Promise&lt;'T array&gt;</code></p>
+<p>Same as <a href="#Promise.all">Promise.all</a></p>
+<pre style="background-color: #FFFFFF;color: #000000;padding: 1em"><code><span style="color: #A626A4">let</span><span> </span><span style="color: #E45649">p1</span><span> </span><span style="color: #A626A4">=</span>
+<span>    </span><span style="color: #A626A4">promise {</span>
+<span>        </span><span style="color: #A626A4">do!</span><span> Promise.sleep </span><span style="color: #986801">100</span>
+<span>        </span><span style="color: #A626A4">return</span><span> </span><span style="color: #986801">1</span>
+<span>    </span><span style="color: #A626A4">}</span>
+<span style="color: #A626A4">let</span><span> </span><span style="color: #E45649">p2</span><span> </span><span style="color: #A626A4">=</span>
+<span>    </span><span style="color: #A626A4">promise {</span>
+<span>        </span><span style="color: #A626A4">do!</span><span> Promise.sleep </span><span style="color: #986801">200</span>
+<span>        </span><span style="color: #A626A4">return</span><span> </span><span style="color: #986801">2</span>
+<span>    </span><span style="color: #A626A4">}</span>
+<span style="color: #A626A4">let</span><span> </span><span style="color: #E45649">p3</span><span> </span><span style="color: #A626A4">=</span>
+<span>    </span><span style="color: #A626A4">promise {</span>
+<span>        </span><span style="color: #A626A4">do!</span><span> Promise.sleep </span><span style="color: #986801">300</span>
+<span>        </span><span style="color: #A626A4">return</span><span> </span><span style="color: #986801">3</span>
+<span>    </span><span style="color: #A626A4">}</span>
+
+<span>Promise.Parallel </span><span style="color: #A626A4">[</span><span>p1</span><span style="color: #A626A4">;</span><span> p2</span><span style="color: #A626A4">;</span><span> p3</span><span style="color: #A626A4">]</span>
+<span style="color: #A626A4">|&gt;</span><span> Promise.map </span><span style="color: #A626A4">(fun</span><span style="color: #383A42"> res </span><span style="color: #A626A4">-&gt;</span>
+<span>    </span><span style="color: #A0A1A7;font-style: italic">// res = [|1; 2; 3 |]</span>
+<span style="color: #A626A4">)</span>
+<span style="color: #A626A4">|&gt;</span><span> Promise.map </span><span style="color: #A626A4">..</span><span>.</span></code></pre>
+<h2>Promise.all <a href="#Promise.all" aria-hidden="true"><span class="anchor" id="Promise.all"></span>#</a></h2>
+<p><code>all: pr: seq&lt;JS.Promise&lt;'T&gt;&gt; -&gt; Promise&lt;'T array&gt;</code></p>
+<p><code>Promise.all</code> takes a sequence of promises as an input, and returns a single <code>Promise</code> that resolves to an array of the results of the input promises.</p>
+<pre style="background-color: #FFFFFF;color: #000000;padding: 1em"><code><span style="color: #A626A4">let</span><span> </span><span style="color: #E45649">p1</span><span> </span><span style="color: #A626A4">=</span>
+<span>    </span><span style="color: #A626A4">promise {</span>
+<span>        </span><span style="color: #A626A4">do!</span><span> Promise.sleep </span><span style="color: #986801">100</span>
+<span>        </span><span style="color: #A626A4">return</span><span> </span><span style="color: #986801">1</span>
+<span>    </span><span style="color: #A626A4">}</span>
+<span style="color: #A626A4">let</span><span> </span><span style="color: #E45649">p2</span><span> </span><span style="color: #A626A4">=</span>
+<span>    </span><span style="color: #A626A4">promise {</span>
+<span>        </span><span style="color: #A626A4">do!</span><span> Promise.sleep </span><span style="color: #986801">200</span>
+<span>        </span><span style="color: #A626A4">return</span><span> </span><span style="color: #986801">2</span>
+<span>    </span><span style="color: #A626A4">}</span>
+<span style="color: #A626A4">let</span><span> </span><span style="color: #E45649">p3</span><span> </span><span style="color: #A626A4">=</span>
+<span>    </span><span style="color: #A626A4">promise {</span>
+<span>        </span><span style="color: #A626A4">do!</span><span> Promise.sleep </span><span style="color: #986801">300</span>
+<span>        </span><span style="color: #A626A4">return</span><span> </span><span style="color: #986801">3</span>
+<span>    </span><span style="color: #A626A4">}</span>
+
+<span>Promise.all </span><span style="color: #A626A4">[</span><span>p1</span><span style="color: #A626A4">;</span><span> p2</span><span style="color: #A626A4">;</span><span> p3</span><span style="color: #A626A4">]</span>
+<span style="color: #A626A4">|&gt;</span><span> Promise.map </span><span style="color: #A626A4">(fun</span><span style="color: #383A42"> res </span><span style="color: #A626A4">-&gt;</span>
+<span>    </span><span style="color: #A0A1A7;font-style: italic">// res = [|1; 2; 3 |]</span>
+<span style="color: #A626A4">)</span>
+<span style="color: #A626A4">|&gt;</span><span> Promise.map </span><span style="color: #A626A4">..</span><span>.</span></code></pre>
+<p>Note: If you need to return mixed types you can use boxing and unboxing</p>
+<pre style="background-color: #FFFFFF;color: #000000;padding: 1em"><code><span style="color: #A626A4">let</span><span> </span><span style="color: #E45649">users</span><span> </span><span style="color: #A626A4">=</span>
+<span>    </span><span style="color: #A626A4">promise {</span>
+<span>        </span><span style="color: #A626A4">let!</span><span> </span><span style="color: #E45649">users</span><span> </span><span style="color: #A626A4">=</span><span> fetchUsers </span><span style="color: #986801">()</span>
+<span>        </span><span style="color: #A626A4">return</span><span> box users</span>
+<span>    </span><span style="color: #A626A4">}</span>
+<span style="color: #A626A4">let</span><span> </span><span style="color: #E45649">posts</span><span> </span><span style="color: #A626A4">=</span>
+<span>    </span><span style="color: #A626A4">promise {</span>
+<span>        </span><span style="color: #A626A4">let!</span><span> </span><span style="color: #E45649">posts</span><span> </span><span style="color: #A626A4">=</span><span> fetchPosts </span><span style="color: #986801">()</span>
+<span>        </span><span style="color: #A626A4">return</span><span> box posts</span>
+<span>    </span><span style="color: #A626A4">}</span>
+
+<span>Promise.all </span><span style="color: #A626A4">[</span><span>p1</span><span style="color: #A626A4">;</span><span> p2</span><span style="color: #A626A4">]</span>
+<span style="color: #A626A4">|&gt;</span><span> Promise.map </span><span style="color: #A626A4">(fun</span><span style="color: #383A42"> res </span><span style="color: #A626A4">-&gt;</span>
+<span>    </span><span style="color: #A626A4">let</span><span> </span><span style="color: #E45649">users</span><span> </span><span style="color: #A626A4">=</span><span> unbox</span><span style="color: #A626A4">&lt;</span><span>User list</span><span style="color: #A626A4">&gt;</span><span> res.</span><span style="color: #A626A4">[</span><span style="color: #986801">0</span><span style="color: #A626A4">]</span>
+<span>    </span><span style="color: #A626A4">let</span><span> </span><span style="color: #E45649">posts</span><span> </span><span style="color: #A626A4">=</span><span> unbox</span><span style="color: #A626A4">&lt;</span><span>Post list</span><span style="color: #A626A4">&gt;</span><span> res.</span><span style="color: #A626A4">[</span><span style="color: #986801">1</span><span style="color: #A626A4">]</span>
+<span>    </span><span style="color: #A0A1A7;font-style: italic">// ...</span>
+<span style="color: #A626A4">)</span></code></pre>
+<h2>Promise.result <a href="#Promise.result" aria-hidden="true"><span class="anchor" id="Promise.result"></span>#</a></h2>
+<p><code>result: a: Promise&lt;'A&gt; -&gt; Promise&lt;Result&lt;'A,'E&gt;&gt;</code></p>
+<p>Map the <code>Promise</code> result into a <code>Result</code> type.</p>
+<pre style="background-color: #FFFFFF;color: #000000;padding: 1em"><code><span style="color: #A0A1A7;font-style: italic">// Success example</span>
+<span>Promise.lift </span><span style="color: #986801">42</span>
+<span style="color: #A626A4">|&gt;</span><span> Promise.result</span>
+<span style="color: #A626A4">|&gt;</span><span> Promise.map </span><span style="color: #A626A4">(fun</span><span style="color: #383A42"> value </span><span style="color: #A626A4">-&gt;</span>
+<span>    </span><span style="color: #A0A1A7;font-style: italic">// value = Ok 42</span>
+<span style="color: #A626A4">)</span>
+
+<span style="color: #A0A1A7;font-style: italic">// Fail example</span>
+<span>Promise.reject </span><span style="color: #50A14F">&quot;Invalid value&quot;</span>
+<span style="color: #A626A4">|&gt;</span><span> Promise.result</span>
+<span style="color: #A626A4">|&gt;</span><span> Promise.map </span><span style="color: #A626A4">(fun</span><span style="color: #383A42"> value </span><span style="color: #A626A4">-&gt;</span>
+<span>    </span><span style="color: #A0A1A7;font-style: italic">// value = Error &quot;Invalid value&quot;</span>
+<span style="color: #A626A4">)</span></code></pre>
+<h2>Promise.mapResult <a href="#Promise.mapResult" aria-hidden="true"><span class="anchor" id="Promise.mapResult"></span>#</a></h2>
+<p><code>mapResult: fn: ('A -&gt; 'B) -&gt; myPromise : Promise&lt;Result&lt;'A,'E&gt;&gt; -&gt; Promise&lt;Result&lt;'B,'E&gt;&gt;</code></p>
+<p>Evaluates to <code>myPromise |&gt; Promise.map (Result.map fn)</code></p>
+<pre style="background-color: #FFFFFF;color: #000000;padding: 1em"><code><span>Promise.lift </span><span style="color: #986801">42</span>
+<span style="color: #A626A4">|&gt;</span><span> Promise.result</span>
+<span style="color: #A626A4">|&gt;</span><span> Promise.mapResult </span><span style="color: #A626A4">(fun</span><span style="color: #383A42"> value </span><span style="color: #A626A4">-&gt;</span>
+<span>    value </span><span style="color: #A626A4">+</span><span> </span><span style="color: #986801">10</span>
+<span style="color: #A626A4">)</span>
+<span style="color: #A626A4">|&gt;</span><span> Promise.map </span><span style="color: #A626A4">(fun</span><span style="color: #383A42"> value </span><span style="color: #A626A4">-&gt;</span>
+<span>    </span><span style="color: #A0A1A7;font-style: italic">// value = Ok 52</span>
+<span style="color: #A626A4">)</span></code></pre>
+<h2>Promise.bindResult <a href="#Promise.bindResult" aria-hidden="true"><span class="anchor" id="Promise.bindResult"></span>#</a></h2>
+<p><code>bindResult: fn: ('A -&gt; JS.Promise&lt;'B&gt;) -&gt; a : Promise&lt;Result&lt;'A,'E&gt;&gt; -&gt; Promise&lt;Result&lt;'B,'E&gt;&gt;</code></p>
+<p>Transform the success part of a result promise into another promise.</p>
+<pre style="background-color: #FFFFFF;color: #000000;padding: 1em"><code><span style="color: #A626A4">let</span><span> </span><span style="color: #E45649">multiplyBy2</span><span style="color: #383A42"> </span><span style="color: #A626A4">(</span><span style="color: #383A42">value </span><span style="color: #A626A4">:</span><span> </span><span style="color: #C18401">int</span><span style="color: #A626A4">)</span><span> </span><span style="color: #A626A4">=</span>
+<span>    Promise.create </span><span style="color: #A626A4">(fun</span><span style="color: #383A42"> resolve reject </span><span style="color: #A626A4">-&gt;</span>
+<span>        resolve </span><span style="color: #A626A4">(</span><span>value </span><span style="color: #A626A4">*</span><span> </span><span style="color: #986801">2</span><span style="color: #A626A4">)</span>
+<span>    </span><span style="color: #A626A4">)</span>
+
+<span>Promise.lift </span><span style="color: #986801">42</span>
+<span style="color: #A626A4">|&gt;</span><span> Promise.result</span>
+<span style="color: #A626A4">|&gt;</span><span> Promise.bindResult </span><span style="color: #A626A4">(fun</span><span style="color: #383A42"> value </span><span style="color: #A626A4">-&gt;</span>
+<span>    multiplyBy2 value</span>
+<span style="color: #A626A4">)</span>
+<span style="color: #A626A4">|&gt;</span><span> Promise.map </span><span style="color: #A626A4">(fun</span><span style="color: #383A42"> value </span><span style="color: #A626A4">-&gt;</span>
+<span>    </span><span style="color: #A0A1A7;font-style: italic">// value = Ok 84</span>
+<span style="color: #A626A4">)</span></code></pre>
+<h2>Promise.mapResultError <a href="#Promise.mapResultError" aria-hidden="true"><span class="anchor" id="Promise.mapResultError"></span>#</a></h2>
+<p><code>mapResultError: fn: ('B -&gt; 'C) -&gt; a : Promise&lt;Result&lt;'A,'B&gt;&gt; -&gt; Promise&lt;Result&lt;'A,'C&gt;&gt;</code></p>
+<p>Evaluates to <code>myPromise |&gt; Promise.map (Result.map fn)</code></p>
+<pre style="background-color: #FFFFFF;color: #000000;padding: 1em"><code><span>Promise.reject </span><span style="color: #A626A4">-</span><span style="color: #986801">1</span>
+<span style="color: #A626A4">|&gt;</span><span> Promise.result</span>
+<span style="color: #A626A4">|&gt;</span><span> Promise.mapResultError </span><span style="color: #A626A4">(fun</span><span style="color: #383A42"> value </span><span style="color: #A626A4">-&gt;</span>
+<span>    $</span><span style="color: #50A14F">&quot;</span><span style="color: #A626A4">%s</span><span style="color: #50A14F">{value} is not a valid value&quot;</span>
+<span style="color: #A626A4">)</span>
+<span style="color: #A626A4">|&gt;</span><span> Promise.map </span><span style="color: #A626A4">(fun</span><span style="color: #383A42"> value </span><span style="color: #A626A4">-&gt;</span>
+<span>    </span><span style="color: #A0A1A7;font-style: italic">// value = Error &quot;-1 is not a valid value&quot;</span>
+<span style="color: #A626A4">)</span></code></pre>
+<h2>Promise.tap <a href="#Promise.tap" aria-hidden="true"><span class="anchor" id="Promise.tap"></span>#</a></h2>
+<p><code>tap: fn: ('A -&gt; unit) -&gt; a : Promise&lt;'A&gt; -&gt; Promise&lt;'A&gt;</code></p>
+<p>This is an identity function, it calls the given function and return the promise value untouched.</p>
+<pre style="background-color: #FFFFFF;color: #000000;padding: 1em"><code><span>fetchUser </span><span style="color: #986801">()</span>
+<span style="color: #A626A4">|&gt;</span><span> Promise.tap </span><span style="color: #A626A4">(fun</span><span style="color: #383A42"> user </span><span style="color: #A626A4">-&gt;</span>
+<span>    </span><span style="color: #A0A1A7;font-style: italic">// Do something</span>
+<span>    console.log </span><span style="color: #50A14F">&quot;The user has been received&quot;</span>
+<span style="color: #A626A4">)</span>
+<span style="color: #A626A4">|&gt;</span><span> Promise.map </span><span style="color: #A626A4">(fun</span><span style="color: #383A42"> user </span><span style="color: #A626A4">-&gt;</span>
+<span>    </span><span style="color: #A0A1A7;font-style: italic">// user value is available here untouched</span>
+<span style="color: #A626A4">)</span></code></pre>
+</div></div></section><div class="navigation-container"><button class="button navigate-to-previous is-invisible"></button><a class="button navigate-to-next is-primary is-outlined" href="/fable-promise/documentation/computation-expression.html"><span class=" is-uppercase">Computation expression</span><span class="icon"><i class=" fas fa-arrow-right"></i></span></a></div></div></div></div><script async="" src="/fable-promise/resources/nacara-standard-layouts/scripts/menu.js"></script></body></html>
