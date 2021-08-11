@@ -3,7 +3,55 @@ title: Pipeline
 layout: nacara-standard
 ---
 
-## Promise.create
+## Introduction
+
+Pipeline style allows you use to chian your promise using the pipe operator `|>`.
+
+Writing your code using the pipeline style makes your code looks similar to what you would write in JavaScript.
+
+<div class="columns" date-disable-copy-button="true">
+    <div class="column is-half-desktop">
+
+<div class="has-text-centered mb-2 has-text-weight-semibold">JavaScript</div>
+
+```js
+fetch('https://my-api.com/users')
+.then(function (response) {
+  return fetch('https://my-api.com/posts')
+})
+.then(function (response) {
+    // Done, do something with the result
+})
+.catch(function (req) {
+    // An error ocurred
+})
+```
+
+</div>
+    <div class="column is-half-desktop">
+
+<div class="has-text-centered mb-2 has-text-weight-semibold">F#</div>
+
+```fsharp
+fetch "https://my-api.com/users"
+|> Promise.map (fun response ->
+    fetch "https://my-api.com/posts"
+)
+|> Promise.map (fun response ->
+    // Done, do something with the result
+)
+|> Promise.catch (fun error ->
+    // An error ocurred
+)
+```
+</div>
+</div>
+
+## API
+
+Description and examples for all the pipeline API.
+
+### Promise.create
 
 `create: f: (('T -> unit) -> (Exception -> unit) -> unit) -> Promise<'T>`
 
@@ -20,7 +68,7 @@ let write (path: string) (content: string) =
     )
 ```
 
-## Promise.sleep
+### Promise.sleep
 
 `sleep: ms: int -> Promise<unit>`
 
@@ -38,7 +86,7 @@ doSomething ()
 |> Promise.map ...
 ```
 
-## Promise.lift
+### Promise.lift
 
 `lift: a: 'T -> Promise<'T>`
 
@@ -53,7 +101,7 @@ Promise.lift {| Firstname = "John" |}
 |> Promise.map ...
 ```
 
-## Promise.reject
+### Promise.reject
 
 `reject: reason: obj -> Promise<'T>`
 
@@ -71,7 +119,7 @@ Promise.reject "User not found"
 |> Promise.map ...
 ```
 
-## Promise.bind
+### Promise.bind
 
 `bind: a : ('T -> JS.Promise<'R>) -> pr: Promise<'T> -> Promise<'R>`
 
@@ -92,7 +140,7 @@ Promise.lift {| Firstname = "John" |}
 |> Promise.map ...
 ```
 
-## Promise.map
+### Promise.map
 
 `map: a : ('T -> 'R) -> pr: Promise<'T> -> Promise<'R>`
 
@@ -106,7 +154,7 @@ Promise.lift {| Firstname = "John" |}
 |> Promise.map ...
 ```
 
-## Promise.iter
+### Promise.iter
 
 `iter: a : ('T -> unit) -> pr: Promise<'T> -> unit`
 
@@ -121,7 +169,7 @@ fetchUser ()
 ) // unit
 ```
 
-## Promise.catch
+### Promise.catch
 
 `catch: fail: (Exception -> 'T) -> pr  : Promise<'T> -> Promise<'T>`
 
@@ -142,7 +190,7 @@ Promise.create (fun resolve reject ->
 |> Promise.map ...
 ```
 
-## Promise.catchBind
+### Promise.catchBind
 
 `catchBind: fail: (Exception -> JS.Promise<'T>) -> pr : Promise<'T> -> Promise<'T>`
 
@@ -161,7 +209,7 @@ Promise.create (fun resolve reject ->
 |> Promise.map ...
 ```
 
-## Promise.catchEnd
+### Promise.catchEnd
 
 `catchEnd: fail: (Exception -> unit) -> pr  : Promise<'T> -> unit`
 
@@ -182,7 +230,7 @@ Promise.create (fun resolve reject ->
 ) // Returns unit
 ```
 
-## Promise.either
+### Promise.either
 
 `either: success: ('T -> U2<'R,JS.Promise<'R>>) -> fail : ('E -> U2<'R,JS.Promise<'R>>) -> pr : Promise<'T> -> Promise<'R>`
 
@@ -196,7 +244,7 @@ somePromise
 |> Promise.map ...
 ```
 
-## Promise.eitherEnd
+### Promise.eitherEnd
 
 `eitherEnd: success: ('T -> unit) -> fail : ('E -> unit) -> pr : Promise<'T> -> unit`
 
@@ -209,7 +257,7 @@ somePromise
     (fun err -> ^!(Promise.lift err.Message))
 ```
 
-## Promise.start
+### Promise.start
 
 `start: pr: Promise<'T> -> unit`
 
@@ -222,7 +270,7 @@ myPromise
 |> Promise.start
 ```
 
-## Promise.tryStart
+### Promise.tryStart
 
 `tryStart: fail: (Exception -> unit) -> pr : Promise<'T> -> unit`
 
@@ -236,7 +284,7 @@ myPromise
     )
 ```
 
-## Promise.Parallel
+### Promise.Parallel
 
 `Parallel: pr: seq<JS.Promise<'T>> -> Promise<'T array>`
 
@@ -266,7 +314,7 @@ Promise.Parallel [p1; p2; p3]
 |> Promise.map ...
 ```
 
-## Promise.all
+### Promise.all
 
 `all: pr: seq<JS.Promise<'T>> -> Promise<'T array>`
 
@@ -318,7 +366,7 @@ Promise.all [p1; p2]
 )
 ```
 
-## Promise.result
+### Promise.result
 
 `result: a: Promise<'A> -> Promise<Result<'A,'E>>`
 
@@ -340,7 +388,7 @@ Promise.reject "Invalid value"
 )
 ```
 
-## Promise.mapResult
+### Promise.mapResult
 
 `mapResult: fn: ('A -> 'B) -> myPromise : Promise<Result<'A,'E>> -> Promise<Result<'B,'E>>`
 
@@ -357,7 +405,7 @@ Promise.lift 42
 )
 ```
 
-## Promise.bindResult
+### Promise.bindResult
 
 `bindResult: fn: ('A -> JS.Promise<'B>) -> a : Promise<Result<'A,'E>> -> Promise<Result<'B,'E>>`
 
@@ -379,7 +427,7 @@ Promise.lift 42
 )
 ```
 
-## Promise.mapResultError
+### Promise.mapResultError
 
 `mapResultError: fn: ('B -> 'C) -> a : Promise<Result<'A,'B>> -> Promise<Result<'A,'C>>`
 
@@ -396,7 +444,7 @@ Promise.reject -1
 )
 ```
 
-## Promise.tap
+### Promise.tap
 
 `tap: fn: ('A -> unit) -> a : Promise<'A> -> Promise<'A>`
 
