@@ -132,3 +132,47 @@ promise {
     return a + b + c // 1 + 2 + 3 = 6
 }
 ```
+
+### Support non-native promise (aka Thenable)
+
+In JavaScript, a thenable is an object that has a `then()` function. All promises are thenables, but not all thenables are promises.
+
+For example, this is the case when working on a VSCode extensions, or with mongoose, axios.
+
+[Source](https://masteringjs.io/tutorials/fundamentals/thenable)
+
+You can extends the `promise` extension to make it easy to works with your thenable.
+
+Example:
+
+```fsharp
+/// This is the definition of a thenable from ts2fable's generation VsCode API
+type [<AllowNullLiteral>] Thenable<'T> =
+    abstract ``then``: ?onfulfilled: ('T -> U2<'TResult, Thenable<'TResult>>) * ?onrejected: (obj option -> U2<'TResult, Thenable<'TResult>>) -> Thenable<'TResult>
+    abstract ``then``: ?onfulfilled: ('T -> U2<'TResult, Thenable<'TResult>>) * ?onrejected: (obj option -> unit) -> Thenable<'TResult>
+
+module Thenable =
+    // Transform a thenable into a promise
+    let toPromise (t: Thenable<'t>): JS.Promise<'t> =  unbox t
+
+type Promise.PromiseBuilder with
+    /// To make a value interop with the promise builder, you have to add an
+    /// overload of the `Source` member to convert from your type to a promise.
+    /// Because thenables are trivially convertible, we can just unbox them.
+    member x.Source(t: Thenable<'t>): JS.Promise<'t> = Thenable.toPromise t
+
+// You can now works with instance of Thenable from the promise computation
+
+// Dummy thenable for the example
+let sampleThenable () =
+    promise {
+        return 1
+    }
+    |> Thenable.ofPromise
+
+// See how you can use the thenable directly from the promise computation
+promise {
+    let! initialValue = sampleThenable()
+    // ...
+}
+```
