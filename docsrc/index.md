@@ -16,29 +16,34 @@ layout: nacara-navbar-only
             Fable.Promise
         </h2>
         <p class="content is-size-5 has-text-centered">
-            Fable.Promise is a library making it easy to work with Promise. It provides
+            Fable.Promise is a library making it easy to work with Promise.
+            <br/><br/>
+            It provides two styles of APIs
         </p>
         <div class="columns is-vcentered mt-5">
-            <div class="column is-4">
+            <div class="column is-4 is-offset-1-desktop">
                 <h4 class="title has-text-primary">
                     Pipeline API
                 </h4>
                 <p class="content is-size-5">
-                    Pipeline allows you to write close to JavaScript code.
+                    Pipeline allows you to write similar to JavaScript code.
                 </p>
+                <a href="/fable-promise/documentation/pipeline.html">
+                    Learn more →
+                </a>
             </div>
-            <div class="column is-6 is-offset-1 is-7-tablet">
+            <div class="column is-5 is-offset-1-desktop is-7-tablet-only">
                 <div class="content has-code-block is-normal">
 
 <!-- The indentation/format used has been chosen so the code is displayed
 without scrollbar on almost any screen size -->
 ```fsharp
-fetch "https://jsonplaceholder.typicode.com/users"
+fetch "https://my-api.com/users"
 |> Promise.map (fun user ->
-    fetch "https://jsonplaceholder.typicode.com/posts"
+    fetch "https://my-api.com/posts"
 )
 |> Promise.map (fun posts ->
-    fetch "https://jsonplaceholder.typicode.com/comments"
+    fetch "https://my-api.com/comments"
 )
 |> Promise.map (fun comments ->
     // Done
@@ -48,24 +53,27 @@ fetch "https://jsonplaceholder.typicode.com/users"
             </div>
         </div>
         <div class="columns is-vcentered mt-5">
-            <div class="column is-4">
+            <div class="column is-4 is-offset-1-desktop">
                 <h4 class="title has-text-primary">
                     Computation expressions
                 </h4>
                 <p class="content is-size-5">
                     Computation expressions make it easy to chain operations
                 </p>
+                <a href="/fable-promise/documentation/computation-expression.html">
+                    Learn more →
+                </a>
             </div>
-            <div class="column is-6 is-offset-1 is-7-tablet">
+            <div class="column is-5 is-offset-1-desktop is-7-tablet-only">
                 <div class="content has-code-block is-normal">
 
 <!-- The indentation/format used has been chosen so the code is displayed
 without scrollbar on almost any screen size -->
 ```fsharp
 promise {
-    let! users = fetch "https://jsonplaceholder.typicode.com/users"
-    let! posts = fetch "https://jsonplaceholder.typicode.com/posts"
-    let! comments = fetch "https://jsonplaceholder.typicode.com/comments"
+    let! users = fetch "https://my-api.com/users"
+    let! posts = fetch "https://my-api.com/posts"
+    let! comments = fetch "https://my-api.com/comments"
 
     // Done success
     return ()
