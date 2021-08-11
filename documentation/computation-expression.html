@@ -1,0 +1,90 @@
+<html class="has-navbar-fixed-top"><head><title>Fable.Promise · Computation expression</title><meta http-equiv="content-type"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" type="text/css" href="/fable-promise/style.css"/><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous"/></head><body><nav class="navbar is-fixed-top"><div class="container"><div class="navbar-brand"><a class="navbar-item title is-4" href="https://fable.io/fable-promise/">Fable.Promise</a><a class="navbar-item is-hidden-desktop" href="https://github.com/fable-compiler/fable-promise"><span class="icon"><i class=" fab fa-github fa-lg"></i></span></a><a class="navbar-item is-hidden-desktop" href="https://twitter.com/FableCompiler"><span class="icon"><i class=" fab fa-twitter fa-lg"></i></span></a><a class="navbar-burger" data-target="nav-menu"><span></span><span></span><span></span></a></div><div class="navbar-menu" id="nav-menu"><div class="navbar-start"><a class="navbar-item is-active" href="/documentation/pipeline.html">Documentation</a></div><div class="navbar-end"><a class="navbar-item" href="https://github.com/fable-compiler/fable-promise"><span class="icon"><i class=" fab fa-github fa-lg"></i></span></a><a class="navbar-item" href="https://twitter.com/FableCompiler"><span class="icon"><i class=" fab fa-twitter fa-lg"></i></span></a></div></div></div></nav><div class="container"><div class="mobile-menu"><nav class="breadcrumb"><ul><li><a class="menu-trigger"><span></span><span></span><span></span></a></li><li class="is-active"><a>API</a></li><li class="is-active"><a>Computation expression</a></li></ul></nav></div><div class="columns is-gapless is-mobile"><div class="column is-menu-column is-3-desktop is-hidden-touch ml-5"><div class="menu-container"><aside class="menu"><ul class="menu-list"><li><a class=" " href="/fable-promise/documentation/getting-started.html">Getting started</a></li><ul class="menu-list"><p class="menu-label">API</p><li><a class=" " href="/fable-promise/documentation/pipeline.html">Pipeline</a></li><li><a class=" is-active has-table-of-content" href="/fable-promise/documentation/computation-expression.html">Computation expression</a></li><ul class="table-of-content"><li><a href="#Introduction" data-toc-element="true">Introduction </a></li><li><a href="#Guides" data-toc-element="true">Guides </a><ul class="table-of-content"><li><a href="#Create-a-promise" data-toc-element="true">Create a promise </a></li><li><a href="#Chaining-promises" data-toc-element="true">Chaining promises </a></li><li><a href="#Nesting-promises" data-toc-element="true">Nesting promises </a></li><li><a href="#Parallel" data-toc-element="true">Parallel </a></li></ul></li></ul></ul></ul></aside></div></div><div class="column is-8-desktop is-full-touch"><section class="section"><div class="content"><header class="page-header"><a class="button is-hidden-touch is-outlined is-primary is-pulled-right" target="_blank" href="https://github.com/fable-compiler/fable-promise/edit/master/docsrc/documentation/computation-expression.md">Edit</a><h1 class="title is-1">Computation expression</h1></header><div><h2>Introduction <a href="#Introduction" aria-hidden="true"><span class="anchor" id="Introduction"></span>#</a></h2>
+<p>The <code>promise</code> computation expression makes it really easy to create and compose promise using F#.</p>
+<div class="columns" date-disable-copy-button="true">
+    <div class="column is-half-desktop">
+<div class="has-text-centered mb-2 has-text-weight-semibold">Pipeline API</div>
+<pre style="background-color: #FFFFFF;color: #000000;padding: 1em"><code><span>fetch </span><span style="color: #50A14F">&quot;https://x.x/users&quot;</span>
+<span style="color: #A626A4">|&gt;</span><span> Promise.map </span><span style="color: #A626A4">(fun</span><span style="color: #383A42"> response </span><span style="color: #A626A4">-&gt;</span>
+<span>    fetch </span><span style="color: #50A14F">&quot;https://x.x/posts&quot;</span>
+<span style="color: #A626A4">)</span>
+<span style="color: #A626A4">|&gt;</span><span> Promise.map </span><span style="color: #A626A4">(fun</span><span style="color: #383A42"> response </span><span style="color: #A626A4">-&gt;</span>
+<span>    </span><span style="color: #A0A1A7;font-style: italic">// Done, do something with the result</span>
+<span style="color: #A626A4">)</span></code></pre>
+</div>
+    <div class="column is-half-desktop">
+<div class="has-text-centered mb-2 has-text-weight-semibold">Computation expression</div>
+<pre style="background-color: #FFFFFF;color: #000000;padding: 1em"><code><span style="color: #A626A4">promise {</span>
+<span>    </span><span style="color: #A626A4">let!</span><span> </span><span style="color: #E45649">users</span><span> </span><span style="color: #A626A4">=</span><span> fetch </span><span style="color: #50A14F">&quot;https://x.x/users&quot;</span>
+<span>    </span><span style="color: #A626A4">let!</span><span> </span><span style="color: #E45649">posts</span><span> </span><span style="color: #A626A4">=</span><span> fetch </span><span style="color: #50A14F">&quot;https://x.x/posts&quot;</span>
+
+<span>    </span><span style="color: #A0A1A7;font-style: italic">// Done, do something with the result</span>
+<span>    </span><span style="color: #A626A4">return</span><span> </span><span style="color: #A0A1A7;font-style: italic">//...</span>
+<span style="color: #A626A4">}</span></code></pre>
+</div>
+</div>
+<h2>Guides <a href="#Guides" aria-hidden="true"><span class="anchor" id="Guides"></span>#</a></h2>
+<p>Here is a quick guides of what you can do with <code>promise</code> computations.</p>
+<p>You can read more about computation expression in F# <a href="https://docs.microsoft.com/en-us/dotnet/fsharp/language-reference/computation-expressions">here</a>.</p>
+<h3>Create a promise <a href="#Create-a-promise" aria-hidden="true"><span class="anchor" id="Create-a-promise"></span>#</a></h3>
+<p>Creating a promise is as simple as writing <code>promise { }</code>.</p>
+<pre style="background-color: #FFFFFF;color: #000000;padding: 1em"><code><span style="color: #A626A4">let</span><span> </span><span style="color: #E45649">double</span><span style="color: #383A42"> </span><span style="color: #A626A4">(</span><span style="color: #383A42">value </span><span style="color: #A626A4">:</span><span> </span><span style="color: #C18401">int</span><span style="color: #A626A4">)</span><span> </span><span style="color: #A626A4">=</span>
+<span>    </span><span style="color: #A626A4">promise {</span>
+<span>        </span><span style="color: #A626A4">return</span><span> value </span><span style="color: #A626A4">*</span><span> </span><span style="color: #986801">2</span>
+<span>    </span><span style="color: #A626A4">}</span></code></pre>
+<h3>Chaining promises <a href="#Chaining-promises" aria-hidden="true"><span class="anchor" id="Chaining-promises"></span>#</a></h3>
+<p>If you need the result of a promise before calling another one, use the <code>let!</code> keyword</p>
+<pre style="background-color: #FFFFFF;color: #000000;padding: 1em"><code><span style="color: #A626A4">promise {</span>
+<span>    </span><span style="color: #A626A4">let!</span><span> </span><span style="color: #E45649">user</span><span> </span><span style="color: #A626A4">=</span><span> fetchUsers session</span>
+<span>    </span><span style="color: #A626A4">let!</span><span> </span><span style="color: #E45649">permission</span><span> </span><span style="color: #A626A4">=</span><span> fetchPermission user</span>
+
+<span>    </span><span style="color: #A626A4">return</span><span> permission</span>
+<span style="color: #A626A4">}</span></code></pre>
+<p>You can also directly return the result of a promise avoiding to use <code>let!</code> and <code>return</code></p>
+<p><code>return!</code> will evaluate the promise and return the result value when completed</p>
+<pre style="background-color: #FFFFFF;color: #000000;padding: 1em"><code><span style="color: #A626A4">promise {</span>
+<span>    </span><span style="color: #A626A4">let!</span><span> </span><span style="color: #E45649">user</span><span> </span><span style="color: #A626A4">=</span><span> fetchUsers session</span>
+
+<span>    </span><span style="color: #A626A4">return!</span><span> fetchPermission user</span>
+<span style="color: #A626A4">}</span></code></pre>
+<h3>Nesting promises <a href="#Nesting-promises" aria-hidden="true"><span class="anchor" id="Nesting-promises"></span>#</a></h3>
+<p>You can nest <code>promise</code> computation as needed.</p>
+<pre style="background-color: #FFFFFF;color: #000000;padding: 1em"><code><span style="color: #A626A4">promise {</span>
+<span>    </span><span style="color: #A0A1A7;font-style: italic">// Nested promise which returns a value</span>
+<span>    </span><span style="color: #A626A4">let!</span><span> </span><span style="color: #E45649">isValid</span><span> </span><span style="color: #A626A4">=</span>
+<span>        </span><span style="color: #A626A4">promise {</span>
+<span>            </span><span style="color: #A0A1A7;font-style: italic">// Do something</span>
+<span>            </span><span style="color: #A626A4">return</span><span> aValue</span>
+<span>        </span><span style="color: #A626A4">}</span>
+
+<span>    </span><span style="color: #A0A1A7;font-style: italic">// Nested promise which return unit</span>
+<span>    </span><span style="color: #A626A4">do!</span><span> </span><span style="color: #A626A4">promise {</span>
+<span>        </span><span style="color: #A0A1A7;font-style: italic">// Do something</span>
+<span>        </span><span style="color: #A626A4">return</span><span> </span><span style="color: #986801">()</span>
+<span>    </span><span style="color: #A626A4">}</span>
+<span style="color: #A626A4">}</span></code></pre>
+<h3>Parallel <a href="#Parallel" aria-hidden="true"><span class="anchor" id="Parallel"></span>#</a></h3>
+<p>If you have independent promise, you can use <code>let!</code> and <code>and!</code> to run them in parallel.</p>
+<pre style="background-color: #FFFFFF;color: #000000;padding: 1em"><code><span style="color: #A626A4">let</span><span> </span><span style="color: #E45649">p1</span><span> </span><span style="color: #A626A4">=</span>
+<span>    </span><span style="color: #A626A4">promise {</span>
+<span>        </span><span style="color: #A626A4">do!</span><span> Promise.sleep </span><span style="color: #986801">100</span>
+<span>        </span><span style="color: #A626A4">return</span><span> </span><span style="color: #986801">1</span>
+<span>    </span><span style="color: #A626A4">}</span>
+<span style="color: #A626A4">let</span><span> </span><span style="color: #E45649">p2</span><span> </span><span style="color: #A626A4">=</span>
+<span>    </span><span style="color: #A626A4">promise {</span>
+<span>        </span><span style="color: #A626A4">do!</span><span> Promise.sleep </span><span style="color: #986801">200</span>
+<span>        </span><span style="color: #A626A4">return</span><span> </span><span style="color: #986801">2</span>
+<span>    </span><span style="color: #A626A4">}</span>
+<span style="color: #A626A4">let</span><span> </span><span style="color: #E45649">p3</span><span> </span><span style="color: #A626A4">=</span>
+<span>    </span><span style="color: #A626A4">promise {</span>
+<span>        </span><span style="color: #A626A4">do!</span><span> Promise.sleep </span><span style="color: #986801">300</span>
+<span>        </span><span style="color: #A626A4">return</span><span> </span><span style="color: #986801">3</span>
+<span>    </span><span style="color: #A626A4">}</span>
+
+<span style="color: #A626A4">promise {</span>
+<span>    </span><span style="color: #A626A4">let!</span><span> </span><span style="color: #E45649">a</span><span> </span><span style="color: #A626A4">=</span><span> p1</span>
+<span>    </span><span style="color: #A626A4">and!</span><span> b </span><span style="color: #A626A4">=</span><span> p2</span>
+<span>    </span><span style="color: #A626A4">and!</span><span> c </span><span style="color: #A626A4">=</span><span> p3</span>
+
+<span>    </span><span style="color: #A626A4">return</span><span> a </span><span style="color: #A626A4">+</span><span> b </span><span style="color: #A626A4">+</span><span> c </span><span style="color: #A0A1A7;font-style: italic">// 1 + 2 + 3 = 6</span>
+<span style="color: #A626A4">}</span></code></pre>
+</div></div></section><div class="navigation-container"><a class="button navigate-to-previous is-primary is-outlined" href="/fable-promise/documentation/pipeline.html"><span class="icon"><i class=" fas fa-arrow-left"></i></span><span class=" is-uppercase">Pipeline</span></a><button class="button navigate-to-next is-invisible"></button></div></div></div></div><script async="" src="/fable-promise/resources/nacara-standard-layouts/scripts/menu.js"></script></body></html>
