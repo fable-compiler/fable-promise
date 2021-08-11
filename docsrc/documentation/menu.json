@@ -1,4 +1,5 @@
 [
+    "documentation/getting-started",
     {
         "type": "category",
         "label": "API",
