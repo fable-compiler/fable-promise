@@ -8,7 +8,7 @@
     "navbar": {
         "start": [
             {
-                "url": "/documentation/pipeline.html",
+                "url": "/fable-promise/documentation/getting-started.html",
                 "section": "documentation",
                 "label": "Documentation"
             }
