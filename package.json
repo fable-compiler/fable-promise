@@ -19,8 +19,8 @@
   },
   "devDependencies": {
     "gh-pages": "^3.2.3",
-    "nacara": "^1.0.0-beta-006",
-    "nacara-layout-standard": "^1.0.0-beta-005",
+    "nacara": "^1.0.0-beta-008",
+    "nacara-layout-standard": "^1.0.0-beta-006",
     "shx": "^0.3.3"
   }
 }
