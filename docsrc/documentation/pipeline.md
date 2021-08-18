@@ -53,7 +53,7 @@ Description and examples for all the pipeline API.
 
 ### Promise.create
 
-`create: f: (('T -> unit) -> (Exception -> unit) -> unit) -> Promise<'T>`
+`create: f: (('T -> unit) -> (exn -> unit) -> unit) -> Promise<'T>`
 
 Create a promise from a function.
 
@@ -103,7 +103,7 @@ Promise.lift {| Firstname = "John" |}
 
 ### Promise.reject
 
-`reject: reason: obj -> Promise<'T>`
+`reject: reason: exn -> Promise<'T>`
 
 Create a promise (in rejected state) with supplied reason.
 
@@ -121,7 +121,7 @@ Promise.reject "User not found"
 
 ### Promise.bind
 
-`bind: a : ('T -> JS.Promise<'R>) -> pr: Promise<'T> -> Promise<'R>`
+`bind: a : ('T1 -> JS.Promise<'T2>) -> pr: Promise<'T1> -> Promise<'T2>`
 
 Bind a value into a promise of a new type.
 
@@ -142,7 +142,7 @@ Promise.lift {| Firstname = "John" |}
 
 ### Promise.map
 
-`map: a : ('T -> 'R) -> pr: Promise<'T> -> Promise<'R>`
+`map: a : ('T1 -> 'T2) -> pr: Promise<'T1> -> Promise<'T2>`
 
 Map a value into another type, the result will be wrapped in a promise for you.
 
@@ -171,7 +171,7 @@ fetchUser ()
 
 ### Promise.catch
 
-`catch: fail: (Exception -> 'T) -> pr  : Promise<'T> -> Promise<'T>`
+`catch: fail: (exn -> 'T) -> pr  : Promise<'T> -> Promise<'T>`
 
 Handle an errored promise allowing you pass a return value.
 
@@ -196,7 +196,7 @@ Promise.create (fun resolve reject ->
 
 Handle an errored promise allowing to call a promise.
 
-This is a version of `catch` that fakes a function returning Promise<'T> as opposed to just `'T`. If you need to return just `'T`, use `catch`.
+This version of `catch` expects a function returning `Promise<'T>` as opposed to just `'T`. If you need to return just `'T`, use `catch`.
 
 ```fsharp
 Promise.create (fun resolve reject ->
@@ -211,7 +211,7 @@ Promise.create (fun resolve reject ->
 
 ### Promise.catchEnd
 
-`catchEnd: fail: (Exception -> unit) -> pr  : Promise<'T> -> unit`
+`catchEnd: fail: (exn -> unit) -> pr  : Promise<'T> -> unit`
 
 Used to catch errors at the end of a promise chain.
 
@@ -232,15 +232,29 @@ Promise.create (fun resolve reject ->
 
 ### Promise.either
 
-`either: success: ('T -> U2<'R,JS.Promise<'R>>) -> fail : ('E -> U2<'R,JS.Promise<'R>>) -> pr : Promise<'T> -> Promise<'R>`
+`either: success: ('T1 -> 'T2) -> fail : (exn -> 'T2) -> pr : Promise<'T1> -> Promise<'T2>`
 
-A combination of `map/bind` and `catch/catchBind`, this function applies the `success` continuation when the input promise resolves successfully, or `fail` continuation when the input promise fails. Both continuations may return either naked value `'R` or another promise `Promise<'R>`. Use the erased-cast operator `!^` to cast values when returning, for example:
+A combination of `map` and `catch`, this function applies the `success` continuation when the input promise resolves successfully, or `fail` continuation when the input promise fails.
 
 ```fsharp
 somePromise
 |> Promise.either
-    (fun x -> !^(string x))
-    (fun err -> ^!(Promise.lift err.Message))
+    (fun x -> string x)
+    (fun err -> Promise.lift err.Message)
+|> Promise.map ...
+```
+
+### Promise.eitherBind
+
+`eitherBind: success: ('T1 -> JS.Promise<'T2>) -> fail : (exn -> JS.Promise<'T2>) -> pr : Promise<'T1> -> Promise<'T2>`
+
+A combination of `bind` and `catchBind`, this function applies the `success` continuation when the input promise resolves successfully, or `fail` continuation when the input promise fails.
+
+```fsharp
+somePromise
+|> Promise.eitherBind
+    (fun x -> string x |> Promise.lift)
+    (fun err -> Promise.lift err.Message)
 |> Promise.map ...
 ```
 
@@ -253,8 +267,8 @@ Same as [`Promise.either`](#Promise.either) but stopping the promise execution.
 ```fsharp
 somePromise
 |> Promise.eitherEnd
-    (fun x -> !^(string x))
-    (fun err -> ^!(Promise.lift err.Message))
+    (fun x -> string x)
+    (fun err -> Promise.lift err.Message)
 ```
 
 ### Promise.start
@@ -272,7 +286,7 @@ myPromise
 
 ### Promise.tryStart
 
-`tryStart: fail: (Exception -> unit) -> pr : Promise<'T> -> unit`
+`tryStart: fail: (exn -> unit) -> pr : Promise<'T> -> unit`
 
 Same as [Promise.start](#Promise.start) but forcing you to handle the rejected state.
 
@@ -368,7 +382,7 @@ Promise.all [p1; p2]
 
 ### Promise.result
 
-`result: a: Promise<'A> -> Promise<Result<'A,'E>>`
+`result: a: Promise<'T> -> Promise<Result<'T,exn>>`
 
 Map the `Promise` result into a `Result` type.
 
@@ -390,7 +404,7 @@ Promise.reject "Invalid value"
 
 ### Promise.mapResult
 
-`mapResult: fn: ('A -> 'B) -> myPromise : Promise<Result<'A,'E>> -> Promise<Result<'B,'E>>`
+`mapResult: fn: ('T1 -> 'T2) -> a : Promise<Result<'T1,'E>> -> Promise<Result<'T2,'E>>`
 
 Evaluates to `myPromise |> Promise.map (Result.map fn)`
 
@@ -407,7 +421,7 @@ Promise.lift 42
 
 ### Promise.bindResult
 
-`bindResult: fn: ('A -> JS.Promise<'B>) -> a : Promise<Result<'A,'E>> -> Promise<Result<'B,'E>>`
+`bindResult: fn: ('T1 -> JS.Promise<'T2>) -> a : Promise<Result<'T1,'E>> -> Promise<Result<'T2,'E>>`
 
 Transform the success part of a result promise into another promise.
 
@@ -429,7 +443,7 @@ Promise.lift 42
 
 ### Promise.mapResultError
 
-`mapResultError: fn: ('B -> 'C) -> a : Promise<Result<'A,'B>> -> Promise<Result<'A,'C>>`
+`mapResultError: fn: ('E1 -> 'E2) -> a : Promise<Result<'T,'E1>> -> Promise<Result<'T,'E2>>`
 
 Evaluates to `myPromise |> Promise.map (Result.map fn)`
 
