@@ -35,11 +35,11 @@ let tap (fn: 'T -> unit) (a: JS.Promise<'T>): JS.Promise<'T> =
     a |> map (fun x -> fn x; x)
 
 [<Emit("$1.catch($0)")>]
-/// This version of `catch` expects a function returning just 'T, as opposed to `Promise<'T>`. If you need to return `Promise<'T>`, use `catchBind`.
+/// This version of `catch` expects a function returning just `'T`, as opposed to `Promise<'T>`. If you need to return `Promise<'T>`, use `catchBind`.
 let catch (fail: exn -> 'T) (pr: JS.Promise<'T>): JS.Promise<'T> = jsNative
 
 [<Emit("$1.catch($0)")>]
-/// This version of `catch` expects a function returning Promise<'T> as opposed to just 'T. If you need to return just 'T, use `catch`.
+/// This version of `catch` expects a function returning `Promise<'T>` as opposed to just `'T`. If you need to return just 'T, use `catch`.
 let catchBind (fail: exn -> JS.Promise<'T>) (pr: JS.Promise<'T>): JS.Promise<'T> = jsNative
 
 [<Emit("void ($1.catch($0))")>]
