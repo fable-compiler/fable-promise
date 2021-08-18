@@ -260,11 +260,11 @@ describe "Promise tests" <| fun _ ->
             let failing = promise { failwith "Boo!" }
             let successful = Promise.lift 42
 
-            let! r1 = successful |> Promise.either (fun x -> !^(string x)) (fun x -> failwith "Shouldn't get called")
-            let! r2 = successful |> Promise.either (fun n -> string n |> Promise.lift |> U2.Case2) (fun x -> failwith "Shouldn't get called")
+            let! r1 = successful |> Promise.either (fun x -> string x) (fun x -> failwith "Shouldn't get called")
+            let! r2 = successful |> Promise.eitherBind (fun n -> string n |> Promise.lift) (fun x -> failwith "Shouldn't get called")
 
-            let! r3 = failing |> Promise.either (fun x -> failwith "Shouldn't get called") (fun (ex:Exception) -> !^ex.Message)
-            let! r4 = failing |> Promise.either (fun x -> failwith "Shouldn't get called") (fun (ex:Exception) -> Promise.lift ex.Message |> U2.Case2)
+            let! r3 = failing |> Promise.either (fun x -> failwith "Shouldn't get called") (fun (ex:Exception) -> ex.Message)
+            let! r4 = failing |> Promise.eitherBind (fun x -> failwith "Shouldn't get called") (fun (ex:Exception) -> Promise.lift ex.Message)
 
             r1 |> equal "42"
             r2 |> equal "42"
@@ -368,10 +368,14 @@ describe "Promise tests" <| fun _ ->
 
 
     it "Promise.result maps to Result.Error in case of error" <| fun () ->
-        Promise.reject "Invalid value"
+        Promise.reject (exn "Invalid value")
         |> Promise.result
         |> Promise.tap (fun result ->
-            result |> equal (Error "Invalid value")
+            let msg = 
+                match result with
+                | Ok _ -> ""
+                | Error e -> e.Message
+            msg |> equal "Invalid value"
         )
 
     it "Promise can be run in parallel with andFor extension" <| fun () ->
