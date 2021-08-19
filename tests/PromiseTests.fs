@@ -40,6 +40,12 @@ describe "Promise tests" <| fun _ ->
     it "Simple promise translates without exception" <| fun () ->
         promise { return () }
 
+    it "Promise.map works" <| fun () ->
+        Promise.lift "Hello"
+        |> Promise.map (fun x ->
+            x.Length |> equal 5
+        )
+
     it "PromiseBuilder.Combine works" <| fun () ->
         let nums = [|1;2;3;4;5|]
         promise {
