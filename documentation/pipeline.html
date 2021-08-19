@@ -1,4 +1,4 @@
-<html class="has-navbar-fixed-top"><head><title>Fable.Promise · Pipeline</title><meta http-equiv="content-type"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" type="text/css" href="/fable-promise/style.css"/><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous"/></head><body><nav class="navbar is-fixed-top"><div class="container"><div class="navbar-brand"><a class="navbar-item title is-4" href="https://fable.io/fable-promise/">Fable.Promise</a><a class="navbar-item is-hidden-desktop" href="https://github.com/fable-compiler/fable-promise"><span class="icon"><i class=" fab fa-github fa-lg"></i></span></a><a class="navbar-item is-hidden-desktop" href="https://twitter.com/FableCompiler"><span class="icon"><i class=" fab fa-twitter fa-lg"></i></span></a><a class="navbar-burger" data-target="nav-menu"><span></span><span></span><span></span></a></div><div class="navbar-menu" id="nav-menu"><div class="navbar-start"><a class="navbar-item is-active" href="/fable-promise/documentation/getting-started.html">Documentation</a></div><div class="navbar-end"><a class="navbar-item" href="https://github.com/fable-compiler/fable-promise"><span class="icon"><i class=" fab fa-github fa-lg"></i></span></a><a class="navbar-item" href="https://twitter.com/FableCompiler"><span class="icon"><i class=" fab fa-twitter fa-lg"></i></span></a></div></div></div></nav><div class="container"><div class="mobile-menu"><nav class="breadcrumb"><ul><li><a class="menu-trigger"><span></span><span></span><span></span></a></li><li class="is-active"><a>API</a></li><li class="is-active"><a>Pipeline</a></li></ul></nav></div><div class="columns is-gapless is-mobile"><div class="column is-menu-column is-3-desktop is-hidden-touch ml-5"><div class="menu-container"><aside class="menu"><ul class="menu-list"><li><a class=" " href="/fable-promise/documentation/getting-started.html">Getting started</a></li><ul class="menu-list"><p class="menu-label">API</p><li><a class=" is-active has-table-of-content" href="/fable-promise/documentation/pipeline.html">Pipeline</a></li><ul class="table-of-content"><li><a href="#Introduction" data-toc-element="true">Introduction </a></li><li><a href="#API" data-toc-element="true">API </a><ul class="table-of-content"><li><a href="#Promise.create" data-toc-element="true">Promise.create </a></li><li><a href="#Promise.sleep" data-toc-element="true">Promise.sleep </a></li><li><a href="#Promise.lift" data-toc-element="true">Promise.lift </a></li><li><a href="#Promise.reject" data-toc-element="true">Promise.reject </a></li><li><a href="#Promise.bind" data-toc-element="true">Promise.bind </a></li><li><a href="#Promise.map" data-toc-element="true">Promise.map </a></li><li><a href="#Promise.iter" data-toc-element="true">Promise.iter </a></li><li><a href="#Promise.catch" data-toc-element="true">Promise.catch </a></li><li><a href="#Promise.catchBind" data-toc-element="true">Promise.catchBind </a></li><li><a href="#Promise.catchEnd" data-toc-element="true">Promise.catchEnd </a></li><li><a href="#Promise.either" data-toc-element="true">Promise.either </a></li><li><a href="#Promise.eitherEnd" data-toc-element="true">Promise.eitherEnd </a></li><li><a href="#Promise.start" data-toc-element="true">Promise.start </a></li><li><a href="#Promise.tryStart" data-toc-element="true">Promise.tryStart </a></li><li><a href="#Promise.Parallel" data-toc-element="true">Promise.Parallel </a></li><li><a href="#Promise.all" data-toc-element="true">Promise.all </a></li><li><a href="#Promise.result" data-toc-element="true">Promise.result </a></li><li><a href="#Promise.mapResult" data-toc-element="true">Promise.mapResult </a></li><li><a href="#Promise.bindResult" data-toc-element="true">Promise.bindResult </a></li><li><a href="#Promise.mapResultError" data-toc-element="true">Promise.mapResultError </a></li><li><a href="#Promise.tap" data-toc-element="true">Promise.tap </a></li></ul></li></ul><li><a class=" " href="/fable-promise/documentation/computation-expression.html">Computation expression</a></li></ul></ul></aside></div></div><div class="column is-8-desktop is-full-touch"><section class="section"><div class="content"><header class="page-header"><a class="button is-hidden-touch is-outlined is-primary is-pulled-right" target="_blank" href="https://github.com/fable-compiler/fable-promise/edit/master/docsrc/documentation/pipeline.md">Edit</a><h1 class="title is-1">Pipeline</h1></header><div><h2>Introduction <a href="#Introduction" aria-hidden="true"><span class="anchor" id="Introduction"></span>#</a></h2>
+<html class="has-navbar-fixed-top"><head><title>Fable.Promise · Pipeline</title><meta http-equiv="content-type"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" type="text/css" href="/fable-promise/style.css"/><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous"/></head><body><nav class="navbar is-fixed-top"><div class="container"><div class="navbar-brand"><a class="navbar-item title is-4" href="https://fable.io/fable-promise/">Fable.Promise</a><a class="navbar-item is-hidden-desktop" href="https://github.com/fable-compiler/fable-promise"><span class="icon"><i class=" fab fa-github fa-lg"></i></span></a><a class="navbar-item is-hidden-desktop" href="https://twitter.com/FableCompiler"><span class="icon"><i class=" fab fa-twitter fa-lg"></i></span></a><a class="navbar-burger" data-target="nav-menu"><span></span><span></span><span></span></a></div><div class="navbar-menu" id="nav-menu"><div class="navbar-start"><a class="navbar-item is-active" href="/fable-promise/documentation/getting-started.html">Documentation</a></div><div class="navbar-end"><a class="navbar-item" href="https://github.com/fable-compiler/fable-promise"><span class="icon"><i class=" fab fa-github fa-lg"></i></span></a><a class="navbar-item" href="https://twitter.com/FableCompiler"><span class="icon"><i class=" fab fa-twitter fa-lg"></i></span></a></div></div></div></nav><div class="container"><div class="mobile-menu"><nav class="breadcrumb"><ul><li><a class="menu-trigger"><span></span><span></span><span></span></a></li><li class="is-active"><a>API</a></li><li class="is-active"><a>Pipeline</a></li></ul></nav></div><div class="columns is-gapless is-mobile"><div class="column is-menu-column is-3-desktop is-hidden-touch ml-5"><div class="menu-container"><aside class="menu"><ul class="menu-list"><li><a class=" " href="/fable-promise/documentation/getting-started.html">Getting started</a></li><ul class="menu-list"><p class="menu-label">API</p><li><a class=" is-active has-table-of-content" href="/fable-promise/documentation/pipeline.html">Pipeline</a></li><ul class="table-of-content"><li><a href="#Introduction" data-toc-element="true">Introduction </a></li><li><a href="#API" data-toc-element="true">API </a><ul class="table-of-content"><li><a href="#Promise.create" data-toc-element="true">Promise.create </a></li><li><a href="#Promise.sleep" data-toc-element="true">Promise.sleep </a></li><li><a href="#Promise.lift" data-toc-element="true">Promise.lift </a></li><li><a href="#Promise.reject" data-toc-element="true">Promise.reject </a></li><li><a href="#Promise.bind" data-toc-element="true">Promise.bind </a></li><li><a href="#Promise.map" data-toc-element="true">Promise.map </a></li><li><a href="#Promise.iter" data-toc-element="true">Promise.iter </a></li><li><a href="#Promise.catch" data-toc-element="true">Promise.catch </a></li><li><a href="#Promise.catchBind" data-toc-element="true">Promise.catchBind </a></li><li><a href="#Promise.catchEnd" data-toc-element="true">Promise.catchEnd </a></li><li><a href="#Promise.either" data-toc-element="true">Promise.either </a></li><li><a href="#Promise.eitherBind" data-toc-element="true">Promise.eitherBind </a></li><li><a href="#Promise.eitherEnd" data-toc-element="true">Promise.eitherEnd </a></li><li><a href="#Promise.start" data-toc-element="true">Promise.start </a></li><li><a href="#Promise.tryStart" data-toc-element="true">Promise.tryStart </a></li><li><a href="#Promise.Parallel" data-toc-element="true">Promise.Parallel </a></li><li><a href="#Promise.all" data-toc-element="true">Promise.all </a></li><li><a href="#Promise.result" data-toc-element="true">Promise.result </a></li><li><a href="#Promise.mapResult" data-toc-element="true">Promise.mapResult </a></li><li><a href="#Promise.bindResult" data-toc-element="true">Promise.bindResult </a></li><li><a href="#Promise.mapResultError" data-toc-element="true">Promise.mapResultError </a></li><li><a href="#Promise.tap" data-toc-element="true">Promise.tap </a></li></ul></li></ul><li><a class=" " href="/fable-promise/documentation/computation-expression.html">Computation expression</a></li></ul></ul></aside></div></div><div class="column is-8-desktop is-full-touch"><section class="section"><div class="content"><header class="page-header"><a class="button is-hidden-touch is-outlined is-primary is-pulled-right" target="_blank" href="https://github.com/fable-compiler/fable-promise/edit/master/docsrc/documentation/pipeline.md">Edit</a><h1 class="title is-1">Pipeline</h1></header><div><h2>Introduction <a href="#Introduction" aria-hidden="true"><span class="anchor" id="Introduction"></span>#</a></h2>
 <p>Pipeline style allows you use to chian your promise using the pipe operator <code>|&gt;</code>.</p>
 <p>Writing your code using the pipeline style makes your code looks similar to what you would write in JavaScript.</p>
 <div class="columns" date-disable-copy-button="true">
@@ -32,7 +32,7 @@
 <h2>API <a href="#API" aria-hidden="true"><span class="anchor" id="API"></span>#</a></h2>
 <p>Description and examples for all the pipeline API.</p>
 <h3>Promise.create <a href="#Promise.create" aria-hidden="true"><span class="anchor" id="Promise.create"></span>#</a></h3>
-<p><code>create: f: (('T -&gt; unit) -&gt; (Exception -&gt; unit) -&gt; unit) -&gt; Promise&lt;'T&gt;</code></p>
+<p><code>create: f: (('T -&gt; unit) -&gt; (exn -&gt; unit) -&gt; unit) -&gt; Promise&lt;'T&gt;</code></p>
 <p>Create a promise from a function.</p>
 <pre style="background-color: #FFFFFF;color: #000000;padding: 1em"><code><span style="color: #A626A4">let</span><span> </span><span style="color: #E45649">write</span><span style="color: #383A42"> </span><span style="color: #A626A4">(</span><span style="color: #383A42">path</span><span style="color: #A626A4">:</span><span> </span><span style="color: #C18401">string</span><span style="color: #A626A4">)</span><span> </span><span style="color: #A626A4">(</span><span style="color: #383A42">content</span><span style="color: #A626A4">:</span><span> </span><span style="color: #C18401">string</span><span style="color: #A626A4">)</span><span> </span><span style="color: #A626A4">=</span>
 <span>    Promise.create </span><span style="color: #A626A4">(fun</span><span style="color: #383A42"> resolve reject </span><span style="color: #A626A4">-&gt;</span>
@@ -64,7 +64,7 @@
 <span style="color: #A626A4">)</span>
 <span style="color: #A626A4">|&gt;</span><span> Promise.map </span><span style="color: #A626A4">..</span><span>.</span></code></pre>
 <h3>Promise.reject <a href="#Promise.reject" aria-hidden="true"><span class="anchor" id="Promise.reject"></span>#</a></h3>
-<p><code>reject: reason: obj -&gt; Promise&lt;'T&gt;</code></p>
+<p><code>reject: reason: exn -&gt; Promise&lt;'T&gt;</code></p>
 <p>Create a promise (in rejected state) with supplied reason.</p>
 <pre style="background-color: #FFFFFF;color: #000000;padding: 1em"><code><span>Promise.reject </span><span style="color: #50A14F">&quot;User not found&quot;</span>
 <span style="color: #A626A4">|&gt;</span><span> Promise.map </span><span style="color: #A626A4">(fun</span><span style="color: #383A42"> _ </span><span style="color: #A626A4">-&gt;</span>
@@ -76,7 +76,7 @@
 <span style="color: #A626A4">)</span>
 <span style="color: #A626A4">|&gt;</span><span> Promise.map </span><span style="color: #A626A4">..</span><span>.</span></code></pre>
 <h3>Promise.bind <a href="#Promise.bind" aria-hidden="true"><span class="anchor" id="Promise.bind"></span>#</a></h3>
-<p><code>bind: a : ('T -&gt; JS.Promise&lt;'R&gt;) -&gt; pr: Promise&lt;'T&gt; -&gt; Promise&lt;'R&gt;</code></p>
+<p><code>bind: a : ('T1 -&gt; JS.Promise&lt;'T2&gt;) -&gt; pr: Promise&lt;'T1&gt; -&gt; Promise&lt;'T2&gt;</code></p>
 <p>Bind a value into a promise of a new type.</p>
 <pre style="background-color: #FFFFFF;color: #000000;padding: 1em"><code><span>Promise.lift </span><span style="color: #A626A4">{|</span><span> Firstname </span><span style="color: #A626A4">=</span><span> </span><span style="color: #50A14F">&quot;John&quot;</span><span> </span><span style="color: #A626A4">|}</span>
 <span style="color: #A626A4">|&gt;</span><span> Promise.bind </span><span style="color: #A626A4">(fun</span><span style="color: #383A42"> user </span><span style="color: #A626A4">-&gt;</span>
@@ -91,7 +91,7 @@
 <span style="color: #A626A4">)</span>
 <span style="color: #A626A4">|&gt;</span><span> Promise.map </span><span style="color: #A626A4">..</span><span>.</span></code></pre>
 <h3>Promise.map <a href="#Promise.map" aria-hidden="true"><span class="anchor" id="Promise.map"></span>#</a></h3>
-<p><code>map: a : ('T -&gt; 'R) -&gt; pr: Promise&lt;'T&gt; -&gt; Promise&lt;'R&gt;</code></p>
+<p><code>map: a : ('T1 -&gt; 'T2) -&gt; pr: Promise&lt;'T1&gt; -&gt; Promise&lt;'T2&gt;</code></p>
 <p>Map a value into another type, the result will be wrapped in a promise for you.</p>
 <pre style="background-color: #FFFFFF;color: #000000;padding: 1em"><code><span>Promise.lift </span><span style="color: #A626A4">{|</span><span> Firstname </span><span style="color: #A626A4">=</span><span> </span><span style="color: #50A14F">&quot;John&quot;</span><span> </span><span style="color: #A626A4">|}</span>
 <span style="color: #A626A4">|&gt;</span><span> Promise.map </span><span style="color: #A626A4">(fun</span><span style="color: #383A42"> user </span><span style="color: #A626A4">-&gt;</span>
@@ -107,7 +107,7 @@
 <span>    console.log </span><span style="color: #50A14F">&quot;User firstname is user.Firstname&quot;</span>
 <span style="color: #A626A4">)</span><span> </span><span style="color: #A0A1A7;font-style: italic">// unit</span></code></pre>
 <h3>Promise.catch <a href="#Promise.catch" aria-hidden="true"><span class="anchor" id="Promise.catch"></span>#</a></h3>
-<p><code>catch: fail: (Exception -&gt; 'T) -&gt; pr  : Promise&lt;'T&gt; -&gt; Promise&lt;'T&gt;</code></p>
+<p><code>catch: fail: (exn -&gt; 'T) -&gt; pr  : Promise&lt;'T&gt; -&gt; Promise&lt;'T&gt;</code></p>
 <p>Handle an errored promise allowing you pass a return value.</p>
 <p>This version of <code>catch</code> fakes a function returning just <code>'T</code>, as opposed to <code>Promise&lt;'T&gt;</code>. If you need to return <code>Promise&lt;'T&gt;</code>, use <code>catchBind</code>.</p>
 <pre style="background-color: #FFFFFF;color: #000000;padding: 1em"><code><span>Promise.create </span><span style="color: #A626A4">(fun</span><span style="color: #383A42"> resolve reject </span><span style="color: #A626A4">-&gt;</span>
@@ -123,7 +123,7 @@
 <h3>Promise.catchBind <a href="#Promise.catchBind" aria-hidden="true"><span class="anchor" id="Promise.catchBind"></span>#</a></h3>
 <p><code>catchBind: fail: (Exception -&gt; JS.Promise&lt;'T&gt;) -&gt; pr : Promise&lt;'T&gt; -&gt; Promise&lt;'T&gt;</code></p>
 <p>Handle an errored promise allowing to call a promise.</p>
-<p>This is a version of <code>catch</code> that fakes a function returning Promise&lt;'T&gt; as opposed to just <code>'T</code>. If you need to return just <code>'T</code>, use <code>catch</code>.</p>
+<p>This version of <code>catch</code> expects a function returning <code>Promise&lt;'T&gt;</code> as opposed to just <code>'T</code>. If you need to return just <code>'T</code>, use <code>catch</code>.</p>
 <pre style="background-color: #FFFFFF;color: #000000;padding: 1em"><code><span>Promise.create </span><span style="color: #A626A4">(fun</span><span style="color: #383A42"> resolve reject </span><span style="color: #A626A4">-&gt;</span>
 <span>    reject </span><span style="color: #A626A4">(</span><span>System.Exception </span><span style="color: #50A14F">&quot;User not found&quot;</span><span style="color: #A626A4">)</span>
 <span style="color: #A626A4">)</span>
@@ -133,7 +133,7 @@
 <span style="color: #A626A4">)</span>
 <span style="color: #A626A4">|&gt;</span><span> Promise.map </span><span style="color: #A626A4">..</span><span>.</span></code></pre>
 <h3>Promise.catchEnd <a href="#Promise.catchEnd" aria-hidden="true"><span class="anchor" id="Promise.catchEnd"></span>#</a></h3>
-<p><code>catchEnd: fail: (Exception -&gt; unit) -&gt; pr  : Promise&lt;'T&gt; -&gt; unit</code></p>
+<p><code>catchEnd: fail: (exn -&gt; unit) -&gt; pr  : Promise&lt;'T&gt; -&gt; unit</code></p>
 <p>Used to catch errors at the end of a promise chain.</p>
 <pre style="background-color: #FFFFFF;color: #000000;padding: 1em"><code><span>Promise.create </span><span style="color: #A626A4">(fun</span><span style="color: #383A42"> resolve reject </span><span style="color: #A626A4">-&gt;</span>
 <span>    reject </span><span style="color: #A626A4">(</span><span>System.Exception </span><span style="color: #50A14F">&quot;User not found&quot;</span><span style="color: #A626A4">)</span>
@@ -148,20 +148,28 @@
 <span>    </span><span style="color: #A0A1A7;font-style: italic">// ...</span>
 <span style="color: #A626A4">)</span><span> </span><span style="color: #A0A1A7;font-style: italic">// Returns unit</span></code></pre>
 <h3>Promise.either <a href="#Promise.either" aria-hidden="true"><span class="anchor" id="Promise.either"></span>#</a></h3>
-<p><code>either: success: ('T -&gt; U2&lt;'R,JS.Promise&lt;'R&gt;&gt;) -&gt; fail : ('E -&gt; U2&lt;'R,JS.Promise&lt;'R&gt;&gt;) -&gt; pr : Promise&lt;'T&gt; -&gt; Promise&lt;'R&gt;</code></p>
-<p>A combination of <code>map/bind</code> and <code>catch/catchBind</code>, this function applies the <code>success</code> continuation when the input promise resolves successfully, or <code>fail</code> continuation when the input promise fails. Both continuations may return either naked value <code>'R</code> or another promise <code>Promise&lt;'R&gt;</code>. Use the erased-cast operator <code>!^</code> to cast values when returning, for example:</p>
+<p><code>either: success: ('T1 -&gt; 'T2) -&gt; fail : (exn -&gt; 'T2) -&gt; pr : Promise&lt;'T1&gt; -&gt; Promise&lt;'T2&gt;</code></p>
+<p>A combination of <code>map</code> and <code>catch</code>, this function applies the <code>success</code> continuation when the input promise resolves successfully, or <code>fail</code> continuation when the input promise fails.</p>
 <pre style="background-color: #FFFFFF;color: #000000;padding: 1em"><code><span>somePromise</span>
 <span style="color: #A626A4">|&gt;</span><span> Promise.either</span>
-<span>    </span><span style="color: #A626A4">(fun</span><span style="color: #383A42"> x </span><span style="color: #A626A4">-&gt;</span><span> </span><span style="color: #A626A4">!^(</span><span>string x</span><span style="color: #A626A4">))</span>
-<span>    </span><span style="color: #A626A4">(fun</span><span style="color: #383A42"> err </span><span style="color: #A626A4">-&gt;</span><span> </span><span style="color: #A626A4">^!(</span><span>Promise.lift err.Message</span><span style="color: #A626A4">))</span>
+<span>    </span><span style="color: #A626A4">(fun</span><span style="color: #383A42"> x </span><span style="color: #A626A4">-&gt;</span><span> string x</span><span style="color: #A626A4">)</span>
+<span>    </span><span style="color: #A626A4">(fun</span><span style="color: #383A42"> err </span><span style="color: #A626A4">-&gt;</span><span> Promise.lift err.Message</span><span style="color: #A626A4">)</span>
+<span style="color: #A626A4">|&gt;</span><span> Promise.map </span><span style="color: #A626A4">..</span><span>.</span></code></pre>
+<h3>Promise.eitherBind <a href="#Promise.eitherBind" aria-hidden="true"><span class="anchor" id="Promise.eitherBind"></span>#</a></h3>
+<p><code>eitherBind: success: ('T1 -&gt; JS.Promise&lt;'T2&gt;) -&gt; fail : (exn -&gt; JS.Promise&lt;'T2&gt;) -&gt; pr : Promise&lt;'T1&gt; -&gt; Promise&lt;'T2&gt;</code></p>
+<p>A combination of <code>bind</code> and <code>catchBind</code>, this function applies the <code>success</code> continuation when the input promise resolves successfully, or <code>fail</code> continuation when the input promise fails.</p>
+<pre style="background-color: #FFFFFF;color: #000000;padding: 1em"><code><span>somePromise</span>
+<span style="color: #A626A4">|&gt;</span><span> Promise.eitherBind</span>
+<span>    </span><span style="color: #A626A4">(fun</span><span style="color: #383A42"> x </span><span style="color: #A626A4">-&gt;</span><span> string x </span><span style="color: #A626A4">|&gt;</span><span> Promise.lift</span><span style="color: #A626A4">)</span>
+<span>    </span><span style="color: #A626A4">(fun</span><span style="color: #383A42"> err </span><span style="color: #A626A4">-&gt;</span><span> Promise.lift err.Message</span><span style="color: #A626A4">)</span>
 <span style="color: #A626A4">|&gt;</span><span> Promise.map </span><span style="color: #A626A4">..</span><span>.</span></code></pre>
 <h3>Promise.eitherEnd <a href="#Promise.eitherEnd" aria-hidden="true"><span class="anchor" id="Promise.eitherEnd"></span>#</a></h3>
 <p><code>eitherEnd: success: ('T -&gt; unit) -&gt; fail : ('E -&gt; unit) -&gt; pr : Promise&lt;'T&gt; -&gt; unit</code></p>
 <p>Same as <a href="#Promise.either"><code>Promise.either</code></a> but stopping the promise execution.</p>
 <pre style="background-color: #FFFFFF;color: #000000;padding: 1em"><code><span>somePromise</span>
 <span style="color: #A626A4">|&gt;</span><span> Promise.eitherEnd</span>
-<span>    </span><span style="color: #A626A4">(fun</span><span style="color: #383A42"> x </span><span style="color: #A626A4">-&gt;</span><span> </span><span style="color: #A626A4">!^(</span><span>string x</span><span style="color: #A626A4">))</span>
-<span>    </span><span style="color: #A626A4">(fun</span><span style="color: #383A42"> err </span><span style="color: #A626A4">-&gt;</span><span> </span><span style="color: #A626A4">^!(</span><span>Promise.lift err.Message</span><span style="color: #A626A4">))</span></code></pre>
+<span>    </span><span style="color: #A626A4">(fun</span><span style="color: #383A42"> x </span><span style="color: #A626A4">-&gt;</span><span> string x</span><span style="color: #A626A4">)</span>
+<span>    </span><span style="color: #A626A4">(fun</span><span style="color: #383A42"> err </span><span style="color: #A626A4">-&gt;</span><span> Promise.lift err.Message</span><span style="color: #A626A4">)</span></code></pre>
 <h3>Promise.start <a href="#Promise.start" aria-hidden="true"><span class="anchor" id="Promise.start"></span>#</a></h3>
 <p><code>start: pr: Promise&lt;'T&gt; -&gt; unit</code></p>
 <p>Start a promise.</p>
@@ -169,7 +177,7 @@
 <pre style="background-color: #FFFFFF;color: #000000;padding: 1em"><code><span>myPromise</span>
 <span style="color: #A626A4">|&gt;</span><span> Promise.start</span></code></pre>
 <h3>Promise.tryStart <a href="#Promise.tryStart" aria-hidden="true"><span class="anchor" id="Promise.tryStart"></span>#</a></h3>
-<p><code>tryStart: fail: (Exception -&gt; unit) -&gt; pr : Promise&lt;'T&gt; -&gt; unit</code></p>
+<p><code>tryStart: fail: (exn -&gt; unit) -&gt; pr : Promise&lt;'T&gt; -&gt; unit</code></p>
 <p>Same as <a href="#Promise.start">Promise.start</a> but forcing you to handle the rejected state.</p>
 <pre style="background-color: #FFFFFF;color: #000000;padding: 1em"><code><span>myPromise</span>
 <span style="color: #A626A4">|&gt;</span><span> Promise.tryStart</span>
@@ -243,7 +251,7 @@
 <span>    </span><span style="color: #A0A1A7;font-style: italic">// ...</span>
 <span style="color: #A626A4">)</span></code></pre>
 <h3>Promise.result <a href="#Promise.result" aria-hidden="true"><span class="anchor" id="Promise.result"></span>#</a></h3>
-<p><code>result: a: Promise&lt;'A&gt; -&gt; Promise&lt;Result&lt;'A,'E&gt;&gt;</code></p>
+<p><code>result: a: Promise&lt;'T&gt; -&gt; Promise&lt;Result&lt;'T,exn&gt;&gt;</code></p>
 <p>Map the <code>Promise</code> result into a <code>Result</code> type.</p>
 <pre style="background-color: #FFFFFF;color: #000000;padding: 1em"><code><span style="color: #A0A1A7;font-style: italic">// Success example</span>
 <span>Promise.lift </span><span style="color: #986801">42</span>
@@ -259,7 +267,7 @@
 <span>    </span><span style="color: #A0A1A7;font-style: italic">// value = Error &quot;Invalid value&quot;</span>
 <span style="color: #A626A4">)</span></code></pre>
 <h3>Promise.mapResult <a href="#Promise.mapResult" aria-hidden="true"><span class="anchor" id="Promise.mapResult"></span>#</a></h3>
-<p><code>mapResult: fn: ('A -&gt; 'B) -&gt; myPromise : Promise&lt;Result&lt;'A,'E&gt;&gt; -&gt; Promise&lt;Result&lt;'B,'E&gt;&gt;</code></p>
+<p><code>mapResult: fn: ('T1 -&gt; 'T2) -&gt; a : Promise&lt;Result&lt;'T1,'E&gt;&gt; -&gt; Promise&lt;Result&lt;'T2,'E&gt;&gt;</code></p>
 <p>Evaluates to <code>myPromise |&gt; Promise.map (Result.map fn)</code></p>
 <pre style="background-color: #FFFFFF;color: #000000;padding: 1em"><code><span>Promise.lift </span><span style="color: #986801">42</span>
 <span style="color: #A626A4">|&gt;</span><span> Promise.result</span>
@@ -270,7 +278,7 @@
 <span>    </span><span style="color: #A0A1A7;font-style: italic">// value = Ok 52</span>
 <span style="color: #A626A4">)</span></code></pre>
 <h3>Promise.bindResult <a href="#Promise.bindResult" aria-hidden="true"><span class="anchor" id="Promise.bindResult"></span>#</a></h3>
-<p><code>bindResult: fn: ('A -&gt; JS.Promise&lt;'B&gt;) -&gt; a : Promise&lt;Result&lt;'A,'E&gt;&gt; -&gt; Promise&lt;Result&lt;'B,'E&gt;&gt;</code></p>
+<p><code>bindResult: fn: ('T1 -&gt; JS.Promise&lt;'T2&gt;) -&gt; a : Promise&lt;Result&lt;'T1,'E&gt;&gt; -&gt; Promise&lt;Result&lt;'T2,'E&gt;&gt;</code></p>
 <p>Transform the success part of a result promise into another promise.</p>
 <pre style="background-color: #FFFFFF;color: #000000;padding: 1em"><code><span style="color: #A626A4">let</span><span> </span><span style="color: #E45649">multiplyBy2</span><span style="color: #383A42"> </span><span style="color: #A626A4">(</span><span style="color: #383A42">value </span><span style="color: #A626A4">:</span><span> </span><span style="color: #C18401">int</span><span style="color: #A626A4">)</span><span> </span><span style="color: #A626A4">=</span>
 <span>    Promise.create </span><span style="color: #A626A4">(fun</span><span style="color: #383A42"> resolve reject </span><span style="color: #A626A4">-&gt;</span>
@@ -286,7 +294,7 @@
 <span>    </span><span style="color: #A0A1A7;font-style: italic">// value = Ok 84</span>
 <span style="color: #A626A4">)</span></code></pre>
 <h3>Promise.mapResultError <a href="#Promise.mapResultError" aria-hidden="true"><span class="anchor" id="Promise.mapResultError"></span>#</a></h3>
-<p><code>mapResultError: fn: ('B -&gt; 'C) -&gt; a : Promise&lt;Result&lt;'A,'B&gt;&gt; -&gt; Promise&lt;Result&lt;'A,'C&gt;&gt;</code></p>
+<p><code>mapResultError: fn: ('E1 -&gt; 'E2) -&gt; a : Promise&lt;Result&lt;'T,'E1&gt;&gt; -&gt; Promise&lt;Result&lt;'T,'E2&gt;&gt;</code></p>
 <p>Evaluates to <code>myPromise |&gt; Promise.map (Result.map fn)</code></p>
 <pre style="background-color: #FFFFFF;color: #000000;padding: 1em"><code><span>Promise.reject </span><span style="color: #A626A4">-</span><span style="color: #986801">1</span>
 <span style="color: #A626A4">|&gt;</span><span> Promise.result</span>
