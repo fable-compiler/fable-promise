@@ -1,6 +1,10 @@
+### 3.0.0-beta-002
+
+* Fix #18: Fix the type annotation of `Promise.map`
+
 ### 3.0.0-beta-001
 
-* Use .catch for errors instead of second arg of .then @AngelMunoz 
+* Use .catch for errors instead of second arg of .then @AngelMunoz
 * Allow user-defined Source overloads for interop with user-defined types @baronfel
 * Documentation @MangelMaxime
 * Cleanup and make either consistent with other signatures
