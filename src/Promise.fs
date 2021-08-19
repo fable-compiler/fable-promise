@@ -26,7 +26,7 @@ let reject<'T> (reason: exn) : JS.Promise<'T> = jsNative
 let bind (a: 'T1 -> JS.Promise<'T2>) (pr: JS.Promise<'T1>): JS.Promise<'T2> = jsNative
 
 [<Emit("$1.then($0)")>]
-let map (a: 'T1 -> 'T2) (pr: JS.Promise<'T>): JS.Promise<'T2> = jsNative
+let map (a: 'T1 -> 'T2) (pr: JS.Promise<'T1>): JS.Promise<'T2> = jsNative
 
 [<Emit("void ($1.then($0))")>]
 let iter (a: 'T -> unit) (pr: JS.Promise<'T>): unit = jsNative
