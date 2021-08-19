@@ -1,3 +1,10 @@
+### 3.0.0-beta-001
+
+* Use .catch for errors instead of second arg of .then @AngelMunoz 
+* Allow user-defined Source overloads for interop with user-defined types @baronfel
+* Documentation @MangelMaxime
+* Cleanup and make either consistent with other signatures
+
 ### 2.2.2
 
 * Downgrade FSharp.Core to 4.7.2
