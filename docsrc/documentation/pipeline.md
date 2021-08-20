@@ -5,7 +5,7 @@ layout: nacara-standard
 
 ## Introduction
 
-Pipeline style allows you use to chian your promise using the pipe operator `|>`.
+Pipeline style allows you use to chain your promise using the pipe operator `|>`.
 
 Writing your code using the pipeline style makes your code looks similar to what you would write in JavaScript.
 
