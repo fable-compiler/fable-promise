@@ -151,29 +151,33 @@ type PromiseBuilder() =
 
     [<Emit("Promise.all([$1, $2])")>]
     member _.MergeSources(a: JS.Promise<'T1>, b: JS.Promise<'T2>): JS.Promise<'T1 * 'T2> = jsNative
-    
+
     [<Emit("Promise.all([$1, $2, $3])")>]
     member _.MergeSources3(a: JS.Promise<'T1>, b: JS.Promise<'T2>, c: JS.Promise<'T3>): JS.Promise<'T1 * 'T2 * 'T3> = jsNative
 
     [<Emit("Promise.all([$1, $2, $3, $4])")>]
     member _.MergeSources4(a: JS.Promise<'T1>, b: JS.Promise<'T2>, c: JS.Promise<'T3>, d: JS.Promise<'T4>): JS.Promise<'T1 * 'T2 * 'T3 * 'T4> = jsNative
-    
+
     [<Emit("Promise.all([$1, $2, $3, $4, $5])")>]
     member _.MergeSources5(a: JS.Promise<'T1>, b: JS.Promise<'T2>, c: JS.Promise<'T3>, d: JS.Promise<'T4>, e: JS.Promise<'T5>): JS.Promise<'T1 * 'T2 * 'T3 * 'T4 * 'T5> = jsNative
-    
+
     [<Emit("Promise.all([$1, $2, $3, $4, $5, $6])")>]
     member _.MergeSources6(a: JS.Promise<'T1>, b: JS.Promise<'T2>, c: JS.Promise<'T3>, d: JS.Promise<'T4>, e: JS.Promise<'T5>, f: JS.Promise<'T6>): JS.Promise<'T1 * 'T2 * 'T3 * 'T4 * 'T5 * 'T6> = jsNative
 
 //    member _.BindReturn(y: JS.Promise<'T1>, f) = map f y
-    
+
     [<Emit("Promise.all([$1,$2]).then(([a,b]) => $3(a,b))")>]
     [<CustomOperation("andFor", IsLikeZip=true)>]
     member _.Merge(a: JS.Promise<'T1>, b: JS.Promise<'T2>, [<ProjectionParameter>] resultSelector : 'T1 -> 'T2 -> 'R): JS.Promise<'R> = jsNative
 
-    /// this is the 'base case' for Source transformations, and
-    /// must be present before any user-defined overloads will
-    /// actually work.
-    member x.Source(p: JS.Promise<'T1>): JS.Promise<'T1> = p
+module Extension =
 
-    // allows for..in and for..do expressions inside CEs
-    member x.Source(ps: #seq<_>): _ = ps
+    type PromiseBuilder with
+
+        /// this is the 'base case' for Source transformations, and
+        /// must be present before any user-defined overloads will
+        /// actually work.
+        member x.Source(p: JS.Promise<'T1>): JS.Promise<'T1> = p
+
+        // allows for..in and for..do expressions inside CEs
+        member x.Source(ps: #seq<_>): _ = ps
