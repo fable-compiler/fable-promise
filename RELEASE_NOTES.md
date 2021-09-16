@@ -1,3 +1,7 @@
+### 3.0.0
+
+* Publish 3.0 stable
+
 ### 3.0.0-beta-002
 
 * Fix #18: Fix the type annotation of `Promise.map`
