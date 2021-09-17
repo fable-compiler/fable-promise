@@ -1,3 +1,7 @@
+### 3.1.0
+
+* Fix #21: Remove Source from Promise builder
+
 ### 3.0.0
 
 * Publish 3.0 stable
