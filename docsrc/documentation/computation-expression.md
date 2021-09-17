@@ -161,6 +161,10 @@ type Promise.PromiseBuilder with
     /// Because thenables are trivially convertible, we can just unbox them.
     member x.Source(t: Thenable<'t>): JS.Promise<'t> = Thenable.toPromise t
 
+    // Also provide these cases for overload resolution
+    member _.Source(p: JS.Promise<'T1>): JS.Promise<'T1> = p
+    member _.Source(ps: #seq<_>): _ = ps
+
 // You can now works with instance of Thenable from the promise computation
 
 // Dummy thenable for the example

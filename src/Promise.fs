@@ -169,15 +169,3 @@ type PromiseBuilder() =
     [<Emit("Promise.all([$1,$2]).then(([a,b]) => $3(a,b))")>]
     [<CustomOperation("andFor", IsLikeZip=true)>]
     member _.Merge(a: JS.Promise<'T1>, b: JS.Promise<'T2>, [<ProjectionParameter>] resultSelector : 'T1 -> 'T2 -> 'R): JS.Promise<'R> = jsNative
-
-module Extension =
-
-    type PromiseBuilder with
-
-        /// this is the 'base case' for Source transformations, and
-        /// must be present before any user-defined overloads will
-        /// actually work.
-        member x.Source(p: JS.Promise<'T1>): JS.Promise<'T1> = p
-
-        // allows for..in and for..do expressions inside CEs
-        member x.Source(ps: #seq<_>): _ = ps

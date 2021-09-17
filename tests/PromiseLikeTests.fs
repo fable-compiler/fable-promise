@@ -1,7 +1,6 @@
 module PromiseLikeTests
 
 open Fable.Core
-open Promise.Extension
 
 /// this is the definition of a thenable from ts2fable's generation VsCode API
 type [<AllowNullLiteral>] Thenable<'T> =
@@ -16,12 +15,21 @@ type Promise.PromiseBuilder with
     /// to make a value interop with the promise builder, you have to add an
     /// overload of the `Source` member to convert from your type to a promise.
     /// because thenables are trivially convertible, we can just unbox them.
-    member x.Source(t: Thenable<'t>): JS.Promise<'t> = Thenable.toPromise t
+    member _.Source(t: Thenable<'t>): JS.Promise<'t> = Thenable.toPromise t
+
+    // Also provide these cases for overload resolution
+    member _.Source(p: JS.Promise<'T1>): JS.Promise<'T1> = p
+    member _.Source(ps: #seq<_>): _ = ps
 
 
 describe "Promise like tests" <| fun _ ->
 
     it "Promise can interop with thenables" <| fun () ->
+        let samplePromise () =
+            promise {
+                return 1
+            }
+
         let sampleThenable () =
             promise {
                 return 1
@@ -29,6 +37,8 @@ describe "Promise like tests" <| fun _ ->
             |> Thenable.ofPromise
 
         promise {
-            let! initialValue = sampleThenable()
-            initialValue |> equal 1
+            let! x = samplePromise()
+            let! y = sampleThenable()
+            
+            x + y |> equal 2
         }
