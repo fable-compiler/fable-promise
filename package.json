@@ -9,7 +9,7 @@
     "predocs:watch": "npm run docs:clean",
     "docs:watch": "nacara watch",
     "predocs:build": "npm run docs:clean",
-    "docs:api-gen": "dotnet nacara-apigen --project Fable.Promise -lib src/bin/Debug/netstandard2.0/publish --output docs --base-url /fable-promise/",
+    "docs:api-gen": "dotnet publish src && dotnet nacara-apigen --project Fable.Promise -lib src/bin/Debug/netstandard2.0/publish --output docs --base-url /fable-promise/",
     "docs:build": "npm run docs:api-gen && nacara",
     "docs:deploy": "npm run build && gh-pages -d docs_deploy"
   },
