@@ -1,76 +1,17 @@
-<html class="has-navbar-fixed-top"><head><title>Fable.Promise</title><meta http-equiv="content-type"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" type="text/css" href="/fable-promise/style.css"/><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous"/></head><body><nav class="navbar is-fixed-top"><div class="container"><div class="navbar-brand"><a class="navbar-item title is-4" href="https://fable.io/fable-promise/">Fable.Promise</a><a class="navbar-item is-hidden-desktop" href="https://github.com/fable-compiler/fable-promise"><span class="icon"><i class=" fab fa-github fa-lg"></i></span></a><a class="navbar-item is-hidden-desktop" href="https://twitter.com/FableCompiler"><span class="icon"><i class=" fab fa-twitter fa-lg"></i></span></a><a class="navbar-burger" data-target="nav-menu"><span></span><span></span><span></span></a></div><div class="navbar-menu" id="nav-menu"><div class="navbar-start"><a class="navbar-item" href="/fable-promise/documentation/getting-started.html">Documentation</a></div><div class="navbar-end"><a class="navbar-item" href="https://github.com/fable-compiler/fable-promise"><span class="icon"><i class=" fab fa-github fa-lg"></i></span></a><a class="navbar-item" href="https://twitter.com/FableCompiler"><span class="icon"><i class=" fab fa-twitter fa-lg"></i></span></a></div></div></div></nav><div><!-- Disable the copy-button on all the elements contained inside the container (all this page) -->
-<div class="container mt-5" date-disable-copy-button="true">
-    <!--
-        Selling points of Fable
-        For the selling points of Fable we use CSS grid instead of Bulma columns
-        because we want all the box to have the same height.
-        This is not something possible to do dynamically using Flexbox / Bulma columns system
-    -->
-    <section class="section">
-        <h2 class="title is-2 has-text-primary has-text-centered">
-            Fable.Promise
-        </h2>
-        <p class="content is-size-5 has-text-centered">
-            Fable.Promise is a library making it easy to work with Promise.
-            <br/><br/>
-            It provides two styles of APIs
-        </p>
-        <div class="columns is-vcentered mt-5">
-            <div class="column is-4 is-offset-1-desktop">
-                <h4 class="title has-text-primary">
-                    Pipeline API
-                </h4>
-                <p class="content is-size-5">
-                    Pipeline allows you to write similar to JavaScript code.
-                </p>
-                <a href="/fable-promise/documentation/pipeline.html">
-                    Learn more →
-                </a>
-            </div>
-            <div class="column is-5 is-offset-1-desktop is-7-tablet-only">
-                <div class="content has-code-block is-normal">
-<!-- The indentation/format used has been chosen so the code is displayed
-without scrollbar on almost any screen size -->
-<pre style="background-color: #FFFFFF;color: #000000;padding: 1em"><code><span>fetch </span><span style="color: #50A14F">&quot;https://my-api.com/users&quot;</span>
-<span style="color: #A626A4">|&gt;</span><span> Promise.map </span><span style="color: #A626A4">(fun</span><span style="color: #383A42"> user </span><span style="color: #A626A4">-&gt;</span>
-<span>    fetch </span><span style="color: #50A14F">&quot;https://my-api.com/posts&quot;</span>
-<span style="color: #A626A4">)</span>
-<span style="color: #A626A4">|&gt;</span><span> Promise.map </span><span style="color: #A626A4">(fun</span><span style="color: #383A42"> posts </span><span style="color: #A626A4">-&gt;</span>
-<span>    fetch </span><span style="color: #50A14F">&quot;https://my-api.com/comments&quot;</span>
-<span style="color: #A626A4">)</span>
-<span style="color: #A626A4">|&gt;</span><span> Promise.map </span><span style="color: #A626A4">(fun</span><span style="color: #383A42"> comments </span><span style="color: #A626A4">-&gt;</span>
-<span>    </span><span style="color: #A0A1A7;font-style: italic">// Done</span>
-<span style="color: #A626A4">)</span></code></pre>
-</div> <!-- Markdown is sensible to indentation -->
-            </div>
-        </div>
-        <div class="columns is-vcentered mt-5">
-            <div class="column is-4 is-offset-1-desktop">
-                <h4 class="title has-text-primary">
-                    Computation expressions
-                </h4>
-                <p class="content is-size-5">
-                    Computation expressions make it easy to chain operations
-                </p>
-                <a href="/fable-promise/documentation/computation-expression.html">
-                    Learn more →
-                </a>
-            </div>
-            <div class="column is-5 is-offset-1-desktop is-7-tablet-only">
-                <div class="content has-code-block is-normal">
-<!-- The indentation/format used has been chosen so the code is displayed
-without scrollbar on almost any screen size -->
-<pre style="background-color: #FFFFFF;color: #000000;padding: 1em"><code><span style="color: #A626A4">promise {</span>
-<span>    </span><span style="color: #A626A4">let!</span><span> </span><span style="color: #E45649">users</span><span> </span><span style="color: #A626A4">=</span><span> fetch </span><span style="color: #50A14F">&quot;https://my-api.com/users&quot;</span>
-<span>    </span><span style="color: #A626A4">let!</span><span> </span><span style="color: #E45649">posts</span><span> </span><span style="color: #A626A4">=</span><span> fetch </span><span style="color: #50A14F">&quot;https://my-api.com/posts&quot;</span>
-<span>    </span><span style="color: #A626A4">let!</span><span> </span><span style="color: #E45649">comments</span><span> </span><span style="color: #A626A4">=</span><span> fetch </span><span style="color: #50A14F">&quot;https://my-api.com/comments&quot;</span>
-
-<span>    </span><span style="color: #A0A1A7;font-style: italic">// Done success</span>
-<span>    </span><span style="color: #A626A4">return</span><span> </span><span style="color: #986801">()</span>
-<span style="color: #A626A4">}</span></code></pre>
-</div> <!-- Markdown is sensible to indentation -->
-            </div>
-        </div>
-    </section>
-</div>
-</div><script async="" src="/fable-promise/resources/nacara-standard-layouts/scripts/menu.js"></script></body></html>
+<html class="has-navbar-fixed-top" lang="en"><head><title>Fable.Promise</title><meta http-equiv="content-type" content="text/html; charset=UTF-8" charSet="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" type="text/css" href="/fable-promise/style.css"/><script src="https://unpkg.com/scroll-into-view-if-needed@2.2.28/umd/scroll-into-view-if-needed.min.js"></script></head><body><nav class="navbar is-fixed-top is-spaced"><div class="container"><div class="navbar-brand"><a class="navbar-item title is-4" href="https://fable.io/fable-promise/">Fable.Promise</a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item is-hidden-mobile" href="/fable-promise/documentation/getting-started.html">Documentation</a><a class="navbar-item is-hidden-mobile" href="/fable-promise/reference/Fable.Promise/index.html">API</a><div class="navbar-item navbar-burger-dots is-hidden-tablet"><svg height="4" stroke="none" viewBox="0 0 22 4" width="22"><circle cx="2" cy="2" r="2"></circle><circle cx="2" cy="2" r="2" transform="translate(9,0)"></circle><circle cx="2" cy="2" r="2" transform="translate(18,0)"></circle></svg></div></div><div class="navbar-end is-hidden-mobile"><a class="navbar-item" href="https://github.com/fable-compiler/fable-promise"><span class="icon"><i class=" fab fa-github fa-lg"></i></span></a><a class="navbar-item" href="https://twitter.com/FableCompiler"><span class="icon"><i class=" fab fa-twitter fa-lg"></i></span></a></div></div><div class="nacara-navbar-menu"><a class="nacara-navbar-menu-item" href="/fable-promise/documentation/getting-started.html">Documentation</a><a class="nacara-navbar-menu-item" href="/fable-promise/reference/Fable.Promise/index.html">API</a><a class="nacara-navbar-menu-item" href="https://github.com/fable-compiler/fable-promise">Github</a><a class="nacara-navbar-menu-item" href="https://twitter.com/FableCompiler">Twitter</a></div></div></nav><div class="grey-overlay"></div><div class="nacara-content"><div><style class=grvsc-styles>.grvsc-container{overflow:auto;position:relative;-webkit-overflow-scrolling:touch;padding-top:1rem;padding-top:var(--grvsc-padding-top,var(--grvsc-padding-v,1rem));padding-bottom:1rem;padding-bottom:var(--grvsc-padding-bottom,var(--grvsc-padding-v,1rem));border-radius:8px;border-radius:var(--grvsc-border-radius,8px);font-feature-settings:normal;line-height:1.4}.grvsc-code{display:table}.grvsc-line{display:table-row;box-sizing:border-box;width:100%;position:relative}.grvsc-line>*{position:relative}.grvsc-gutter-pad{display:table-cell;padding-left:.75rem;padding-left:calc(var(--grvsc-padding-left,var(--grvsc-padding-h,1.5rem))/ 2)}.grvsc-gutter{display:table-cell;-webkit-user-select:none;-moz-user-select:none;user-select:none}.grvsc-gutter::before{content:attr(data-content)}.grvsc-source{display:table-cell;padding-left:1.5rem;padding-left:var(--grvsc-padding-left,var(--grvsc-padding-h,1.5rem));padding-right:1.5rem;padding-right:var(--grvsc-padding-right,var(--grvsc-padding-h,1.5rem))}.grvsc-source:empty::after{content:' ';-webkit-user-select:none;-moz-user-select:none;user-select:none}.grvsc-gutter+.grvsc-source{padding-left:.75rem;padding-left:calc(var(--grvsc-padding-left,var(--grvsc-padding-h,1.5rem))/ 2)}.grvsc-has-line-highlighting>.grvsc-code>.grvsc-line::before{content:' ';position:absolute;width:100%}.grvsc-line-diff-add::before{background-color:var(--grvsc-line-diff-add-background-color,rgba(0,255,60,.2))}.grvsc-line-diff-del::before{background-color:var(--grvsc-line-diff-del-background-color,rgba(255,0,20,.2))}.grvsc-line-number{padding:0 2px;text-align:right;opacity:.7}.atom-one-light{background-color:#fafafa;color:#383a42}.atom-one-light .mtki{font-style:italic}.atom-one-light .mtk1{color:#383a42}.atom-one-light .mtk10{color:#50a14f}.atom-one-light .mtk14{color:#a626a4}.atom-one-light .mtk7{color:#a0a1a7}.atom-one-light .mtk5{color:#e45649}.atom-one-light .mtk6{color:#986801}.atom-one-light .grvsc-line-highlighted::before{background-color:var(--grvsc-line-highlighted-background-color,rgba(0,0,0,.05));box-shadow:inset var(--grvsc-line-highlighted-border-width,4px) 0 0 0 var(--grvsc-line-highlighted-border-color,rgba(0,0,0,.2))}</style><div class="mt-5 container"date-disable-copy-button=true><section class=section><h2 class="has-text-primary title has-text-centered is-2">Fable.Promise</h2><p class="content is-size-5 has-text-centered">Fable.Promise is a library making it easy to work with Promise.<br><br>It provides two styles of APIs<div class="mt-5 columns is-vcentered"><div class="column is-offset-1-desktop is-4"><h4 class="has-text-primary title">Pipeline API</h4><p class="content is-size-5">Pipeline allows you to write similar to JavaScript code.</p><a href=/fable-promise/documentation/pipeline.html>Learn more →</a></div><div class="column is-offset-1-desktop is-5 is-7-tablet-only"><div class="content has-code-block is-normal"><pre class="atom-one-light grvsc-container"data-index=0 data-language=fsharp><code class=grvsc-code><span class=grvsc-line><span class=grvsc-source><span class=mtk1>fetch </span><span class=mtk10>"https://my-api.com/users"</span></span></span>
+<span class=grvsc-line><span class=grvsc-source><span class=mtk14>|></span><span class=mtk1> Promise.map </span><span class=mtk14>(fun</span><span class=mtk1> user </span><span class=mtk14>-></span></span></span>
+<span class=grvsc-line><span class=grvsc-source><span class=mtk1>    fetch </span><span class=mtk10>"https://my-api.com/posts"</span></span></span>
+<span class=grvsc-line><span class=grvsc-source><span class=mtk14>)</span></span></span>
+<span class=grvsc-line><span class=grvsc-source><span class=mtk14>|></span><span class=mtk1> Promise.map </span><span class=mtk14>(fun</span><span class=mtk1> posts </span><span class=mtk14>-></span></span></span>
+<span class=grvsc-line><span class=grvsc-source><span class=mtk1>    fetch </span><span class=mtk10>"https://my-api.com/comments"</span></span></span>
+<span class=grvsc-line><span class=grvsc-source><span class=mtk14>)</span></span></span>
+<span class=grvsc-line><span class=grvsc-source><span class=mtk14>|></span><span class=mtk1> Promise.map </span><span class=mtk14>(fun</span><span class=mtk1> comments </span><span class=mtk14>-></span></span></span>
+<span class=grvsc-line><span class=grvsc-source><span class=mtk1>    </span><span class="mtk7 mtki">// Done</span></span></span>
+<span class=grvsc-line><span class=grvsc-source><span class=mtk14>)</span></span></span></code></pre></div></div></div><div class="mt-5 columns is-vcentered"><div class="column is-offset-1-desktop is-4"><h4 class="has-text-primary title">Computation expressions</h4><p class="content is-size-5">Computation expressions make it easy to chain operations</p><a href=/fable-promise/documentation/computation-expression.html>Learn more →</a></div><div class="column is-offset-1-desktop is-5 is-7-tablet-only"><div class="content has-code-block is-normal"><pre class="atom-one-light grvsc-container"data-index=1 data-language=fsharp><code class=grvsc-code><span class=grvsc-line><span class=grvsc-source><span class=mtk14>promise {</span></span></span>
+<span class=grvsc-line><span class=grvsc-source><span class=mtk1>    </span><span class=mtk14>let!</span><span class=mtk1> </span><span class=mtk5>users</span><span class=mtk1> </span><span class=mtk14>=</span><span class=mtk1> fetch </span><span class=mtk10>"https://my-api.com/users"</span></span></span>
+<span class=grvsc-line><span class=grvsc-source><span class=mtk1>    </span><span class=mtk14>let!</span><span class=mtk1> </span><span class=mtk5>posts</span><span class=mtk1> </span><span class=mtk14>=</span><span class=mtk1> fetch </span><span class=mtk10>"https://my-api.com/posts"</span></span></span>
+<span class=grvsc-line><span class=grvsc-source><span class=mtk1>    </span><span class=mtk14>let!</span><span class=mtk1> </span><span class=mtk5>comments</span><span class=mtk1> </span><span class=mtk14>=</span><span class=mtk1> fetch </span><span class=mtk10>"https://my-api.com/comments"</span></span></span>
+<span class=grvsc-line><span class=grvsc-source></span></span>
+<span class=grvsc-line><span class=grvsc-source><span class=mtk1>    </span><span class="mtk7 mtki">// Done success</span></span></span>
+<span class=grvsc-line><span class=grvsc-source><span class=mtk1>    </span><span class=mtk14>return</span><span class=mtk1> </span><span class=mtk6>()</span></span></span>
+<span class=grvsc-line><span class=grvsc-source><span class=mtk14>}</span></span></span></code></pre></div></div></div></section></div></div></div><script async="" src="/fable-promise/resources/nacara-standard-layouts/scripts/menu.js"></script></body></html>
