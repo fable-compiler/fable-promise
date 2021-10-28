@@ -21,8 +21,8 @@
   "devDependencies": {
     "gatsby-remark-vscode": "^3.3.0",
     "gh-pages": "^3.2.3",
-    "nacara": "^1.0.0-beta-023",
-    "nacara-layout-standard": "^1.0.0-beta-017",
+    "nacara": "^1.0.0",
+    "nacara-layout-standard": "^1.0.0",
     "shx": "^0.3.3",
     "vscode-theme-onelight": "github:akamud/vscode-theme-onelight"
   }
