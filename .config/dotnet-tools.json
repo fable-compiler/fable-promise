@@ -7,6 +7,12 @@
       "commands": [
         "fable"
       ]
+    },
+    "nacara.apigen": {
+      "version": "1.0.0-beta-001",
+      "commands": [
+        "nacara-apigen"
+      ]
     }
   }
 }
