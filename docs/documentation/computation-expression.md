@@ -1,6 +1,8 @@
 ---
 title: Computation expression
-layout: nacara-standard
+layout: standard
+toc:
+    to: 3
 ---
 
 ## Introduction

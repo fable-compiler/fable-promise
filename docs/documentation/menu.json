@@ -1,7 +1,7 @@
 [
     "documentation/getting-started",
     {
-        "type": "category",
+        "type": "section",
         "label": "API",
         "items": [
             "documentation/pipeline",

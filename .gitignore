@@ -254,7 +254,6 @@ paket-files/
 # JetBrains Rider
 .idea/
 *.sln.iml
-docs/public/*
-!docs/public/assets/
-temp/
-deploy/
+docs/reference/
+docs_deploy/
+.nacara/

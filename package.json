@@ -7,10 +7,10 @@
     "test": "mocha -r esm build/tests -t 10000",
     "docs:clean": "shx rm -rf deploy",
     "predocs:watch": "npm run docs:clean",
-    "docs:watch": "nacara --watch",
+    "docs:watch": "nacara watch",
     "predocs:build": "npm run docs:clean",
     "docs:build": "nacara",
-    "docs:deploy": "npm run build && gh-pages -d deploy"
+    "docs:deploy": "npm run build && gh-pages -d docs_deploy"
   },
   "dependencies": {
     "esm": "^3.2.25",
@@ -18,9 +18,11 @@
     "mocha": "^8.2.1"
   },
   "devDependencies": {
+    "gatsby-remark-vscode": "^3.3.0",
     "gh-pages": "^3.2.3",
-    "nacara": "^1.0.0-beta-008",
-    "nacara-layout-standard": "^1.0.0-beta-006",
-    "shx": "^0.3.3"
+    "nacara": "^1.0.0-beta-022",
+    "nacara-layout-standard": "^1.0.0-beta-017",
+    "shx": "^0.3.3",
+    "vscode-theme-onelight": "github:akamud/vscode-theme-onelight"
   }
 }

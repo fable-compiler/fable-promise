@@ -1,6 +1,6 @@
 ---
 title: Getting started
-layout: nacara-standard
+layout: standard
 ---
 
 Add `Fable.Promise` package to your project.

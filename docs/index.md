@@ -1,6 +1,6 @@
 ---
 title:
-layout: nacara-navbar-only
+layout: navbar-only
 ---
 
 <!-- Disable the copy-button on all the elements contained inside the container (all this page) -->
