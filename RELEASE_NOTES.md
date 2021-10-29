@@ -1,3 +1,7 @@
+### 3.1.1
+
+* Add docs comments to all the functions
+
 ### 3.1.0
 
 * Fix #21: Remove Source from Promise builder
