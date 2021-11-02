@@ -1,3 +1,7 @@
+### 3.1.2
+
+* Fix #26: Revert argument names changed introduced by 3.1.1
+
 ### 3.1.1
 
 * Add docs comments to all the functions
