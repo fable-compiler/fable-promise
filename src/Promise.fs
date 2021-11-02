@@ -119,14 +119,14 @@ let reject<'T> (reason: exn) : JS.Promise<'T> = jsNative
 /// </code>
 /// </example>
 /// </summary>
-/// <param name="binder">
+/// <param name="a">
 /// A function that takes the value of type <c>T1</c> and transforms it into a promise of type <c>T2</c>.
 /// </param>
 /// <param name="pr">The input promise</param>
 /// <typeparam name="'T1"></typeparam>
 /// <typeparam name="'T2"></typeparam>
 /// <returns>A promise of the output type of the binder.</returns>
-let bind (binder: 'T1 -> JS.Promise<'T2>) (pr: JS.Promise<'T1>): JS.Promise<'T2> = jsNative
+let bind (a: 'T1 -> JS.Promise<'T2>) (pr: JS.Promise<'T1>): JS.Promise<'T2> = jsNative
 
 [<Emit("$1.then($0)")>]
 /// <summary>
@@ -141,12 +141,12 @@ let bind (binder: 'T1 -> JS.Promise<'T2>) (pr: JS.Promise<'T1>): JS.Promise<'T2>
 /// </code>
 /// </example>
 /// </summary>
-/// <param name="mapper">A function to apply to the result of the input promise.</param>
+/// <param name="a">A function to apply to the result of the input promise.</param>
 /// <param name="pr">The input promise</param>
 /// <typeparam name="'T1"></typeparam>
 /// <typeparam name="'T2"></typeparam>
 /// <returns>A promise after applying the mapping function</returns>
-let map (mapper: 'T1 -> 'T2) (pr: JS.Promise<'T1>): JS.Promise<'T2> = jsNative
+let map (a: 'T1 -> 'T2) (pr: JS.Promise<'T1>): JS.Promise<'T2> = jsNative
 
 [<Emit("void ($1.then($0))")>]
 /// <summary>
