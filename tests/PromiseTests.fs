@@ -249,13 +249,6 @@ describe "Promise tests" <| fun _ ->
             r4 |> equal "Boo!"
         }
 
-    itSync "Promise.start works" <| fun () ->
-        promise {
-            // Whitespaces are just for a better display in the console
-            printfn "    Promise started"
-            return 5
-        } |> Promise.start
-
     it "Promise mapResultError works correctly" <| fun () ->
         Result.Error "foo"
         |> Promise.lift
@@ -443,3 +436,17 @@ describe "Promise tests" <| fun _ ->
         )
 
         delayed.``then``(fun _ -> promiseExecutionCount |> equal 1)
+
+    // Promise.start actually does nothing because promises are hot and start running
+    // just by declaration (see test above), but we test it just in case
+    it "Promise.start works" <| fun () ->
+        let mutable sideEffect = 0
+        promise {
+            promise {
+                do! Promise.sleep 10
+                sideEffect <- 5
+            }
+            |> Promise.start
+            do! Promise.sleep 100
+            sideEffect |> equal 5
+        }
