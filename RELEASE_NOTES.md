@@ -1,3 +1,7 @@
+### 3.1.3
+
+* Fix #26: Revert signature changes in PromiseBuilder
+
 ### 3.1.2
 
 * Fix #26: Revert argument names changed introduced by 3.1.1
