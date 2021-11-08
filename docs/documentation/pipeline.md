@@ -49,4 +49,4 @@ fetch "https://my-api.com/users"
 </div>
 </div>
 
-You can find all the available function with examples [here](http://localhost:8080/reference/Fable.Promise/global-promise.html)
+You can find all the available function with examples [here](/fable-promise/reference/Fable.Promise/global-promise.html)
