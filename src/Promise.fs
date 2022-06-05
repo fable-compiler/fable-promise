@@ -454,6 +454,142 @@ let Parallel (pr: seq<JS.Promise<'T>>): JS.Promise<'T[]> = jsNative
 /// <returns>Return a new promise returning an array containing all the promise result</returns>
 let all (pr: seq<JS.Promise<'T>>): JS.Promise<'T[]> = jsNative
 
+[<StringEnum>]
+type SettledStatus =
+    | Fulfilled
+    | Rejected
+
+type SettledValue<'T> = 
+    {| status: SettledStatus; value: 'T option; reason: exn option |}
+
+let inline (|Success|Rejection|) (p: SettledValue<'T>) =
+    match p.status with 
+    | Fulfilled ->  Success p.value.Value
+    | Rejected -> Rejection p.reason.Value
+
+/// <summary>
+/// Helper functionm to convert a settled result into an F# result
+/// </summary>
+/// <param name="p">The settled result</param>
+/// <typeparam name="'T"></typeparam>
+/// <returns>The F# result</returns>
+/// <example>
+/// <code lang="fsharp">
+/// Promise.allSettled [success; rejection]
+/// |> Promise.map (fun results ->
+///     let success = results.[0]
+///     let rejection = results.[1]
+///     match success |> Promise.settledResult with
+///     | Ok value -> value |> equal 1
+///     | _ -> failwith "Unreachable result"
+///     
+///     match rejection |> Promise.settledResult with
+///     | Error ex -> ex.Message |> equal "I Failed"
+///     | _ -> failwith "Unreachable result"
+/// )
+/// </code>
+/// </example>
+let settledResult (p: SettledValue<'T>) =
+    match p with
+    | Success value -> Ok value
+    | Rejection err -> Error err
+
+/// <summary>
+/// The Promise.allSettled function returns a promise that resolves after all of the given promises have either
+/// fulfilled or rejected, with an array of objects that each describes the outcome of each promise.
+/// It is typically used when you have multiple asynchronous tasks that are not dependent on one another to complete successfully,
+/// or you'd always like to know the result of each promise.
+/// In comparison, the Promise returned by Promise.all may be more appropriate if the tasks are dependent
+/// on each other / if you'd like to immediately reject upon any of them rejecting.
+/// </summary>
+/// <param name="pr">A list of promise to wait for</param>
+/// <typeparam name="'T"></typeparam>
+/// <example>
+/// <code lang="fsharp">
+/// let success =
+///     promise {
+///         do! Promise.sleep 100
+///         return 1
+///     }
+/// let rejection = Promise.reject (exn "I Failed")
+/// 
+/// Promise.allSettled [success; rejection]
+/// |> Promise.map(fun values ->
+///     let success = values.[0]
+///     let rejection = values.[1]
+///     success.value.Value |> equal 1
+///     rejection.reason.Value.Message |> equal "I Failed"
+/// )
+/// </code>
+/// </example>
+[<Emit("Promise.allSettled($0)")>]
+let allSettled (pr: seq<JS.Promise<'T>>): JS.Promise<SettledValue<'T>[]> = jsNative
+
+/// <summary>
+/// Promise.any takes an iterable of Promise objects.
+/// It returns a single promise that resolves as soon as
+/// any of the promises in the iterable fulfills,
+/// with the value of the fulfilled promise. If no promises in the iterable fulfill
+/// (if all of the given promises are rejected),
+/// then the returned promise is rejected with an AggregateError,
+/// a new subclass of Error that groups together individual errors.
+/// </summary>
+/// <param name="pr">A list of promise to wait for</param>
+/// <typeparam name="'T"></typeparam>
+/// <example>
+/// <code lang="fsharp">
+/// let success() =
+///     promise {
+///         do! Promise.sleep 100
+///         return 1
+///     }
+/// let rejection() = Promise.reject (exn "I Failed")
+/// let rejection2() =
+///     promise {
+///         do! Promise.sleep 50
+///         return! Promise.reject (exn "I Failed")
+///     }
+/// 
+/// Promise.any [rejection(); rejection2(); success()]
+/// |> Promise.map (fun result ->
+///     result |> equal 1
+/// )
+/// </code>
+/// </example>
+[<Emit("Promise.any($0)")>]
+let any (pr: seq<JS.Promise<'T>>): JS.Promise<'T> = jsNative
+
+/// <summary>
+/// The Promise.race method returns a promise that fulfills or
+/// rejects as soon as one of the promises in an iterable fulfills or rejects,
+/// with the value or reason from that promise.
+/// </summary>
+/// <example>
+/// <code lang="fsharp">
+/// let success() =
+///     promise {
+///         do! Promise.sleep 5
+///         return 1
+///     }
+/// let rejection() =
+///     promise {
+///         do! Promise.sleep 10
+///         return! Promise.reject (exn "I Failed First")
+///     }
+/// let rejection2() =
+///     promise {
+///         do! Promise.sleep 50
+///         return! Promise.reject (exn "I Failed Last")
+///     }
+/// 
+/// Promise.race [rejection2(); rejection(); success()]
+/// |> Promise.map(fun result ->
+///     result |> equal 1   
+/// )
+/// </code>
+/// </example>
+[<Emit("Promise.race($0)")>]
+let race (pr: seq<JS.Promise<'T>>): JS.Promise<'T> = jsNative
 
 /// <summary>
 /// Map the <c>Promise</c> result into a <c>Result</c> type.

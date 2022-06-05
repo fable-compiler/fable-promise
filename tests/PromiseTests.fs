@@ -336,13 +336,132 @@ describe "Promise tests" <| fun _ ->
             res |> equal [|1; 2; 3 |]
         )
 
+    it "Promise.allSettled works" <| fun () ->
+        let success =
+            promise {
+                do! Promise.sleep 100
+                return 1
+            }
+        let rejection = Promise.reject (exn "I Failed")
+        
+        Promise.allSettled [success; rejection]
+        |> Promise.map(fun values ->
+            let success = values.[0]
+            let rejection = values.[1]
+            success.value.Value |> equal 1
+            rejection.reason.Value.Message |> equal "I Failed"
+        )
+        
+    it "Promise.Success and Promise.Rejection work" <| fun () ->
+        let success =
+            promise {
+                do! Promise.sleep 100
+                return 1
+            }
+        let rejection = Promise.reject (exn "I Failed")
+        
+        Promise.allSettled [success; rejection]
+        |> Promise.map (fun results ->
+            let success = results.[0]
+            let rejection = results.[1]
+            match success with
+            | Promise.Success value -> value |> equal 1
+            | _ -> failwith "Unreachable result"
+            
+            match rejection with
+            | Promise.Rejection ex -> ex.Message |> equal "I Failed"
+            | _ -> failwith "Unreachable result"
+        )
+        
+    it "Promise.settledResult works" <| fun () ->
+        let success =
+            promise {
+                do! Promise.sleep 100
+                return 1
+            }
+        let rejection = Promise.reject (exn "I Failed")
+        
+        Promise.allSettled [success; rejection]
+        |> Promise.map (fun results ->
+            let success = results.[0]
+            let rejection = results.[1]
+            match success |> Promise.settledResult with
+            | Ok value -> value |> equal 1
+            | _ -> failwith "Unreachable result"
+            
+            match rejection |> Promise.settledResult with
+            | Error ex -> ex.Message |> equal "I Failed"
+            | _ -> failwith "Unreachable result"
+        )
+        
+    it "Promise.any works" <| fun () ->
+        let success() =
+            promise {
+                do! Promise.sleep 100
+                return 1
+            }
+        let rejection() = Promise.reject (exn "I Failed")
+        let rejection2() =
+            promise {
+                do! Promise.sleep 50
+                return! Promise.reject (exn "I Failed")
+            }
+        
+        Promise.any [rejection(); rejection2(); success()]
+        |> Promise.map (fun result ->
+            result |> equal 1
+        )
+
+    it "Promise.race resolves first" <| fun () ->
+        let success() =
+            promise {
+                do! Promise.sleep 5
+                return 1
+            }
+        let rejection() =
+            promise {
+                do! Promise.sleep 10
+                return! Promise.reject (exn "I Failed First")
+            }
+        let rejection2() =
+            promise {
+                do! Promise.sleep 50
+                return! Promise.reject (exn "I Failed Last")
+            }
+        
+        Promise.race [rejection2(); rejection(); success()]
+        |> Promise.map(fun result ->
+            result |> equal 1   
+        )
+
+    it "Promise.race fails first" <| fun () ->
+        let success() =
+            promise {
+                do! Promise.sleep 100
+                return 1
+            }
+        let rejection() =
+            promise {
+                do! Promise.sleep 10
+                return! Promise.reject (exn "I Failed First")
+            }
+        let rejection2() =
+            promise {
+                do! Promise.sleep 50
+                return! Promise.reject (exn "I Failed Last")
+            }
+        
+        Promise.race [rejection2(); rejection(); success()]
+        |> Promise.catch(fun result ->
+            result.Message |> equal "I Failed First"    
+        )
+    
     it "Promise.result maps to Result.Ok in case of success" <| fun () ->
         Promise.lift 42
         |> Promise.result
         |> Promise.tap (fun result ->
             result |> equal (Ok 42)
         )
-
 
     it "Promise.result maps to Result.Error in case of error" <| fun () ->
         Promise.reject (exn "Invalid value")
