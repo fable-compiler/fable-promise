@@ -8,7 +8,6 @@ open System
 open Fable.Core
 open Fable.Core.JsInterop
 
-[<Emit("new Promise($0)")>]
 /// <summary>
 /// Create a promise from a function
 /// <example>
@@ -34,9 +33,8 @@ open Fable.Core.JsInterop
 /// <returns>
 /// The promise created by the function
 /// </returns>
+[<Emit("new Promise($0)")>]
 let create (f: ('T -> unit) -> (exn -> unit) -> unit): JS.Promise<'T> = jsNative
-
-[<Emit("new Promise(resolve => setTimeout(resolve, $0))")>]
 
 /// <summary>
 /// Create a promise which wait <c>X</c> ms before resolving.
@@ -56,9 +54,9 @@ let create (f: ('T -> unit) -> (exn -> unit) -> unit): JS.Promise<'T> = jsNative
 /// </summary>
 /// <param name="ms">Number of milliseconds to wait</param>
 /// <returns>A delayed promise</returns>
+[<Emit("new Promise(resolve => setTimeout(resolve, $0))")>]
 let sleep (ms: int): JS.Promise<unit> = jsNative
 
-[<Emit("Promise.resolve($0)")>]
 /// <summary>
 /// Create a promise (in resolved state) with supplied value.
 /// <example>
@@ -75,9 +73,9 @@ let sleep (ms: int): JS.Promise<unit> = jsNative
 /// <param name="a">Value to return</param>
 /// <typeparam name="'T"></typeparam>
 /// <returns>Returns a promise returning the supplied value</returns>
+[<Emit("Promise.resolve($0)")>]
 let lift<'T> (a: 'T): JS.Promise<'T> = jsNative
 
-[<Emit("Promise.reject($0)")>]
 /// <summary>
 /// Creates promise (in rejected state) with supplied reason.
 /// <example>
@@ -97,9 +95,9 @@ let lift<'T> (a: 'T): JS.Promise<'T> = jsNative
 /// <param name="reason">Reason to return</param>
 /// <typeparam name="'T"></typeparam>
 /// <returns>Return a promise in a rejected state</returns>
+[<Emit("Promise.reject($0)")>]
 let reject<'T> (reason: exn) : JS.Promise<'T> = jsNative
 
-[<Emit("$1.then($0)")>]
 /// <summary>
 /// Bind a value into a promise of a new type.
 /// <example>
@@ -126,9 +124,9 @@ let reject<'T> (reason: exn) : JS.Promise<'T> = jsNative
 /// <typeparam name="'T1"></typeparam>
 /// <typeparam name="'T2"></typeparam>
 /// <returns>A promise of the output type of the binder.</returns>
+[<Emit("$1.then($0)")>]
 let bind (a: 'T1 -> JS.Promise<'T2>) (pr: JS.Promise<'T1>): JS.Promise<'T2> = jsNative
 
-[<Emit("$1.then($0)")>]
 /// <summary>
 /// Map a value into another type, the result will be wrapped in a promise for you.
 /// <example>
@@ -146,9 +144,9 @@ let bind (a: 'T1 -> JS.Promise<'T2>) (pr: JS.Promise<'T1>): JS.Promise<'T2> = js
 /// <typeparam name="'T1"></typeparam>
 /// <typeparam name="'T2"></typeparam>
 /// <returns>A promise after applying the mapping function</returns>
+[<Emit("$1.then($0)")>]
 let map (a: 'T1 -> 'T2) (pr: JS.Promise<'T1>): JS.Promise<'T2> = jsNative
 
-[<Emit("void ($1.then($0))")>]
 /// <summary>
 /// Call a function with the result of a promise and stop the promise chain.
 ///
@@ -165,8 +163,8 @@ let map (a: 'T1 -> 'T2) (pr: JS.Promise<'T1>): JS.Promise<'T2> = jsNative
 /// <param name="a">A function to apply to the result of the input promise</param>
 /// <param name="pr">The input promise</param>
 /// <typeparam name="'T"></typeparam>
+[<Emit("void ($1.then($0))")>]
 let iter (a: 'T -> unit) (pr: JS.Promise<'T>): unit = jsNative
-
 
 /// <summary>
 /// This is an identity function, it calls the given function and return the promise value untouched.
@@ -190,7 +188,6 @@ let iter (a: 'T -> unit) (pr: JS.Promise<'T>): unit = jsNative
 let tap (fn: 'T -> unit) (a: JS.Promise<'T>): JS.Promise<'T> =
     a |> map (fun x -> fn x; x)
 
-[<Emit("$1.catch($0)")>]
 /// <summary>
 /// Handle an errored promise allowing you pass a return value.
 ///
@@ -214,9 +211,9 @@ let tap (fn: 'T -> unit) (a: JS.Promise<'T>): JS.Promise<'T> =
 /// <param name="pr">The input promise</param>
 /// <typeparam name="'T"></typeparam>
 /// <returns>A promise which result of the call of fail</returns>
+[<Emit("$1.catch($0)")>]
 let catch (fail: exn -> 'T) (pr: JS.Promise<'T>): JS.Promise<'T> = jsNative
 
-[<Emit("$1.catch($0)")>]
 /// <summary>
 /// Handle an errored promise allowing to call a promise.
 ///
@@ -238,9 +235,9 @@ let catch (fail: exn -> 'T) (pr: JS.Promise<'T>): JS.Promise<'T> = jsNative
 /// <param name="pr">The input promise</param>
 /// <typeparam name="'T"></typeparam>
 /// <returns>A promise which is the result of the fail function</returns>
+[<Emit("$1.catch($0)")>]
 let catchBind (fail: exn -> JS.Promise<'T>) (pr: JS.Promise<'T>): JS.Promise<'T> = jsNative
 
-[<Emit("void ($1.catch($0))")>]
 /// <summary>
 /// Used to catch errors at the end of a promise chain.
 /// <example>
@@ -263,9 +260,9 @@ let catchBind (fail: exn -> JS.Promise<'T>) (pr: JS.Promise<'T>): JS.Promise<'T>
 /// <param name="fail">Fuction to call if the input promise fail</param>
 /// <param name="pr">The input promise</param>
 /// <typeparam name="'T"></typeparam>
+[<Emit("void ($1.catch($0))")>]
 let catchEnd (fail: exn -> unit) (pr: JS.Promise<'T>): unit = jsNative
 
-[<Emit("$2.then($0).catch($1)")>]
 /// <summary>
 /// A combination of <c>map</c> and <c>catch</c>, this function applies the <c>success</c> continuation when the input promise resolves successfully, or <c>fail</c> continuation when the input promise fails.
 /// <example>
@@ -284,9 +281,9 @@ let catchEnd (fail: exn -> unit) (pr: JS.Promise<'T>): unit = jsNative
 /// <typeparam name="'T1"></typeparam>
 /// <typeparam name="'T2"></typeparam>
 /// <returns>A new promise which is the result of calling <c>success</c> if <c>pr</c> succeedes, or of <c>fail</c> if <c>pr</c> failed</returns>
+[<Emit("$2.then($0).catch($1)")>]
 let either (success: 'T1 -> 'T2) (fail: exn -> 'T2) (pr: JS.Promise<'T1>): JS.Promise<'T2> = jsNative
 
-[<Emit("$2.then($0).catch($1)")>]
 /// <summary>
 /// A combination of <c>bind</c> and <c>catchBind</c>, this function applies the <c>success</c> continuation when the input promise resolves successfully, or <c>fail</c> continuation when the input promise fails.
 /// <example>
@@ -305,9 +302,9 @@ let either (success: 'T1 -> 'T2) (fail: exn -> 'T2) (pr: JS.Promise<'T1>): JS.Pr
 /// <typeparam name="'T1"></typeparam>
 /// <typeparam name="'T2"></typeparam>
 /// <returns>A new promise which is the result of calling <c>success</c> if <c>pr</c> succeedes, or of <c>fail</c> if <c>pr</c> failed</returns>
+[<Emit("$2.then($0).catch($1)")>]
 let eitherBind (success: 'T1 -> JS.Promise<'T2>) (fail: exn -> JS.Promise<'T2>) (pr: JS.Promise<'T1>): JS.Promise<'T2> = jsNative
 
-[<Emit("void ($2.then($0).catch($1))")>]
 /// <summary>
 /// Same as <c>Promise.either</c> but stopping the promise execution.
 /// <example>
@@ -323,9 +320,9 @@ let eitherBind (success: 'T1 -> JS.Promise<'T2>) (fail: exn -> JS.Promise<'T2>) 
 /// <param name="fail">Binder function to call if the input promise fail</param>
 /// <param name="pr">The input promise</param>
 /// <typeparam name="'T"></typeparam>
+[<Emit("void ($2.then($0).catch($1))")>]
 let eitherEnd (success: 'T -> unit) (fail: exn -> unit) (pr: JS.Promise<'T>): unit = jsNative
 
-[<Emit("void $0")>]
 /// <summary>
 /// Start a promise.
 ///
@@ -342,9 +339,9 @@ let eitherEnd (success: 'T -> unit) (fail: exn -> unit) (pr: JS.Promise<'T>): un
 /// </summary>
 /// <param name="pr">The input promise</param>
 /// <typeparam name="'T"></typeparam>
+[<Emit("void $0")>]
 let start (pr: JS.Promise<'T>): unit = jsNative
 
-[<Emit("$1.catch($0)")>]
 /// <summary>
 /// Same as <c>Promise.start</c> but forcing you to handle the rejected state.
 /// <example>
@@ -360,9 +357,9 @@ let start (pr: JS.Promise<'T>): unit = jsNative
 /// <param name="fail">Function to apply if the promise fail</param>
 /// <param name="pr">The input promise</param>
 /// <typeparam name="'T"></typeparam>
+[<Emit("$1.catch($0)")>]
 let tryStart (fail: exn -> unit) (pr: JS.Promise<'T>): unit = jsNative
 
-[<Emit("Promise.all($0)")>]
 /// <summary>
 /// Takes a sequence of promises as an input, and returns a single <c>Promise</c> that resolves to an array of the results of the input promises.
 /// <example>
@@ -394,9 +391,9 @@ let tryStart (fail: exn -> unit) (pr: JS.Promise<'T>): unit = jsNative
 /// <param name="pr">A list of promise to wait for</param>
 /// <typeparam name="'T"></typeparam>
 /// <returns>Return a new promise returning an array containing all the promise result</returns>
+[<Emit("Promise.all($0)")>]
 let Parallel (pr: seq<JS.Promise<'T>>): JS.Promise<'T[]> = jsNative
 
-[<Emit("Promise.all($0)")>]
 /// <summary>
 /// Takes a sequence of promises as an input, and returns a single <c>Promise</c> that resolves to an array of the results of the input promises.
 /// <example>
@@ -452,6 +449,7 @@ let Parallel (pr: seq<JS.Promise<'T>>): JS.Promise<'T[]> = jsNative
 /// <param name="pr">A list of promise to wait for</param>
 /// <typeparam name="'T"></typeparam>
 /// <returns>Return a new promise returning an array containing all the promise result</returns>
+[<Emit("Promise.all($0)")>]
 let all (pr: seq<JS.Promise<'T>>): JS.Promise<'T[]> = jsNative
 
 
@@ -459,7 +457,7 @@ let all (pr: seq<JS.Promise<'T>>): JS.Promise<'T[]> = jsNative
 /// Map the <c>Promise</c> result into a <c>Result</c> type.
 /// <example>
 /// <code lang="fsharp">
-// Success example
+/// Success example
 /// Promise.lift 42
 /// |> Promise.result
 /// |> Promise.map (fun value ->
@@ -619,7 +617,7 @@ type PromiseBuilder() =
     // Delay must generate a cold promise-like object that re-runs every time it's called,
     // so we cannot use the JS Promise constructor which is stateful
     member _.Delay(generator: unit -> JS.Promise<'T>): JS.Promise<'T> =
-        !!createObj[
+        !!createObj [
             "then" ==> fun onSuccess onError ->
                 try generator().``then``(onSuccess, onError)
                 with er ->
