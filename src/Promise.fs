@@ -459,40 +459,10 @@ type SettledStatus =
     | Fulfilled
     | Rejected
 
-type SettledValue<'T> = 
-    {| status: SettledStatus; value: 'T option; reason: exn option |}
-
-let inline (|Success|Rejection|) (p: SettledValue<'T>) =
-    match p.status with 
-    | Fulfilled ->  Success p.value.Value
-    | Rejected -> Rejection p.reason.Value
-
-/// <summary>
-/// Helper functionm to convert a settled result into an F# result
-/// </summary>
-/// <param name="p">The settled result</param>
-/// <typeparam name="'T"></typeparam>
-/// <returns>The F# result</returns>
-/// <example>
-/// <code lang="fsharp">
-/// Promise.allSettled [success; rejection]
-/// |> Promise.map (fun results ->
-///     let success = results.[0]
-///     let rejection = results.[1]
-///     match success |> Promise.settledResult with
-///     | Ok value -> value |> equal 1
-///     | _ -> failwith "Unreachable result"
-///     
-///     match rejection |> Promise.settledResult with
-///     | Error ex -> ex.Message |> equal "I Failed"
-///     | _ -> failwith "Unreachable result"
-/// )
-/// </code>
-/// </example>
-let settledResult (p: SettledValue<'T>) =
-    match p with
-    | Success value -> Ok value
-    | Rejection err -> Error err
+type SettledValue<'T> =
+    abstract status: SettledStatus
+    abstract value: 'T option
+    abstract reason: exn option
 
 /// <summary>
 /// The Promise.allSettled function returns a promise that resolves after all of the given promises have either

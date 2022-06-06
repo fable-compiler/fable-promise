@@ -351,8 +351,8 @@ describe "Promise tests" <| fun _ ->
             success.value.Value |> equal 1
             rejection.reason.Value.Message |> equal "I Failed"
         )
-        
-    it "Promise.Success and Promise.Rejection work" <| fun () ->
+
+    it "SettledValue.toResult works" <| fun () ->
         let success =
             promise {
                 do! Promise.sleep 100
@@ -364,32 +364,11 @@ describe "Promise tests" <| fun _ ->
         |> Promise.map (fun results ->
             let success = results.[0]
             let rejection = results.[1]
-            match success with
-            | Promise.Success value -> value |> equal 1
-            | _ -> failwith "Unreachable result"
-            
-            match rejection with
-            | Promise.Rejection ex -> ex.Message |> equal "I Failed"
-            | _ -> failwith "Unreachable result"
-        )
-        
-    it "Promise.settledResult works" <| fun () ->
-        let success =
-            promise {
-                do! Promise.sleep 100
-                return 1
-            }
-        let rejection = Promise.reject (exn "I Failed")
-        
-        Promise.allSettled [success; rejection]
-        |> Promise.map (fun results ->
-            let success = results.[0]
-            let rejection = results.[1]
-            match success |> Promise.settledResult with
+            match success |> SettledValue.toResult with
             | Ok value -> value |> equal 1
             | _ -> failwith "Unreachable result"
             
-            match rejection |> Promise.settledResult with
+            match rejection |> SettledValue.toResult with
             | Error ex -> ex.Message |> equal "I Failed"
             | _ -> failwith "Unreachable result"
         )
@@ -452,6 +431,7 @@ describe "Promise tests" <| fun _ ->
             }
         
         Promise.race [rejection2(); rejection(); success()]
+        |> Promise.map (fun _ -> failwith "Unreachable result")
         |> Promise.catch(fun result ->
             result.Message |> equal "I Failed First"    
         )
