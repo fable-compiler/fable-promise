@@ -365,7 +365,6 @@ describe "Promise tests" <| fun _ ->
         }
         |> Promise.tap (fun result ->
             result |> equal 3
-            ()
         )
 
     it "Promise can be run in parallel with and!" <| fun () ->
