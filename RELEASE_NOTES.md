@@ -1,3 +1,7 @@
+### 3.2.0
+
+* Add Promise.any, Promise.allSettled, Promise.race @AngelMunoz
+
 ### 3.1.3
 
 * Fix #26: Revert signature changes in PromiseBuilder
