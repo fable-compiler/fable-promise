@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "isRoot": true,
+  "tools": {
+    "fable": {
+      "version": "5.17.0",
+      "commands": [
+        "fable"
+      ],
+      "rollForward": false
+    },
+    "easybuild.shipit": {
+      "version": "3.1.0",
+      "commands": [
+        "shipit"
+      ],
+      "rollForward": false
+    },
+    "easybuild.commitlinter": {
+      "version": "2.0.0",
+      "commands": [
+        "commit-linter"
+      ],
+      "rollForward": false
+    },
+    "husky": {
+      "version": "0.9.1",
+      "commands": [
+        "husky"
+      ],
+      "rollForward": false
+    },
+    "fantomas": {
+      "version": "8.0.0-beta-002",
+      "commands": [
+        "fantomas"
+      ],
+      "rollForward": false
+    },
+    "dotnet-outdated-tool": {
+      "version": "4.8.1",
+      "commands": [
+        "dotnet-outdated"
+      ],
+      "rollForward": false
+    }
+  }
+}

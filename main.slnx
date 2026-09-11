@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/build/">
+    <Project Path="build/EasyBuild.fsproj" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/Fable.Promise.fsproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Tests.fsproj" />
+  </Folder>
+</Solution>
