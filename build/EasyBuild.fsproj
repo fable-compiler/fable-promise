@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net10.0</TargetFramework>
+        <ContinuousIntegrationBuild>false</ContinuousIntegrationBuild>
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+    <ItemGroup>
+        <Compile Include="Workspace.fs" />
+        <Compile Include="Commands/Test.fs" />
+        <Compile Include="Commands/Release.fs" />
+        <Compile Include="Main.fs" />
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="BlackFox.CommandLine" Version="1.0.0" />
+        <PackageReference Include="EasyBuild.FileSystemProvider" Version="1.1.0" />
+        <PackageReference Include="EasyBuild.Tools" Version="8.0.0" />
+        <PackageReference Include="SimpleExec" Version="13.1.0" />
+        <PackageReference Include="Spectre.Console.Cli" Version="0.53.1" />
+    </ItemGroup>
+</Project>
