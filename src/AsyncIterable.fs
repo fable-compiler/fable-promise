@@ -43,12 +43,12 @@ type CancellationToken() =
 /// Iterates AsyncIterable. See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for-await...of
 let iter (action: CancellationToken -> 'T -> unit) (iterable: JS.AsyncIterable<'T>): JS.Promise<unit> =
     let token = CancellationToken()
-    emitJsExpr () """(async () => {
-    for await (const value of iterable) {
+    emitJsExpr (action, iterable, token) """(async () => {
+    for await (const value of $1) {
         try {
-            action(token, value)
+            $0($2, value)
         } catch (err) {
-            if (err instanceof token.constructor) {
+            if (err instanceof $2.constructor) {
                 break;
             }
             throw(err);
