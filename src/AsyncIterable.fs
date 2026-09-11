@@ -12,38 +12,70 @@ open Fable.Core.JsInterop
         }
     }
 }""")>]
-let private createAsyncIterator (onNext: unit -> JS.Promise<obj>) (onCancel: unit -> obj): JS.AsyncIterable<'T> = jsNative
+let private createAsyncIterator
+    (onNext: unit -> JS.Promise<obj>)
+    (onCancel: unit -> obj)
+    : JS.AsyncIterable<'T>
+    =
+    jsNative
 
 /// Creates AsyncIterable. See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for-await...of#specifications
-let create (onNext: unit -> JS.Promise<'T option>): JS.AsyncIterable<'T> =
+let create (onNext: unit -> JS.Promise<'T option>) : JS.AsyncIterable<'T> =
     createAsyncIterator
         (fun () ->
-            onNext() |> Promise.map (function
-                | Some value -> createObj ["value" ==> value; "done" ==> false]
-                | None -> createObj ["done" ==> true]
-            ))
+            onNext ()
+            |> Promise.map (
+                function
+                | Some value ->
+                    createObj
+                        [
+                            "value" ==> value
+                            "done" ==> false
+                        ]
+                | None -> createObj [ "done" ==> true ]
+            )
+        )
         (fun () -> createObj [ "done" ==> true ])
 
 /// Creates AsyncIterable with a cleaning function for cancellation (JS caller invokes `break` or `return` during iteration)
-let createCancellable (onCancel: unit -> unit) (onNext: unit -> JS.Promise<'T option>): JS.AsyncIterable<'T> =
+let createCancellable
+    (onCancel: unit -> unit)
+    (onNext: unit -> JS.Promise<'T option>)
+    : JS.AsyncIterable<'T>
+    =
     createAsyncIterator
         (fun () ->
-            onNext() |> Promise.map (function
-                | Some value -> createObj ["value" ==> value; "done" ==> false]
-                | None -> createObj ["done" ==> true]
-            ))
+            onNext ()
+            |> Promise.map (
+                function
+                | Some value ->
+                    createObj
+                        [
+                            "value" ==> value
+                            "done" ==> false
+                        ]
+                | None -> createObj [ "done" ==> true ]
+            )
+        )
         (fun () ->
-            onCancel()
-            createObj [ "done" ==> true ])
+            onCancel ()
+            createObj [ "done" ==> true ]
+        )
 
 type CancellationToken() =
-    member this.Cancel(): unit =
-        raise !!this
+    member this.Cancel() : unit = raise !!this
 
 /// Iterates AsyncIterable. See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for-await...of
-let iter (action: CancellationToken -> 'T -> unit) (iterable: JS.AsyncIterable<'T>): JS.Promise<unit> =
+let iter
+    (action: CancellationToken -> 'T -> unit)
+    (iterable: JS.AsyncIterable<'T>)
+    : JS.Promise<unit>
+    =
     let token = CancellationToken()
-    emitJsExpr (action, iterable, token) """(async () => {
+
+    emitJsExpr
+        (action, iterable, token)
+        """(async () => {
     for await (const value of $1) {
         try {
             $0($2, value)

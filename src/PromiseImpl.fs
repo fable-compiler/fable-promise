@@ -16,16 +16,16 @@ module SettledValue =
     /// <code lang="fsharp">
     /// Promise.allSettled [success; rejection]
     /// |> Promise.iter (fun results ->
-    ///     for result in results do 
-    ///       match SettledValue.toResult result  with 
+    ///     for result in results do
+    ///       match SettledValue.toResult result  with
     ///       | Ok value ->
     ///         printfn "Success: %A" value
-    ///       | Error err -> 
+    ///       | Error err ->
     ///         eprintfn "Error: %O" err
     /// )
     /// </code>
     /// </example>
     let toResult (p: Promise.SettledValue<'T>) =
-        match p.status with 
+        match p.status with
         | Promise.Fulfilled -> Ok p.value.Value
         | Promise.Rejected -> Error p.reason.Value

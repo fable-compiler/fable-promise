@@ -1,4 +1,3 @@
-
 [<RequireQualifiedAccess>]
 module Promise
 
@@ -34,7 +33,7 @@ open Fable.Core.JsInterop
 /// The promise created by the function
 /// </returns>
 [<Emit("new Promise($0)")>]
-let create (f: ('T -> unit) -> (exn -> unit) -> unit): JS.Promise<'T> = jsNative
+let create (f: ('T -> unit) -> (exn -> unit) -> unit) : JS.Promise<'T> = jsNative
 
 /// <summary>
 /// Create a promise which wait <c>X</c> ms before resolving.
@@ -55,7 +54,7 @@ let create (f: ('T -> unit) -> (exn -> unit) -> unit): JS.Promise<'T> = jsNative
 /// <param name="ms">Number of milliseconds to wait</param>
 /// <returns>A delayed promise</returns>
 [<Emit("new Promise(resolve => setTimeout(resolve, $0))")>]
-let sleep (ms: int): JS.Promise<unit> = jsNative
+let sleep (ms: int) : JS.Promise<unit> = jsNative
 
 /// <summary>
 /// Create a promise (in resolved state) with supplied value.
@@ -74,7 +73,7 @@ let sleep (ms: int): JS.Promise<unit> = jsNative
 /// <typeparam name="'T"></typeparam>
 /// <returns>Returns a promise returning the supplied value</returns>
 [<Emit("Promise.resolve($0)")>]
-let lift<'T> (a: 'T): JS.Promise<'T> = jsNative
+let lift<'T> (a: 'T) : JS.Promise<'T> = jsNative
 
 /// <summary>
 /// Creates promise (in rejected state) with supplied reason.
@@ -125,7 +124,7 @@ let reject<'T> (reason: exn) : JS.Promise<'T> = jsNative
 /// <typeparam name="'T2"></typeparam>
 /// <returns>A promise of the output type of the binder.</returns>
 [<Emit("$1.then($0)")>]
-let bind (a: 'T1 -> JS.Promise<'T2>) (pr: JS.Promise<'T1>): JS.Promise<'T2> = jsNative
+let bind (a: 'T1 -> JS.Promise<'T2>) (pr: JS.Promise<'T1>) : JS.Promise<'T2> = jsNative
 
 /// <summary>
 /// Map a value into another type, the result will be wrapped in a promise for you.
@@ -145,7 +144,7 @@ let bind (a: 'T1 -> JS.Promise<'T2>) (pr: JS.Promise<'T1>): JS.Promise<'T2> = js
 /// <typeparam name="'T2"></typeparam>
 /// <returns>A promise after applying the mapping function</returns>
 [<Emit("$1.then($0)")>]
-let map (a: 'T1 -> 'T2) (pr: JS.Promise<'T1>): JS.Promise<'T2> = jsNative
+let map (a: 'T1 -> 'T2) (pr: JS.Promise<'T1>) : JS.Promise<'T2> = jsNative
 
 /// <summary>
 /// Call a function with the result of a promise and stop the promise chain.
@@ -164,7 +163,7 @@ let map (a: 'T1 -> 'T2) (pr: JS.Promise<'T1>): JS.Promise<'T2> = jsNative
 /// <param name="pr">The input promise</param>
 /// <typeparam name="'T"></typeparam>
 [<Emit("void ($1.then($0))")>]
-let iter (a: 'T -> unit) (pr: JS.Promise<'T>): unit = jsNative
+let iter (a: 'T -> unit) (pr: JS.Promise<'T>) : unit = jsNative
 
 /// <summary>
 /// This is an identity function, it calls the given function and return the promise value untouched.
@@ -185,8 +184,12 @@ let iter (a: 'T -> unit) (pr: JS.Promise<'T>): unit = jsNative
 /// <param name="a">The input promise</param>
 /// <typeparam name="'T"></typeparam>
 /// <returns>A promise of the same type as the input promise</returns>
-let tap (fn: 'T -> unit) (a: JS.Promise<'T>): JS.Promise<'T> =
-    a |> map (fun x -> fn x; x)
+let tap (fn: 'T -> unit) (a: JS.Promise<'T>) : JS.Promise<'T> =
+    a
+    |> map (fun x ->
+        fn x
+        x
+    )
 
 /// <summary>
 /// Handle an errored promise allowing you pass a return value.
@@ -212,7 +215,7 @@ let tap (fn: 'T -> unit) (a: JS.Promise<'T>): JS.Promise<'T> =
 /// <typeparam name="'T"></typeparam>
 /// <returns>A promise which result of the call of fail</returns>
 [<Emit("$1.catch($0)")>]
-let catch (fail: exn -> 'T) (pr: JS.Promise<'T>): JS.Promise<'T> = jsNative
+let catch (fail: exn -> 'T) (pr: JS.Promise<'T>) : JS.Promise<'T> = jsNative
 
 /// <summary>
 /// Handle an errored promise allowing to call a promise.
@@ -236,7 +239,7 @@ let catch (fail: exn -> 'T) (pr: JS.Promise<'T>): JS.Promise<'T> = jsNative
 /// <typeparam name="'T"></typeparam>
 /// <returns>A promise which is the result of the fail function</returns>
 [<Emit("$1.catch($0)")>]
-let catchBind (fail: exn -> JS.Promise<'T>) (pr: JS.Promise<'T>): JS.Promise<'T> = jsNative
+let catchBind (fail: exn -> JS.Promise<'T>) (pr: JS.Promise<'T>) : JS.Promise<'T> = jsNative
 
 /// <summary>
 /// Used to catch errors at the end of a promise chain.
@@ -261,7 +264,7 @@ let catchBind (fail: exn -> JS.Promise<'T>) (pr: JS.Promise<'T>): JS.Promise<'T>
 /// <param name="pr">The input promise</param>
 /// <typeparam name="'T"></typeparam>
 [<Emit("void ($1.catch($0))")>]
-let catchEnd (fail: exn -> unit) (pr: JS.Promise<'T>): unit = jsNative
+let catchEnd (fail: exn -> unit) (pr: JS.Promise<'T>) : unit = jsNative
 
 /// <summary>
 /// A combination of <c>map</c> and <c>catch</c>, this function applies the <c>success</c> continuation when the input promise resolves successfully, or <c>fail</c> continuation when the input promise fails.
@@ -282,7 +285,8 @@ let catchEnd (fail: exn -> unit) (pr: JS.Promise<'T>): unit = jsNative
 /// <typeparam name="'T2"></typeparam>
 /// <returns>A new promise which is the result of calling <c>success</c> if <c>pr</c> succeedes, or of <c>fail</c> if <c>pr</c> failed</returns>
 [<Emit("$2.then($0).catch($1)")>]
-let either (success: 'T1 -> 'T2) (fail: exn -> 'T2) (pr: JS.Promise<'T1>): JS.Promise<'T2> = jsNative
+let either (success: 'T1 -> 'T2) (fail: exn -> 'T2) (pr: JS.Promise<'T1>) : JS.Promise<'T2> =
+    jsNative
 
 /// <summary>
 /// A combination of <c>bind</c> and <c>catchBind</c>, this function applies the <c>success</c> continuation when the input promise resolves successfully, or <c>fail</c> continuation when the input promise fails.
@@ -303,7 +307,13 @@ let either (success: 'T1 -> 'T2) (fail: exn -> 'T2) (pr: JS.Promise<'T1>): JS.Pr
 /// <typeparam name="'T2"></typeparam>
 /// <returns>A new promise which is the result of calling <c>success</c> if <c>pr</c> succeedes, or of <c>fail</c> if <c>pr</c> failed</returns>
 [<Emit("$2.then($0).catch($1)")>]
-let eitherBind (success: 'T1 -> JS.Promise<'T2>) (fail: exn -> JS.Promise<'T2>) (pr: JS.Promise<'T1>): JS.Promise<'T2> = jsNative
+let eitherBind
+    (success: 'T1 -> JS.Promise<'T2>)
+    (fail: exn -> JS.Promise<'T2>)
+    (pr: JS.Promise<'T1>)
+    : JS.Promise<'T2>
+    =
+    jsNative
 
 /// <summary>
 /// Same as <c>Promise.either</c> but stopping the promise execution.
@@ -321,7 +331,7 @@ let eitherBind (success: 'T1 -> JS.Promise<'T2>) (fail: exn -> JS.Promise<'T2>) 
 /// <param name="pr">The input promise</param>
 /// <typeparam name="'T"></typeparam>
 [<Emit("void ($2.then($0).catch($1))")>]
-let eitherEnd (success: 'T -> unit) (fail: exn -> unit) (pr: JS.Promise<'T>): unit = jsNative
+let eitherEnd (success: 'T -> unit) (fail: exn -> unit) (pr: JS.Promise<'T>) : unit = jsNative
 
 /// <summary>
 /// Start a promise.
@@ -340,7 +350,7 @@ let eitherEnd (success: 'T -> unit) (fail: exn -> unit) (pr: JS.Promise<'T>): un
 /// <param name="pr">The input promise</param>
 /// <typeparam name="'T"></typeparam>
 [<Emit("void $0")>]
-let start (pr: JS.Promise<'T>): unit = jsNative
+let start (pr: JS.Promise<'T>) : unit = jsNative
 
 /// <summary>
 /// Same as <c>Promise.start</c> but forcing you to handle the rejected state.
@@ -358,7 +368,7 @@ let start (pr: JS.Promise<'T>): unit = jsNative
 /// <param name="pr">The input promise</param>
 /// <typeparam name="'T"></typeparam>
 [<Emit("$1.catch($0)")>]
-let tryStart (fail: exn -> unit) (pr: JS.Promise<'T>): unit = jsNative
+let tryStart (fail: exn -> unit) (pr: JS.Promise<'T>) : unit = jsNative
 
 /// <summary>
 /// Takes a sequence of promises as an input, and returns a single <c>Promise</c> that resolves to an array of the results of the input promises.
@@ -392,7 +402,7 @@ let tryStart (fail: exn -> unit) (pr: JS.Promise<'T>): unit = jsNative
 /// <typeparam name="'T"></typeparam>
 /// <returns>Return a new promise returning an array containing all the promise result</returns>
 [<Emit("Promise.all($0)")>]
-let Parallel (pr: seq<JS.Promise<'T>>): JS.Promise<'T[]> = jsNative
+let Parallel (pr: seq<JS.Promise<'T>>) : JS.Promise<'T[]> = jsNative
 
 /// <summary>
 /// Takes a sequence of promises as an input, and returns a single <c>Promise</c> that resolves to an array of the results of the input promises.
@@ -450,7 +460,7 @@ let Parallel (pr: seq<JS.Promise<'T>>): JS.Promise<'T[]> = jsNative
 /// <typeparam name="'T"></typeparam>
 /// <returns>Return a new promise returning an array containing all the promise result</returns>
 [<Emit("Promise.all($0)")>]
-let all (pr: seq<JS.Promise<'T>>): JS.Promise<'T[]> = jsNative
+let all (pr: seq<JS.Promise<'T>>) : JS.Promise<'T[]> = jsNative
 
 [<StringEnum>]
 type SettledStatus =
@@ -480,7 +490,7 @@ type SettledValue<'T> =
 ///         return 1
 ///     }
 /// let rejection = Promise.reject (exn "I Failed")
-/// 
+///
 /// Promise.allSettled [success; rejection]
 /// |> Promise.map(fun values ->
 ///     let success = values.[0]
@@ -491,7 +501,7 @@ type SettledValue<'T> =
 /// </code>
 /// </example>
 [<Emit("Promise.allSettled($0)")>]
-let allSettled (pr: seq<JS.Promise<'T>>): JS.Promise<SettledValue<'T>[]> = jsNative
+let allSettled (pr: seq<JS.Promise<'T>>) : JS.Promise<SettledValue<'T>[]> = jsNative
 
 /// <summary>
 /// Promise.any takes an iterable of Promise objects.
@@ -517,7 +527,7 @@ let allSettled (pr: seq<JS.Promise<'T>>): JS.Promise<SettledValue<'T>[]> = jsNat
 ///         do! Promise.sleep 50
 ///         return! Promise.reject (exn "I Failed")
 ///     }
-/// 
+///
 /// Promise.any [rejection(); rejection2(); success()]
 /// |> Promise.map (fun result ->
 ///     result |> equal 1
@@ -525,7 +535,7 @@ let allSettled (pr: seq<JS.Promise<'T>>): JS.Promise<SettledValue<'T>[]> = jsNat
 /// </code>
 /// </example>
 [<Emit("Promise.any($0)")>]
-let any (pr: seq<JS.Promise<'T>>): JS.Promise<'T> = jsNative
+let any (pr: seq<JS.Promise<'T>>) : JS.Promise<'T> = jsNative
 
 /// <summary>
 /// The Promise.race method returns a promise that fulfills or
@@ -549,15 +559,15 @@ let any (pr: seq<JS.Promise<'T>>): JS.Promise<'T> = jsNative
 ///         do! Promise.sleep 50
 ///         return! Promise.reject (exn "I Failed Last")
 ///     }
-/// 
+///
 /// Promise.race [rejection2(); rejection(); success()]
 /// |> Promise.map(fun result ->
-///     result |> equal 1   
+///     result |> equal 1
 /// )
 /// </code>
 /// </example>
 [<Emit("Promise.race($0)")>]
-let race (pr: seq<JS.Promise<'T>>): JS.Promise<'T> = jsNative
+let race (pr: seq<JS.Promise<'T>>) : JS.Promise<'T> = jsNative
 
 /// <summary>
 /// Map the <c>Promise</c> result into a <c>Result</c> type.
@@ -582,8 +592,7 @@ let race (pr: seq<JS.Promise<'T>>): JS.Promise<'T> = jsNative
 /// <param name="a">The input promise</param>
 /// <typeparam name="'T"></typeparam>
 /// <returns>A promise returning <c>Ok</c> if the input promise succeed, <c>Error</c> if the input promise failed</returns>
-let result (a: JS.Promise<'T>): JS.Promise<Result<'T, exn>> =
-    either Ok Error a
+let result (a: JS.Promise<'T>) : JS.Promise<Result<'T, exn>> = either Ok Error a
 
 /// <summary>
 /// Evaluates to `myPromise |> Promise.map (Result.map fn)`
@@ -606,9 +615,8 @@ let result (a: JS.Promise<'T>): JS.Promise<Result<'T, exn>> =
 /// <typeparam name="'T2"></typeparam>
 /// <typeparam name="'E"></typeparam>
 /// <returns>A promise returning the result of applying the mapping function to the input promise result</returns>
-let mapResult (fn: 'T1 -> 'T2) (a: JS.Promise<Result<'T1, 'E>>): JS.Promise<Result<'T2, 'E>> =
+let mapResult (fn: 'T1 -> 'T2) (a: JS.Promise<Result<'T1, 'E>>) : JS.Promise<Result<'T2, 'E>> =
     a |> map (Result.map fn)
-
 
 /// <summary>
 /// Transform the success part of a result promise into another promise.
@@ -636,13 +644,17 @@ let mapResult (fn: 'T1 -> 'T2) (a: JS.Promise<Result<'T1, 'E>>): JS.Promise<Resu
 /// <typeparam name="'T2"></typeparam>
 /// <typeparam name="'E"></typeparam>
 /// <returns>Returns a new promise applying to the binder function to it if the input promise succeed</returns>
-let bindResult (fn: 'T1 -> JS.Promise<'T2>) (a: JS.Promise<Result<'T1, 'E>>): JS.Promise<Result<'T2, 'E>> =
-    a |> bind (fun a ->
+let bindResult
+    (fn: 'T1 -> JS.Promise<'T2>)
+    (a: JS.Promise<Result<'T1, 'E>>)
+    : JS.Promise<Result<'T2, 'E>>
+    =
+    a
+    |> bind (fun a ->
         match a with
-        | Ok a ->
-            fn a |> map Ok
-        | Error e ->
-            lift (Error e))
+        | Ok a -> fn a |> map Ok
+        | Error e -> lift (Error e)
+    )
 
 /// <summary>
 /// Evaluates to <c>myPromise |> Promise.map (Result.map fn)</c>
@@ -665,7 +677,7 @@ let bindResult (fn: 'T1 -> JS.Promise<'T2>) (a: JS.Promise<Result<'T1, 'E>>): JS
 /// <typeparam name="'E2"></typeparam>
 /// <typeparam name="'T"></typeparam>
 /// <returns>A promise returning the result of applying the mapper function to the input promise in case of error, otherwise the result of the input promise as it is</returns>
-let mapResultError (fn: 'E1 -> 'E2) (a: JS.Promise<Result<'T, 'E1>>): JS.Promise<Result<'T, 'E2>> =
+let mapResultError (fn: 'E1 -> 'E2) (a: JS.Promise<Result<'T, 'E1>>) : JS.Promise<Result<'T, 'E2>> =
     a |> map (Result.mapError fn)
 
 /// <summary>
@@ -683,84 +695,148 @@ let mapResultError (fn: 'E1 -> 'E2) (a: JS.Promise<Result<'T, 'E1>>): JS.Promise
 /// </summary>
 type PromiseBuilder() =
     [<Emit("$1.then($2)")>]
-    member _.Bind(p: JS.Promise<'T1>, f: 'T1 -> JS.Promise<'T2>): JS.Promise<'T2> = jsNative
+    member _.Bind(p: JS.Promise<'T1>, f: 'T1 -> JS.Promise<'T2>) : JS.Promise<'T2> = jsNative
 
     [<Emit("$1.then(() => $2)")>]
-    member _.Combine(p1: JS.Promise<unit>, p2: JS.Promise<'T>): JS.Promise<'T> = jsNative
+    member _.Combine(p1: JS.Promise<unit>, p2: JS.Promise<'T>) : JS.Promise<'T> = jsNative
 
-    member _.For(seq: seq<'T>, body: 'T -> JS.Promise<unit>): JS.Promise<unit> =
+    member _.For(seq: seq<'T>, body: 'T -> JS.Promise<unit>) : JS.Promise<unit> =
         // (lift (), seq)
         // ||> Seq.fold (fun p a ->
         //     bind (fun () -> body a) p)
         let mutable p = lift ()
+
         for a in seq do
             p <- p |> bind (fun () -> body a)
+
         p
 
     [<Emit("$1.then($2)")>]
-    member _.For(p: JS.Promise<'T1>, f: 'T1 -> JS.Promise<'T2>): JS.Promise<'T2> = jsNative
+    member _.For(p: JS.Promise<'T1>, f: 'T1 -> JS.Promise<'T2>) : JS.Promise<'T2> = jsNative
 
-    member this.While(guard: unit -> bool, p: JS.Promise<unit>): JS.Promise<unit> =
-        if guard()
-        then bind (fun () -> this.While(guard, p)) p
-        else lift()
+    member this.While(guard: unit -> bool, p: JS.Promise<unit>) : JS.Promise<unit> =
+        if guard () then
+            bind (fun () -> this.While(guard, p)) p
+        else
+            lift ()
 
     [<Emit("Promise.resolve($1)")>]
-    member _.Return(a: 'T): JS.Promise<'T> = jsNative
+    member _.Return(a: 'T) : JS.Promise<'T> = jsNative
 
     [<Emit("$1")>]
-    member _.ReturnFrom(p: JS.Promise<'T>): JS.Promise<'T> = jsNative
+    member _.ReturnFrom(p: JS.Promise<'T>) : JS.Promise<'T> = jsNative
 
     [<Emit("Promise.resolve()")>]
-    member _.Zero(): JS.Promise<unit> = jsNative
+    member _.Zero() : JS.Promise<unit> = jsNative
 
-    member _.TryFinally(p: JS.Promise<'T>, compensation: unit -> unit): JS.Promise<'T> =
-        either (fun (x: 'T) -> compensation(); x) (fun er -> compensation(); raise er) p
+    member _.TryFinally(p: JS.Promise<'T>, compensation: unit -> unit) : JS.Promise<'T> =
+        either
+            (fun (x: 'T) ->
+                compensation ()
+                x
+            )
+            (fun er ->
+                compensation ()
+                raise er
+            )
+            p
 
     [<Emit("$1.catch($2)")>]
-    member _.TryWith(p: JS.Promise<'T>, catchHandler: exn -> JS.Promise<'T>): JS.Promise<'T> = jsNative
+    member _.TryWith(p: JS.Promise<'T>, catchHandler: exn -> JS.Promise<'T>) : JS.Promise<'T> =
+        jsNative
 
     // Delay must generate a cold promise-like object that re-runs every time it's called,
     // so we cannot use the JS Promise constructor which is stateful
-    member _.Delay(generator: unit -> JS.Promise<'T>): JS.Promise<'T> =
-        !!createObj [
-            "then" ==> fun onSuccess onError ->
-                try generator().``then``(onSuccess, onError)
-                with er ->
-                    if isNull(box onError) then reject er
-                    else
-                        try onError er |> lift
-                        with er -> reject er
-            "catch" ==> fun onError ->
-                try generator().catch(onError)
-                with er ->
-                    try onError er |> lift
-                    with er -> reject er
-        ]
+    member _.Delay(generator: unit -> JS.Promise<'T>) : JS.Promise<'T> =
+        !!
+            createObj
+            [
+                "then"
+                ==> fun onSuccess onError ->
+                    try
+                        generator().``then``(onSuccess, onError)
+                    with er ->
+                        if isNull (box onError) then
+                            reject er
+                        else
+                            try
+                                onError er |> lift
+                            with er ->
+                                reject er
+                "catch"
+                ==> fun onError ->
+                    try
+                        generator().catch(onError)
+                    with er ->
+                        try
+                            onError er |> lift
+                        with er ->
+                            reject er
+            ]
 
     // Make sure we call `then` because this may be used with "cold" fake promises generated by Delay
-    member _.Run(p:JS.Promise<'T>): JS.Promise<'T> = p.``then``(id)
+    member _.Run(p: JS.Promise<'T>) : JS.Promise<'T> = p.``then`` (id)
 
-    member this.Using<'T1, 'T2 when 'T1 :> IDisposable>(resource: 'T1, binder: 'T1 -> JS.Promise<'T2>): JS.Promise<'T2> =
-        this.TryFinally(binder(resource), fun () -> resource.Dispose())
+    member this.Using<'T1, 'T2 when 'T1 :> IDisposable>
+        (resource: 'T1, binder: 'T1 -> JS.Promise<'T2>)
+        : JS.Promise<'T2>
+        =
+        this.TryFinally(binder (resource), fun () -> resource.Dispose())
 
     [<Emit("Promise.all([$1, $2])")>]
-    member _.MergeSources(a: JS.Promise<'T1>, b: JS.Promise<'T2>): JS.Promise<'T1 * 'T2> = jsNative
+    member _.MergeSources(a: JS.Promise<'T1>, b: JS.Promise<'T2>) : JS.Promise<'T1 * 'T2> = jsNative
 
     [<Emit("Promise.all([$1, $2, $3])")>]
-    member _.MergeSources3(a: JS.Promise<'T1>, b: JS.Promise<'T2>, c: JS.Promise<'T3>): JS.Promise<'T1 * 'T2 * 'T3> = jsNative
+    member _.MergeSources3
+        (a: JS.Promise<'T1>, b: JS.Promise<'T2>, c: JS.Promise<'T3>)
+        : JS.Promise<'T1 * 'T2 * 'T3>
+        =
+        jsNative
 
     [<Emit("Promise.all([$1, $2, $3, $4])")>]
-    member _.MergeSources4(a: JS.Promise<'T1>, b: JS.Promise<'T2>, c: JS.Promise<'T3>, d: JS.Promise<'T4>): JS.Promise<'T1 * 'T2 * 'T3 * 'T4> = jsNative
+    member _.MergeSources4
+        (a: JS.Promise<'T1>, b: JS.Promise<'T2>, c: JS.Promise<'T3>, d: JS.Promise<'T4>)
+        : JS.Promise<'T1 * 'T2 * 'T3 * 'T4>
+        =
+        jsNative
 
     [<Emit("Promise.all([$1, $2, $3, $4, $5])")>]
-    member _.MergeSources5(a: JS.Promise<'T1>, b: JS.Promise<'T2>, c: JS.Promise<'T3>, d: JS.Promise<'T4>, e: JS.Promise<'T5>): JS.Promise<'T1 * 'T2 * 'T3 * 'T4 * 'T5> = jsNative
+    member _.MergeSources5
+        (
+            a: JS.Promise<'T1>,
+            b: JS.Promise<'T2>,
+            c: JS.Promise<'T3>,
+            d: JS.Promise<'T4>,
+            e: JS.Promise<'T5>
+        )
+        : JS.Promise<'T1 * 'T2 * 'T3 * 'T4 * 'T5>
+        =
+        jsNative
 
     [<Emit("Promise.all([$1, $2, $3, $4, $5, $6])")>]
-    member _.MergeSources6(a: JS.Promise<'T1>, b: JS.Promise<'T2>, c: JS.Promise<'T3>, d: JS.Promise<'T4>, e: JS.Promise<'T5>, f: JS.Promise<'T6>): JS.Promise<'T1 * 'T2 * 'T3 * 'T4 * 'T5 * 'T6> = jsNative
+    member _.MergeSources6
+        (
+            a: JS.Promise<'T1>,
+            b: JS.Promise<'T2>,
+            c: JS.Promise<'T3>,
+            d: JS.Promise<'T4>,
+            e: JS.Promise<'T5>,
+            f: JS.Promise<'T6>
+        )
+        : JS.Promise<'T1 * 'T2 * 'T3 * 'T4 * 'T5 * 'T6>
+        =
+        jsNative
 
-//    member _.BindReturn(y: JS.Promise<'T1>, f) = map f y
+    //    member _.BindReturn(y: JS.Promise<'T1>, f) = map f y
 
     [<Emit("Promise.all([$1,$2]).then(([a,b]) => $3(a,b))")>]
-    [<CustomOperation("andFor", IsLikeZip=true)>]
-    member _.Merge(a: JS.Promise<'T1>, b: JS.Promise<'T2>, [<ProjectionParameter>] resultSelector : 'T1 -> 'T2 -> 'R): JS.Promise<'R> = jsNative
+    [<CustomOperation("andFor", IsLikeZip = true)>]
+    member _.Merge
+        (
+            a: JS.Promise<'T1>,
+            b: JS.Promise<'T2>,
+            [<ProjectionParameter>] resultSelector: 'T1 -> 'T2 -> 'R
+        )
+        : JS.Promise<'R>
+        =
+        jsNative

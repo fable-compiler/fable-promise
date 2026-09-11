@@ -31,7 +31,14 @@ let tests =
             testAsync (
                 "PromiseBuilder.Combine works",
                 async {
-                    let nums = [| 1; 2; 3; 4; 5 |]
+                    let nums =
+                        [|
+                            1
+                            2
+                            3
+                            4
+                            5
+                        |]
 
                     do!
                         promise {
@@ -45,7 +52,16 @@ let tests =
 
                             return xs
                         }
-                        |> Promise.map (fun xs -> assertThat xs (isEqualTo [ 4; 3; 2 ]))
+                        |> Promise.map (fun xs ->
+                            assertThat
+                                xs
+                                (isEqualTo
+                                    [
+                                        4
+                                        3
+                                        2
+                                    ])
+                        )
                         |> awaitPromise
                 }
             )
@@ -53,7 +69,13 @@ let tests =
             testAsync (
                 "Promise for binding works correctly",
                 async {
-                    let inputs = [| 1; 2; 3 |]
+                    let inputs =
+                        [|
+                            1
+                            2
+                            3
+                        |]
+
                     let mutable result = 0
 
                     do!
@@ -198,7 +220,10 @@ let tests =
                                 return 42
                         }
 
-                    do! work |> Promise.map (fun value -> assertThat value (isEqualTo 42)) |> awaitPromise
+                    do!
+                        work
+                        |> Promise.map (fun value -> assertThat value (isEqualTo 42))
+                        |> awaitPromise
                 }
             )
 
@@ -367,7 +392,9 @@ let tests =
 
                             let! r1 =
                                 successful
-                                |> Promise.either (fun x -> string x) (fun x -> failwith "Shouldn't get called")
+                                |> Promise.either
+                                    (fun x -> string x)
+                                    (fun x -> failwith "Shouldn't get called")
 
                             let! r2 =
                                 successful
@@ -470,8 +497,22 @@ let tests =
                         }
 
                     do!
-                        Promise.Parallel [ p1; p2; p3 ]
-                        |> Promise.map (fun res -> assertThat (List.ofArray res) (isEqualTo [ 1; 2; 3 ]))
+                        Promise.Parallel
+                            [
+                                p1
+                                p2
+                                p3
+                            ]
+                        |> Promise.map (fun res ->
+                            assertThat
+                                (List.ofArray res)
+                                (isEqualTo
+                                    [
+                                        1
+                                        2
+                                        3
+                                    ])
+                        )
                         |> awaitPromise
                 }
             )
@@ -498,8 +539,22 @@ let tests =
                         }
 
                     do!
-                        Promise.all [ p1; p2; p3 ]
-                        |> Promise.map (fun res -> assertThat (List.ofArray res) (isEqualTo [ 1; 2; 3 ]))
+                        Promise.all
+                            [
+                                p1
+                                p2
+                                p3
+                            ]
+                        |> Promise.map (fun res ->
+                            assertThat
+                                (List.ofArray res)
+                                (isEqualTo
+                                    [
+                                        1
+                                        2
+                                        3
+                                    ])
+                        )
                         |> awaitPromise
                 }
             )
@@ -516,7 +571,11 @@ let tests =
                     let rejection = Promise.reject (exn "I Failed")
 
                     do!
-                        Promise.allSettled [ success; rejection ]
+                        Promise.allSettled
+                            [
+                                success
+                                rejection
+                            ]
                         |> Promise.map (fun values ->
                             let success = values.[0]
                             let rejection = values.[1]
@@ -539,7 +598,11 @@ let tests =
                     let rejection = Promise.reject (exn "I Failed")
 
                     do!
-                        Promise.allSettled [ success; rejection ]
+                        Promise.allSettled
+                            [
+                                success
+                                rejection
+                            ]
                         |> Promise.map (fun results ->
                             let success = results.[0]
                             let rejection = results.[1]
@@ -574,7 +637,12 @@ let tests =
                         }
 
                     do!
-                        Promise.any [ rejection (); rejection2 (); success () ]
+                        Promise.any
+                            [
+                                rejection ()
+                                rejection2 ()
+                                success ()
+                            ]
                         |> Promise.map (fun result -> assertThat result (isEqualTo 1))
                         |> awaitPromise
                 }
@@ -602,7 +670,12 @@ let tests =
                         }
 
                     do!
-                        Promise.race [ rejection2 (); rejection (); success () ]
+                        Promise.race
+                            [
+                                rejection2 ()
+                                rejection ()
+                                success ()
+                            ]
                         |> Promise.map (fun result -> assertThat result (isEqualTo 1))
                         |> awaitPromise
                 }
@@ -630,9 +703,16 @@ let tests =
                         }
 
                     do!
-                        Promise.race [ rejection2 (); rejection (); success () ]
+                        Promise.race
+                            [
+                                rejection2 ()
+                                rejection ()
+                                success ()
+                            ]
                         |> Promise.map (fun _ -> failwith "Unreachable result")
-                        |> Promise.catch (fun result -> assertThat result.Message (isEqualTo "I Failed First"))
+                        |> Promise.catch (fun result ->
+                            assertThat result.Message (isEqualTo "I Failed First")
+                        )
                         |> awaitPromise
                 }
             )
