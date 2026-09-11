@@ -1,6 +1,8 @@
 module PromiseLikeTests
 
 open Fable.Core
+open Scriptorium.Nib.Assertion
+open type Scriptorium.Quill.Test
 
 /// this is the definition of a thenable from ts2fable's generation VsCode API
 type [<AllowNullLiteral>] Thenable<'T> =
@@ -21,24 +23,27 @@ type Promise.PromiseBuilder with
     member _.Source(p: JS.Promise<'T1>): JS.Promise<'T1> = p
     member _.Source(ps: #seq<_>): _ = ps
 
+let tests =
+    testList (
+        "Promise like",
+        [
+            testAsync (
+                "Promise can interop with thenables",
+                async {
+                    let samplePromise () = promise { return 1 }
 
-describe "Promise like tests" <| fun _ ->
+                    let sampleThenable () =
+                        promise { return 1 } |> Thenable.ofPromise
 
-    it "Promise can interop with thenables" <| fun () ->
-        let samplePromise () =
-            promise {
-                return 1
-            }
+                    do!
+                        promise {
+                            let! x = samplePromise ()
+                            let! y = sampleThenable ()
 
-        let sampleThenable () =
-            promise {
-                return 1
-            }
-            |> Thenable.ofPromise
-
-        promise {
-            let! x = samplePromise()
-            let! y = sampleThenable()
-            
-            x + y |> equal 2
-        }
+                            assertThat (x + y) (isEqualTo 2)
+                        }
+                        |> awaitPromise
+                }
+            )
+        ]
+    )
