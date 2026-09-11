@@ -1,0 +1,65 @@
+# Run this workflow when the "Test" workflow completes successfully on the main branch.
+on:
+  workflow_run:
+    workflows: ["Test"]
+    types:
+      - completed
+    branches:
+      - main
+
+permissions:
+  contents: write
+  pull-requests: write
+  id-token: write
+
+name: EasyBuild ShipIt
+
+# Learn more at https://github.com/easybuild-org/EasyBuild.ShipIt#github-actions-auto-release
+
+jobs:
+  # Generate a Pull Request to prepare a release
+  shipit-pr:
+    name: ShipIt - Pull Request
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # We need more than the last commit to generate the changelog from the commit history.
+          fetch-depth: 50
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+
+      - name: ShipIt (Pull Request)
+        run: |
+          dotnet tool restore
+          dotnet shipit
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # Release the package when the 'chore: release ...' commit lands on main.
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    if: "startsWith(github.event.workflow_run.head_commit.message, 'chore: release ')"
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+
+      # Learn more at https://github.com/NuGet/login
+      - name: NuGet login (OIDC -> temp API key)
+        uses: NuGet/login@v1
+        id: login
+        with:
+          user: MangelMaxime
+
+      - name: Release
+        run: ./build.sh release
+        env:
+          NUGET_KEY: ${{ steps.login.outputs.NUGET_API_KEY }}
