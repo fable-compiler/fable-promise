@@ -1,6 +1,7 @@
 [<RequireQualifiedAccess>]
 module AsyncIterable
 
+open System
 open Fable.Core
 open Fable.Core.JsInterop
 
@@ -87,3 +88,137 @@ let iter
         }
     }
 })()"""
+
+/// Intermediate value of the <c>asyncIterable</c> computation expression.
+type Computation<'T> = interface end
+
+[<Literal>]
+let private YieldComputation =
+    "if (Array.isArray(computation)) { for (const value of computation) { yield value; } } else { yield* computation; }"
+
+[<Literal>]
+let private RunTemplate =
+    "async function* (generator) { const computation = generator(); "
+    + YieldComputation
+    + " }"
+
+[<Literal>]
+let private BindTemplate =
+    "async function* (p, binder) { const computation = binder(await p); "
+    + YieldComputation
+    + " }"
+
+[<Literal>]
+let private CombineTemplate =
+    "async function* (first, second) { { const computation = first; "
+    + YieldComputation
+    + " } { const computation = second(); "
+    + YieldComputation
+    + " } }"
+
+[<Literal>]
+let private WhileTemplate =
+    "async function* (guard, body) { while (guard()) { const computation = body(); "
+    + YieldComputation
+    + " } }"
+
+[<Literal>]
+let private ForTemplate =
+    "async function* (source, body) { for await (const item of source) { const computation = body(item); "
+    + YieldComputation
+    + " } }"
+
+[<Literal>]
+let private TryWithTemplate =
+    "async function* (body, handler) { try { const computation = body(); "
+    + YieldComputation
+    + " } catch (error) { const computation = handler(error); "
+    + YieldComputation
+    + " } }"
+
+[<Literal>]
+let private TryFinallyTemplate =
+    "async function* (body, compensation) { try { const computation = body(); "
+    + YieldComputation
+    + " } finally { compensation(); } }"
+
+let private runGenerator: obj = emitJsExpr () RunTemplate
+let private bindGenerator: obj = emitJsExpr () BindTemplate
+let private combineGenerator: obj = emitJsExpr () CombineTemplate
+let private whileGenerator: obj = emitJsExpr () WhileTemplate
+let private forGenerator: obj = emitJsExpr () ForTemplate
+let private tryWithGenerator: obj = emitJsExpr () TryWithTemplate
+let private tryFinallyGenerator: obj = emitJsExpr () TryFinallyTemplate
+
+/// <summary>
+/// A builder to provide AsyncIterable Computation Expression support.
+///
+/// The CE is available via <c>asyncIterable { ... }</c>
+/// <example>
+/// <code lang="fsharp">
+/// let numbers (count : int) =
+///     asyncIterable {
+///         for i in 1 .. count do
+///             do! Promise.sleep 100
+///             yield i
+///     }
+/// </code>
+/// </example>
+/// </summary>
+type AsyncIterableBuilder() =
+    [<Emit("[]")>]
+    member _.Zero() : Computation<'T> = jsNative
+
+    [<Emit("[$1]")>]
+    member _.Yield(value: 'T) : Computation<'T> = jsNative
+
+    [<Emit("$1")>]
+    member _.YieldFrom(source: JS.AsyncIterable<'T>) : Computation<'T> = jsNative
+
+    [<Emit("$1")>]
+    member _.Delay(generator: unit -> Computation<'T>) : unit -> Computation<'T> = jsNative
+
+    member _.Run(generator: unit -> Computation<'T>) : JS.AsyncIterable<'T> =
+        emitJsExpr (runGenerator, generator) "({ [Symbol.asyncIterator]: () => $0($1) })"
+
+    member _.Bind(p: JS.Promise<'T>, binder: 'T -> Computation<'U>) : Computation<'U> =
+        emitJsExpr (bindGenerator, p, binder) "$0($1, $2)"
+
+    member _.Combine(first: Computation<'T>, second: unit -> Computation<'T>) : Computation<'T> =
+        emitJsExpr (combineGenerator, first, second) "$0($1, $2)"
+
+    member _.While(guard: unit -> bool, body: unit -> Computation<'T>) : Computation<'T> =
+        emitJsExpr (whileGenerator, guard, body) "$0($1, $2)"
+
+    member _.For(source: JS.AsyncIterable<'T>, body: 'T -> Computation<'U>) : Computation<'U> =
+        emitJsExpr (forGenerator, source, body) "$0($1, $2)"
+
+    member this.For(source: seq<'T>, body: 'T -> Computation<'U>) : Computation<'U> =
+        this.Using(
+            source.GetEnumerator(),
+            fun enumerator ->
+                this.While((fun () -> enumerator.MoveNext()), (fun () -> body enumerator.Current))
+        )
+
+    member _.TryWith
+        (body: unit -> Computation<'T>, handler: exn -> Computation<'T>)
+        : Computation<'T>
+        =
+        emitJsExpr (tryWithGenerator, body, handler) "$0($1, $2)"
+
+    member _.TryFinally
+        (body: unit -> Computation<'T>, compensation: unit -> unit)
+        : Computation<'T>
+        =
+        emitJsExpr (tryFinallyGenerator, body, compensation) "$0($1, $2)"
+
+    member this.Using<'T, 'U when 'T :> IDisposable>
+        (resource: 'T, binder: 'T -> Computation<'U>)
+        : Computation<'U>
+        =
+        this.TryFinally(
+            (fun () -> binder resource),
+            fun () ->
+                if not (isNull (box resource)) then
+                    resource.Dispose()
+        )

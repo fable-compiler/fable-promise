@@ -33,3 +33,31 @@ export async function handleAsyncIterableWithBreak(iterable) {
     }
     return acc;
 }
+
+/**
+ * 
+ * @param {AsyncIterable<T>} iterable 
+ */
+export async function toArray(iterable) {
+    const values = [];
+    for await (const value of iterable) {
+        values.push(value);
+    }
+    return values;
+}
+
+/**
+ * 
+ * @param {number} count 
+ * @param {AsyncIterable<T>} iterable 
+ */
+export async function take(count, iterable) {
+    const values = [];
+    for await (const value of iterable) {
+        values.push(value);
+        if (values.length === count) {
+            break;
+        }
+    }
+    return values;
+}
