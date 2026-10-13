@@ -184,6 +184,50 @@ type AsyncIterableBuilder() =
     member _.Bind(p: JS.Promise<'T>, binder: 'T -> Computation<'U>) : Computation<'U> =
         emitJsExpr (bindGenerator, p, binder) "$0($1, $2)"
 
+    [<Emit("Promise.all([$1, $2])")>]
+    member _.MergeSources(a: JS.Promise<'T1>, b: JS.Promise<'T2>) : JS.Promise<'T1 * 'T2> = jsNative
+
+    [<Emit("Promise.all([$1, $2, $3])")>]
+    member _.MergeSources3
+        (a: JS.Promise<'T1>, b: JS.Promise<'T2>, c: JS.Promise<'T3>)
+        : JS.Promise<'T1 * 'T2 * 'T3>
+        =
+        jsNative
+
+    [<Emit("Promise.all([$1, $2, $3, $4])")>]
+    member _.MergeSources4
+        (a: JS.Promise<'T1>, b: JS.Promise<'T2>, c: JS.Promise<'T3>, d: JS.Promise<'T4>)
+        : JS.Promise<'T1 * 'T2 * 'T3 * 'T4>
+        =
+        jsNative
+
+    [<Emit("Promise.all([$1, $2, $3, $4, $5])")>]
+    member _.MergeSources5
+        (
+            a: JS.Promise<'T1>,
+            b: JS.Promise<'T2>,
+            c: JS.Promise<'T3>,
+            d: JS.Promise<'T4>,
+            e: JS.Promise<'T5>
+        )
+        : JS.Promise<'T1 * 'T2 * 'T3 * 'T4 * 'T5>
+        =
+        jsNative
+
+    [<Emit("Promise.all([$1, $2, $3, $4, $5, $6])")>]
+    member _.MergeSources6
+        (
+            a: JS.Promise<'T1>,
+            b: JS.Promise<'T2>,
+            c: JS.Promise<'T3>,
+            d: JS.Promise<'T4>,
+            e: JS.Promise<'T5>,
+            f: JS.Promise<'T6>
+        )
+        : JS.Promise<'T1 * 'T2 * 'T3 * 'T4 * 'T5 * 'T6>
+        =
+        jsNative
+
     member _.Combine(first: Computation<'T>, second: unit -> Computation<'T>) : Computation<'T> =
         emitJsExpr (combineGenerator, first, second) "$0($1, $2)"
 

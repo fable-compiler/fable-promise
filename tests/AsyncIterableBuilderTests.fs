@@ -76,6 +76,39 @@ let tests =
             )
 
             testAsync (
+                "and! awaits promises in parallel",
+                async {
+                    let mutable order = ""
+
+                    let work ms letter =
+                        promise {
+                            do! Promise.sleep ms
+                            order <- order + letter
+                            return letter
+                        }
+
+                    do!
+                        asyncIterable {
+                            let! a = work 30 "a"
+                            and! b = work 10 "b"
+                            yield a + b
+
+                            let! c = work 30 "c"
+                            and! d = work 20 "d"
+                            and! e = work 10 "e"
+                            yield c + d + e
+                        }
+                        |> expectValues
+                            [
+                                "ab"
+                                "cde"
+                            ]
+
+                    assertThat order (isEqualTo "baedc")
+                }
+            )
+
+            testAsync (
                 "for iterates over a seq",
                 asyncIterable {
                     for i in 1..3 do
