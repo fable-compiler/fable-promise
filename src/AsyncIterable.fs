@@ -94,7 +94,7 @@ type Computation<'T> = interface end
 
 [<Literal>]
 let private YieldComputation =
-    "if (Array.isArray(computation)) { for (const value of computation) { yield value; } } else { yield* computation; }"
+    "if (Array.isArray(computation)) { for (let i = 0; i < computation.length; i++) { yield computation[i]; } } else { yield* computation; }"
 
 [<Literal>]
 let private RunTemplate =
@@ -129,6 +129,25 @@ let private ForTemplate =
     + " } }"
 
 [<Literal>]
+let private ArrayForTemplate =
+    "async function* (source, body) { for (let index = 0; index < source.length; index++) { const computation = body(source[index]); "
+    + YieldComputation
+    + " } }"
+
+// Template arguments:
+// - $0: enumerate
+// - $1: moveNext
+// - $2: current
+// - $3: dispose
+//
+// for...of drops an error thrown by return() when the body has thrown; F# lets Dispose's error win.
+[<Literal>]
+let private SeqForTemplate =
+    "async function* (source, body) { const enumerator = $0(source); try { while ($1(enumerator)) { const computation = body($2(enumerator)); "
+    + YieldComputation
+    + " } } finally { $3(enumerator); } }"
+
+[<Literal>]
 let private TryWithTemplate =
     "async function* (body, handler) { try { const computation = body(); "
     + YieldComputation
@@ -149,6 +168,19 @@ let private whileGenerator: obj = emitJsExpr () WhileTemplate
 let private forGenerator: obj = emitJsExpr () ForTemplate
 let private tryWithGenerator: obj = emitJsExpr () TryWithTemplate
 let private tryFinallyGenerator: obj = emitJsExpr () TryFinallyTemplate
+let private arrayForGenerator: obj = emitJsExpr () ArrayForTemplate
+
+let private enumerate (source: seq<obj>) = source.GetEnumerator()
+let private moveNext (enumerator: Collections.Generic.IEnumerator<obj>) = enumerator.MoveNext()
+let private current (enumerator: Collections.Generic.IEnumerator<obj>) = enumerator.Current
+let private dispose (enumerator: Collections.Generic.IEnumerator<obj>) = enumerator.Dispose()
+
+let private seqForGenerator: obj =
+    emitJsExpr (enumerate, moveNext, current, dispose) SeqForTemplate
+
+/// JS arrays and typed arrays, which Fable uses for F# arrays and <c>ResizeArray</c>.
+let private isNativeArray (source: obj) : bool =
+    emitJsExpr source "Array.isArray($0) || ArrayBuffer.isView($0)"
 
 /// <summary>
 /// A builder to provide AsyncIterable Computation Expression support.
@@ -237,12 +269,11 @@ type AsyncIterableBuilder() =
     member _.For(source: JS.AsyncIterable<'T>, body: 'T -> Computation<'U>) : Computation<'U> =
         emitJsExpr (forGenerator, source, body) "$0($1, $2)"
 
-    member this.For(source: seq<'T>, body: 'T -> Computation<'U>) : Computation<'U> =
-        this.Using(
-            source.GetEnumerator(),
-            fun enumerator ->
-                this.While((fun () -> enumerator.MoveNext()), (fun () -> body enumerator.Current))
-        )
+    member _.For(source: seq<'T>, body: 'T -> Computation<'U>) : Computation<'U> =
+        if isNativeArray source then
+            emitJsExpr (arrayForGenerator, source, body) "$0($1, $2)"
+        else
+            emitJsExpr (seqForGenerator, source, body) "$0($1, $2)"
 
     member _.TryWith
         (body: unit -> Computation<'T>, handler: exn -> Computation<'T>)

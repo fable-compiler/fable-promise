@@ -361,6 +361,139 @@ let tests =
             )
 
             testAsync (
+                "for iterates over an array",
+                asyncIterable {
+                    for i in
+                        [|
+                            1
+                            2
+                            3
+                        |] do
+                        do! Promise.sleep 1
+                        yield i * 10
+                }
+                |> expectValues
+                    [
+                        10
+                        20
+                        30
+                    ]
+            )
+
+            testAsync (
+                "for over a seq disposes its enumerator when the consumer breaks",
+                async {
+                    let mutable disposed = false
+
+                    let source =
+                        seq {
+                            try
+                                yield 1
+                                yield 2
+                                yield 3
+                            finally
+                                disposed <- true
+                        }
+
+                    do!
+                        asyncIterable {
+                            for value in source do
+                                yield value
+                        }
+                        |> take 2
+                        |> Promise.tap (fun values ->
+                            assertThat
+                                (List.ofArray values)
+                                (isEqualTo
+                                    [
+                                        1
+                                        2
+                                    ])
+                        )
+                        |> awaitPromise
+
+                    assertThat disposed (isEqualTo true)
+                }
+            )
+
+            testAsync (
+                "for over a seq disposes its enumerator when the seq completes",
+                async {
+                    let mutable disposed = false
+
+                    let source =
+                        seq {
+                            try
+                                yield 1
+                            finally
+                                disposed <- true
+                        }
+
+                    do!
+                        asyncIterable {
+                            for value in source do
+                                yield value
+                        }
+                        |> toArray
+                        |> awaitPromise
+
+                    assertThat disposed (isEqualTo true)
+                }
+            )
+
+            testAsync (
+                "for over a seq reports an error from Dispose over the body's error",
+                asyncIterable {
+                    for value in
+                        seq {
+                            try
+                                yield 1
+                            finally
+                                failwith "dispose failed"
+                        } do
+                        if value = 1 then
+                            failwith "body failed"
+
+                        yield value
+                }
+                |> toArray
+                |> Promise.either (fun _ -> "unexpected") (fun e -> e.Message)
+                |> Promise.tap (fun message -> assertThat message (isEqualTo "dispose failed"))
+                |> awaitPromise
+            )
+
+            testAsync (
+                "for over a seq disposes its enumerator when the body throws",
+                async {
+                    let mutable disposed = false
+
+                    let source =
+                        seq {
+                            try
+                                yield 1
+                                yield 2
+                            finally
+                                disposed <- true
+                        }
+
+                    do!
+                        asyncIterable {
+                            for value in source do
+                                if value = 2 then
+                                    failwith "boom"
+
+                                yield value
+                        }
+                        |> toArray
+                        |> Promise.either (fun _ -> "unexpected") (fun e -> e.Message)
+                        |> Promise.tap (fun message -> assertThat message (isEqualTo "boom"))
+                        |> awaitPromise
+
+                    assertThat disposed (isEqualTo true)
+                }
+            )
+
+            testAsync (
                 "Body does not run before iteration",
                 async {
                     let mutable started = false
