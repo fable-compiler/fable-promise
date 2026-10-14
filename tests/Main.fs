@@ -9,4 +9,5 @@ let main _ =
             PromiseTests.tests
             PromiseLikeTests.tests
             AsyncIterableTests.tests
+            AsyncIterableBuilderTests.tests
         ]

@@ -9,6 +9,7 @@
     <Compile Include="Promise.fs" />
     <Compile Include="PromiseImpl.fs" />
     <Compile Include="AsyncIterable.fs" />
+    <Compile Include="AsyncIterableImpl.fs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Fable.Core" Version="5.2.0" />

@@ -8,6 +8,7 @@
     <Compile Include="PromiseTests.fs" />
     <Compile Include="PromiseLikeTests.fs" />
     <Compile Include="AsyncIterableTests.fs" />
+    <Compile Include="AsyncIterableBuilderTests.fs" />
     <Compile Include="Main.fs" />
   </ItemGroup>
   <ItemGroup>
